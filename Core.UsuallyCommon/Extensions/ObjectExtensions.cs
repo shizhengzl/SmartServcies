@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Linq;
+using System.ComponentModel;
 
 namespace Core.UsuallyCommon
 {
@@ -61,6 +62,59 @@ namespace Core.UsuallyCommon
         public static string GetPropertyValue(this object obj, string name)
         {
             return obj.GetType().GetProperty(name).GetValue(obj, null).ToStringExtension();
+        }
+
+        /// <summary>
+        /// 获取属性特性
+        /// </summary>
+        /// <param name="obj"></param> 
+        /// <returns>string</returns>
+        public static string GetPropertyDescription(this PropertyInfo obj)
+        {
+            var response = obj.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            if (response != null)
+            {
+                foreach (DescriptionAttribute att in response)
+                {
+                    return att.Description;
+                }
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// 根据字符串获取类型
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <returns></returns>
+        public static Type GetTypeByName(this string typeName)
+        {
+            Type type = null;
+            Assembly[] assemblyArray = AppDomain.CurrentDomain.GetAssemblies();
+            int assemblyArrayLength = assemblyArray.Length;
+            for (int i = 0; i < assemblyArrayLength; ++i)
+            {
+                type = assemblyArray[i].GetType(typeName);
+                if (type != null)
+                {
+                    return type;
+                }
+            }
+
+            for (int i = 0; (i < assemblyArrayLength); ++i)
+            {
+                Type[] typeArray = assemblyArray[i].GetTypes();
+                int typeArrayLength = typeArray.Length;
+                for (int j = 0; j < typeArrayLength; ++j)
+                {
+                    if (typeArray[j].Name.Equals(typeName))
+                    {
+                        return typeArray[j];
+                    }
+                }
+            }
+            return type;
+
         }
     }
 }

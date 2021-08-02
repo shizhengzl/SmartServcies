@@ -1,12 +1,10 @@
 ﻿using FreeSql;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Core.UsuallyCommon;
 
-namespace Core.AppEntitys
+namespace Core.FreeSql
 {
-    /// <summary>
+     /// <summary>
     /// 数据库工厂
     /// </summary>
     public class FreeSqlFactory

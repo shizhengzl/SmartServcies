@@ -160,6 +160,21 @@ namespace Core.UsuallyCommon
         }
 
         /// <summary>
+        /// 枚举转字典
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <returns></returns>
+        public static Dictionary<int, string> EnumToKeyValue(this Type enumType)
+        {
+            Dictionary<int, string> list = new Dictionary<int, string>();
+            foreach (int i in Enum.GetValues(enumType))
+            {
+                list.Add(i, Enum.GetName(enumType, i));
+            }
+            return list;
+        }
+
+        /// <summary>
         /// 枚举转List<string>
         /// </summary>
         /// <typeparam name="T"></typeparam>

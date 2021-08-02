@@ -25,7 +25,7 @@ namespace Core.AppEntitys
         /// <summary>
         /// 总数
         /// </summary>
-        public Int64 Total { get; set; }
+        public Int64 Total { get; set; } = 0;
 
         /// <summary>
         /// 成功编码
