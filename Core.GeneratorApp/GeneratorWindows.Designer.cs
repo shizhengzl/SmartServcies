@@ -32,7 +32,13 @@ namespace Core.GeneratorApp
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GeneratorWindows));
             this.工具栏 = new System.Windows.Forms.ToolStrip();
             this.toolsConnection = new System.Windows.Forms.ToolStripButton();
+            this.pantree = new System.Windows.Forms.Panel();
+            this.treemenu = new System.Windows.Forms.TreeView();
+            this.paneltab = new System.Windows.Forms.Panel();
+            this.tabControls = new System.Windows.Forms.TabControl();
             this.工具栏.SuspendLayout();
+            this.pantree.SuspendLayout();
+            this.paneltab.SuspendLayout();
             this.SuspendLayout();
             // 
             // 工具栏
@@ -54,16 +60,57 @@ namespace Core.GeneratorApp
             this.toolsConnection.Text = "连接管理";
             this.toolsConnection.Click += new System.EventHandler(this.toolsConnection_Click);
             // 
+            // pantree
+            // 
+            this.pantree.Controls.Add(this.treemenu);
+            this.pantree.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pantree.Location = new System.Drawing.Point(0, 25);
+            this.pantree.Name = "pantree";
+            this.pantree.Size = new System.Drawing.Size(267, 613);
+            this.pantree.TabIndex = 1;
+            // 
+            // treemenu
+            // 
+            this.treemenu.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treemenu.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.treemenu.Location = new System.Drawing.Point(0, 0);
+            this.treemenu.Name = "treemenu";
+            this.treemenu.Size = new System.Drawing.Size(267, 613);
+            this.treemenu.TabIndex = 0;
+            this.treemenu.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treemenu_NodeMouseDoubleClick);
+            // 
+            // paneltab
+            // 
+            this.paneltab.Controls.Add(this.tabControls);
+            this.paneltab.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.paneltab.Location = new System.Drawing.Point(267, 25);
+            this.paneltab.Name = "paneltab";
+            this.paneltab.Size = new System.Drawing.Size(1194, 613);
+            this.paneltab.TabIndex = 2;
+            // 
+            // tabControls
+            // 
+            this.tabControls.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControls.Location = new System.Drawing.Point(0, 0);
+            this.tabControls.Name = "tabControls";
+            this.tabControls.SelectedIndex = 0;
+            this.tabControls.Size = new System.Drawing.Size(1194, 613);
+            this.tabControls.TabIndex = 0;
+            // 
             // GeneratorWindows
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1461, 638);
+            this.Controls.Add(this.paneltab);
+            this.Controls.Add(this.pantree);
             this.Controls.Add(this.工具栏);
             this.Name = "GeneratorWindows";
             this.Text = "生成器窗口";
             this.工具栏.ResumeLayout(false);
             this.工具栏.PerformLayout();
+            this.pantree.ResumeLayout(false);
+            this.paneltab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -73,6 +120,10 @@ namespace Core.GeneratorApp
 
         private System.Windows.Forms.ToolStrip 工具栏;
         private System.Windows.Forms.ToolStripButton toolsConnection;
+        private System.Windows.Forms.Panel pantree;
+        private System.Windows.Forms.TreeView treemenu;
+        private System.Windows.Forms.Panel paneltab;
+        private System.Windows.Forms.TabControl tabControls;
     }
 }
 

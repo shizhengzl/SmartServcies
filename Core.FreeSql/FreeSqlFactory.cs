@@ -2,7 +2,7 @@
 using System;
 using Core.UsuallyCommon;
 
-namespace Core.FreeSql
+namespace Core.FreeSqlServices
 {
      /// <summary>
     /// 数据库工厂

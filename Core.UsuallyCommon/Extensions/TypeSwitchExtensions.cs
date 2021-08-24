@@ -13,6 +13,17 @@ namespace Core.UsuallyCommon
     {
         /// <summary>
         /// Any object converts a string. If the conversion fails, string.empty will be returned
+        /// 判断对象是否为空
+        /// </summary>
+        /// <param name="obj">Any object(任意对象)</param>
+        /// <returns>Boolean</returns>
+        public static Boolean IsNullOrEmpty(this object obj)
+        {
+            return string.IsNullOrEmpty(obj.ToStringExtension());
+        }
+
+        /// <summary>
+        /// Any object converts a string. If the conversion fails, string.empty will be returned
         /// 任意对象转字符串，Guid.Empty
         /// </summary>
         /// <param name="obj">Any object(任意对象)</param>

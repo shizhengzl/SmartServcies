@@ -15,10 +15,10 @@ namespace Core.Testings
         static void Main()
         {
 
-           // var ds = OfficeServices.ExeclServices.GetDataTable(@"C:\Users\shizheng\Desktop\模板\导入清单参考样式 (1).xls");
+            var ds = OfficeServices.ExeclServices.GetDataTable(@"C:\Users\shizheng\Desktop\报表\房建进度款标准报表\3.3.xls");
+            var ds1 = OfficeServices.ExeclServices.GetDataTable(@"C:\Users\shizheng\Desktop\报表\房建进度款标准报表\3.进度款支付分项汇总表.xls");
 
             InitdataBase database = new InitdataBase();
-             
             Console.WriteLine("Completed");
         }
     }

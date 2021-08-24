@@ -10,6 +10,32 @@ namespace Core.UsuallyCommon
     /// </summary>
     public static class FileExtenstions
     {
+
+        /// <summary>
+        /// 创建文件
+        /// </summary>
+        /// <param name="Path">路劲</param>
+        /// <param name="Content">内容</param>
+        public static void WriteFile(this string Path, string Content)
+        {
+            if (!System.IO.File.Exists(Path))
+            {
+                FileStream fs = new FileStream(Path, FileMode.Create);
+                StreamWriter sw = new StreamWriter(fs, Encoding.Unicode);
+                sw.Write(Content);
+                sw.Close();
+                fs.Close();
+            }
+            else
+            {
+                StreamWriter writer = new StreamWriter(Path, false, Encoding.Unicode);
+                writer.Flush();
+                writer.Write(Content);
+                writer.Close();
+            }
+        }
+
+
         /// <summary>
         /// 根据路劲获取文件内容
         /// </summary>
@@ -19,19 +45,7 @@ namespace Core.UsuallyCommon
         {
             return File.ReadAllText(Paht, Encoding.Default);
         }
-
-        /// <summary>  
-        /// 向文本文件中写入内容  
-        /// </summary>  
-        /// <param name="filePath">文件的绝对路径</param>  
-        /// <param name="content">写入的内容</param>          
-        public static void WriteText(this string filePath, string content)
-        {
-            //向文件写入内容  
-            File.WriteAllText(filePath, content, Encoding.Default);
-        }
-
-
+         
 
         /// <summary>
         /// 获取文件夹下所有扩展文件

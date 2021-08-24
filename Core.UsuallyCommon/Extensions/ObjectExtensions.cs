@@ -39,7 +39,15 @@ namespace Core.UsuallyCommon
                 if (IsNullableType(property.PropertyType))
                     property.SetValue(instance, value, null);
                 else
-                    property.SetValue(instance, Convert.ChangeType(value, property.PropertyType), null);
+                {
+                    if(property.PropertyType.UnderlyingSystemType.Name == "Guid")
+                        property.SetValue(instance, Convert.ChangeType(value.ToGuid(), property.PropertyType), null);
+                    else if(property.PropertyType.IsEnum)
+                        property.SetValue(instance,value, null);
+                    else
+                        property.SetValue(instance, Convert.ChangeType(value, property.PropertyType), null);
+                }
+                   
             }
         }
 

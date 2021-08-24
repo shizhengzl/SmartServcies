@@ -78,7 +78,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="BaseList.cs">
-      <SubType>Form</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="GeneratorWindows.cs">
       <SubType>Form</SubType>
@@ -90,6 +90,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="BaseForm.resx">
       <DependentUpon>BaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BaseList.resx">
+      <DependentUpon>BaseList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GeneratorWindows.resx">
       <DependentUpon>GeneratorWindows.cs</DependentUpon>
@@ -118,13 +121,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core.AppSystemServices\Core.AppSystemServices.csproj">
+      <Project>{91EBF269-FF44-475A-B313-B287CDA99D3C}</Project>
+      <Name>Core.AppSystemServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core.DataBaseServices\Core.DataBaseServices.csproj">
       <Project>{3df5eb1a-30f5-4d4d-89f6-439e709df12b}</Project>
       <Name>Core.DataBaseServices</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Core.FreeSql\Core.FreeSql.csproj">
-      <Project>{D10C539E-74A6-4B47-878E-1099A5866128}</Project>
-      <Name>Core.FreeSql</Name>
+    <ProjectReference Include="..\Core.FreeSql\Core.FreeSqlServices.csproj">
+      <Project>{d10c539e-74a6-4b47-878e-1099a5866128}</Project>
+      <Name>Core.FreeSqlServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core.Snippets\Core.SnippetServices.csproj">
+      <Project>{eccd55a7-b3f2-489c-b9bb-39f554db3a2d}</Project>
+      <Name>Core.SnippetServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\Core.UsuallyCommon\Core.UsuallyCommon.csproj">
       <Project>{0107edbb-6baf-4ed1-aca4-78f92cf78324}</Project>
