@@ -15,7 +15,7 @@ namespace Core.UsuallyCommon.Model
         /// 主键
         /// </summary>
         [Description("主键")]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; } 
 
         /// <summary>
         /// 创建时间

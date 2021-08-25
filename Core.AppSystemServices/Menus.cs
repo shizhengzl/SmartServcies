@@ -31,6 +31,12 @@ namespace Core.AppSystemServices
         public string Url { get; set; }
 
         /// <summary>
+        /// 排序
+        /// </summary>
+        [Description("排序")]
+        public Int32 Sort { get; set; }
+
+        /// <summary>
         /// 父菜单
         /// </summary>
         [Description("父菜单")]

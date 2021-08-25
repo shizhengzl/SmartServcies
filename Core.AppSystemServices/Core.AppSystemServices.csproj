@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Core.FreeSql\Core.FreeSqlServices.csproj" />
     <ProjectReference Include="..\Core.UsuallyCommon\Core.UsuallyCommon.csproj" />
   </ItemGroup>
 

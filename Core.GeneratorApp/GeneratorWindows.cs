@@ -19,7 +19,10 @@ namespace Core.GeneratorApp
     {
         public Form self { get; set; }
         public GeneratorWindows()
-        { 
+        {
+            InitDataBase initDataBase = new InitDataBase();
+            initDataBase.Init();
+
             InitializeComponent();
             LoadTree();
             self = this;

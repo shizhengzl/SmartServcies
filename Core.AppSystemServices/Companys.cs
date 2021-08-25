@@ -1,10 +1,11 @@
-﻿using FreeSql.DataAnnotations;
+﻿using Core.UsuallyCommon.Model;
+using FreeSql.DataAnnotations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace Core.AppEntitys
+namespace Core.AppSystemServices
 {
     /// <summary>
     /// 单位租户表
