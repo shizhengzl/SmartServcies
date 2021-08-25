@@ -17,10 +17,12 @@ namespace Core.GeneratorApp
 {
     public partial class GeneratorWindows : Form
     {
+        public Form self { get; set; }
         public GeneratorWindows()
         { 
             InitializeComponent();
             LoadTree();
+            self = this;
         }
         public FreeSqlFactory factory = new FreeSqlFactory();
         private void toolsConnection_Click(object sender, EventArgs e)
@@ -80,15 +82,17 @@ namespace Core.GeneratorApp
 
 
             var from = ((Panel)instance); 
-            from.Dock = DockStyle.Fill; 
-
+            
+         
+            from.Dock = DockStyle.Fill;
             TabPage tabpage = new TabPage();
             var name = menus.Url.ToStringExtension().GetClassType().Name;
             tabpage.Text = name;
             tabpage.Name = name;
+             
             tabpage.Controls.Add(from);
-            from.Show(); 
-            if(!tabControls.TabPages.ContainsKey(name))
+            from.Tag = this.imagelistall;
+            if (!tabControls.TabPages.ContainsKey(name))
                 tabControls.TabPages.Add(tabpage);
             tabControls.SelectTab(name);
         }

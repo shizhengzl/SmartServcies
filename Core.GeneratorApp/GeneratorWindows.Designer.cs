@@ -29,6 +29,7 @@ namespace Core.GeneratorApp
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GeneratorWindows));
             this.工具栏 = new System.Windows.Forms.ToolStrip();
             this.toolsConnection = new System.Windows.Forms.ToolStripButton();
@@ -36,6 +37,7 @@ namespace Core.GeneratorApp
             this.treemenu = new System.Windows.Forms.TreeView();
             this.paneltab = new System.Windows.Forms.Panel();
             this.tabControls = new System.Windows.Forms.TabControl();
+            this.imagelistall = new System.Windows.Forms.ImageList(this.components);
             this.工具栏.SuspendLayout();
             this.pantree.SuspendLayout();
             this.paneltab.SuspendLayout();
@@ -97,6 +99,15 @@ namespace Core.GeneratorApp
             this.tabControls.Size = new System.Drawing.Size(1194, 613);
             this.tabControls.TabIndex = 0;
             // 
+            // imagelistall
+            // 
+            this.imagelistall.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imagelistall.ImageStream")));
+            this.imagelistall.TransparentColor = System.Drawing.Color.Transparent;
+            this.imagelistall.Images.SetKeyName(0, "connection.png");
+            this.imagelistall.Images.SetKeyName(1, "create.png");
+            this.imagelistall.Images.SetKeyName(2, "modify.png");
+            this.imagelistall.Images.SetKeyName(3, "remove.png");
+            // 
             // GeneratorWindows
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -124,6 +135,7 @@ namespace Core.GeneratorApp
         private System.Windows.Forms.TreeView treemenu;
         private System.Windows.Forms.Panel paneltab;
         private System.Windows.Forms.TabControl tabControls;
+        public System.Windows.Forms.ImageList imagelistall;
     }
 }
 

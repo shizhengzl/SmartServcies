@@ -91,6 +91,24 @@ namespace Core.UsuallyCommon
         }
 
         /// <summary>
+        /// 获取属性特性
+        /// </summary>
+        /// <param name="obj"></param> 
+        /// <returns>string</returns>
+        public static string GetPropertyDescription<T>(this PropertyInfo obj,string attpropertyname)  
+        {
+            var response = obj.GetCustomAttributes(typeof(T), false);
+            if (response != null)
+            {
+                foreach (T att in response)
+                {
+                    return att.GetPropertyValue(attpropertyname);
+                }
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
         /// 根据字符串获取类型
         /// </summary>
         /// <param name="typeName"></param>

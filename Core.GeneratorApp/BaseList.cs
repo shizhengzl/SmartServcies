@@ -22,24 +22,57 @@ namespace Core.GeneratorApp
         private StatusStrip statusmessage;
         private DataGridView listview;
         private ToolStrip toollist;
-
+        private System.ComponentModel.IContainer components;
         public FreeSqlFactory factory = new FreeSqlFactory();
+
+        public Panel self { get; set; }
         public BaseList()
         {
+            self = this;
             InitializeComponent();
-
             this.listview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             this.listview.MultiSelect = false;
+            LoadList(); 
 
-            LoadList();
+             
         }
-         
 
         public void LoadList()
-        {
+        { 
+             
             var list = factory.FreeSql.Select<T>().Where(x=> 1==1).ToList();
             listview.DataSource = list;
-            
+            listview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            listview.ReadOnly = true;
+            listview.DataBindingComplete += Listview_DataBindingComplete;
+            listview.CellDoubleClick += Listview_CellDoubleClick;
+        }
+
+        private void Listview_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var sources = (List<T>)listview.DataSource;
+            T t = new T();
+            foreach (DataGridViewRow item in listview.SelectedRows)
+            {
+                var key = ((T)sources[item.Index]).GetPropertyValue("Id");
+                t = factory.FreeSql.Select<T>(key).First();
+            }
+
+            BaseForm<T> baseForm = new BaseForm<T>(t);
+            var response = baseForm.ShowDialog();
+            if (response == DialogResult.OK)
+            {
+                this.LoadList();
+            }
+        }
+
+        private void Listview_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            for (int i = 0; i < listview.Columns.Count; i++)
+            {
+                var description = typeof(T).GetProperty(listview.Columns[i].Name).GetPropertyDescription();
+                listview.Columns[i].HeaderText = description;
+            }
         }
 
         private void InitializeComponent()
@@ -96,7 +129,6 @@ namespace Core.GeneratorApp
             // 
             // toolsearch
             // 
-            this.toolsearch.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.toolsearch.Name = "toolsearch";
             this.toolsearch.Size = new System.Drawing.Size(100, 25);
             // 
@@ -130,10 +162,10 @@ namespace Core.GeneratorApp
             // 
             // BaseList
             // 
-            this.ClientSize = new System.Drawing.Size(1091, 651);
             this.Controls.Add(this.panellist);
             this.Controls.Add(this.toollist);
-            this.Name = "BaseList";
+            this.Size = new System.Drawing.Size(1091, 651);
+            this.Resize += new System.EventHandler(this.BaseList_Resize);
             this.toollist.ResumeLayout(false);
             this.toollist.PerformLayout();
             this.panellist.ResumeLayout(false);
@@ -182,6 +214,17 @@ namespace Core.GeneratorApp
                 var response = factory.FreeSql.Delete<T>(key).ExecuteAffrows();
                 this.LoadList();
             }
+
+        }
+
+        private void BaseList_Resize(object sender, EventArgs e)
+        {
+            ImageList imglist = ((self.Tag as ImageList));
+
+            this.toollist.ImageList = imglist;
+            this.toolcreate.ImageIndex = 1;
+            this.toolmodify.ImageIndex = 2;
+            this.toolremove.ImageIndex = 3;
 
         }
     }
