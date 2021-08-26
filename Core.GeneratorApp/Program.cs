@@ -16,7 +16,7 @@ namespace Core.GeneratorApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GeneratorWindows());
+            Application.Run(new Login());
         }
     }
 }
