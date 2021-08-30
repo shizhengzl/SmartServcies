@@ -1,4 +1,4 @@
-﻿using Core.UsuallyCommon.Model;
+﻿using Core.UsuallyCommon;
 using FreeSql.DataAnnotations;
 using System;
 using System.Collections.Generic;
@@ -8,16 +8,16 @@ using System.Text;
 namespace Core.AppSystemServices
 {
     /// <summary>
-    /// 单位租户表
+    /// 部门表
     /// </summary>
-    [Description("单位表")]
-    public class Companys : EntityBaseAll
+    [Description("部门表")]
+    public class Departments : EntityBaseAll
     {
         /// <summary>
-        /// 租户名称
+        /// 部门名称
         /// </summary>
-        [Description("单位名称")]
+        [Description("部门名称")]
         [Column(StringLength = 50)]
-        public String CompanyName { get; set; }
+        public string Name { get; set; }
     }
 }

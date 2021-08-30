@@ -1,4 +1,4 @@
-﻿using Core.UsuallyCommon.Model;
+﻿using Core.UsuallyCommon;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

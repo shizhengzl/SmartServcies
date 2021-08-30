@@ -1,4 +1,4 @@
-﻿using Core.UsuallyCommon.Model;
+﻿using Core.UsuallyCommon;
 using FreeSql.DataAnnotations;
 using System;
 using System.Collections.Generic;
@@ -35,7 +35,7 @@ namespace Core.SnippetServices
         /// </summary>
         [Description("描述")]
         [Column(StringLength = -1)]
-        public string Description { get; set; }
+        public string Note { get; set; }
         /// <summary>
         /// 作者
         /// </summary>

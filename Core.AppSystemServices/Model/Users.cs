@@ -1,4 +1,4 @@
-﻿using Core.UsuallyCommon.Model;
+﻿using Core.UsuallyCommon;
 using FreeSql.DataAnnotations;
 using System;
 using System.Collections.Generic;
@@ -50,5 +50,12 @@ namespace Core.AppSystemServices
         /// </summary>
         [Description("默认单位")]
         public Guid? DefaultCompany { get; set; }
+
+
+        /// <summary>
+        /// 管理员
+        /// </summary>
+        [Description("管理员")]
+        public bool IsAdmin { get; set; }
     }
 }

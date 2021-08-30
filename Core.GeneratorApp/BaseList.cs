@@ -21,8 +21,7 @@ namespace Core.GeneratorApp
         private Panel panellist;
         private StatusStrip statusmessage;
         private DataGridView listview;
-        private ToolStrip toollist;
-        private System.ComponentModel.IContainer components;
+        private ToolStrip toollist; 
         public FreeSqlFactory factory = new FreeSqlFactory();
 
         public Panel self { get; set; }

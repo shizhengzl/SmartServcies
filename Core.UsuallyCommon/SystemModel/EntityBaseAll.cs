@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace Core.UsuallyCommon.Model
+namespace Core.UsuallyCommon
 {
     /// <summary>
     /// 基类包含创建时间和用户和修改
@@ -40,5 +40,12 @@ namespace Core.UsuallyCommon.Model
         /// </summary>
         [Description("修改用户")]
         public Guid? ModifyUserId { get; set; }
+
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        [Description("描述")]
+        public String Description { get; set; }
     }
 }
