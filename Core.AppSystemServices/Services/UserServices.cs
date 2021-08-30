@@ -51,13 +51,25 @@ namespace Core.AppSystemServices.Services
             return result;
         }
 
-        ///// <summary>
-        ///// 获取用户菜单
-        ///// </summary>
-        //public List<Menus> GetSupperMenus(Users user)
-        //{
-        //    var companyId = user.DefaultCompany;
-        //}
+        /// <summary>
+        /// 获取用户菜单
+        /// </summary>
+        public List<Menus> GetUserMenus(Users user)
+        {
+            var companyId = user.DefaultCompany;
+            var menus = GetEntitys<CompanyMenus>().Where(x => x.CompanysId == companyId).ToList().Select(p => p.MenusId).ToList();
+            return GetEntitys<Menus>().Where(x => menus.Contains(x.MenusId)).ToList();
+        }
+
+        /// <summary>
+        /// 获取admin菜单
+        /// </summary>
+        public List<Menus> GetAdminMenus(Users user)
+        {
+            var companyId = user.DefaultCompany;
+            var menus = GetEntitys<CompanyMenus>().Where(x=>x.CompanysId == companyId).ToList().Select(p=>p.MenusId).ToList();
+            return GetEntitys<Menus>().Where(x => menus.Contains(x.MenusId)).ToList();
+        }
 
         /// <summary>
         /// 获取超级管理员菜单

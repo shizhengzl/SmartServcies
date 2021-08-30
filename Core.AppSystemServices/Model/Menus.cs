@@ -41,5 +41,17 @@ namespace Core.AppSystemServices
         /// </summary>
         [Description("父菜单")]
         public Guid MenusId { get; set; } = Guid.Empty;
+
+        /// <summary>
+        /// 默认菜单
+        /// </summary>
+        [Description("默认菜单")]
+        public Boolean IsDefault { get; set; }
+
+        /// <summary>
+        /// 超级管理员菜单
+        /// </summary>
+        [Description("超级管理员菜单")]
+        public Boolean IsSupper { get; set; }
     }
 }
