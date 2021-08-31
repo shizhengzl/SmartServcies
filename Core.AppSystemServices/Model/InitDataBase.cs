@@ -10,18 +10,32 @@ namespace Core.AppSystemServices
     {
 
         public FreeSqlFactory factory = new FreeSqlFactory();
-        public Guid companyId = DefaultCommonEnum.defaultCompany.GetDescription().ToGuid();
+        public Guid defaultSelfCompany = DefaultCommonEnum.defaultCompany.GetDescription().ToGuid();
         Guid defaultsuppermenuid = DefaultCommonEnum.defaultsuppermenuid.GetDescription().ToGuid();
         Guid defaultsystemmenuid = DefaultCommonEnum.defaultsystemmenuid.GetDescription().ToGuid();
 
-        public Guid defaultguid = Guid.Empty;
+        Guid defaultSelfRole = DefaultCommonEnum.defaultSelfRole.GetDescription().ToGuid();
+        Guid defaultCompanyRole = DefaultCommonEnum.defaultCompanyRole.GetDescription().ToGuid();
+
+        Guid defaultSelfUser = DefaultCommonEnum.defaultSelfUser.GetDescription().ToGuid();
+        Guid defaultCompanyUser = DefaultCommonEnum.defaultCompanyUser.GetDescription().ToGuid();
+
+        Guid defaultSelfOrganization = DefaultCommonEnum.defaultSelfOrganization.GetDescription().ToGuid();
+        Guid defaultOrganization = DefaultCommonEnum.defaultOrganization.GetDescription().ToGuid();
+
+
+        string defaultSelfCompanyName = DefaultCommonEnum.defaultSelfCompanyName.GetDescription();
+        string defaultCompanyName = DefaultCommonEnum.defaultCompanyName.GetDescription();
+
+        public Guid defaultCompanyguid = Guid.Empty;
 
         public void Init()
         {
             InitMenus();
             InitCompanys();
             InitUsers();
-            InitCompanyMenus();
+
+
         }
         #region 初始化菜单
         public void InitMenus()
@@ -81,14 +95,14 @@ namespace Core.AppSystemServices
         #region 初始化单位
         public void InitCompanys()
         {
-            Companys selfcompanys = new Companys() { Id = companyId, CompanyName = "智能科技云计算技术有限公司" };
-            if (!factory.FreeSql.Select<Companys>().Any(x => x.CompanyName == "智能科技云计算技术有限公司"))
+            Companys selfcompanys = new Companys() { Id = defaultSelfCompany, CompanyName = defaultSelfCompanyName };
+            if (!factory.FreeSql.Select<Companys>().Any(x => x.Id == defaultSelfCompany))
             {
                 factory.FreeSql.Insert<Companys>(selfcompanys).ExecuteAffrows();
             }
 
-            Companys defaultcompany = new Companys() { Id = defaultguid, CompanyName = "隔壁老王管理公司" };
-            if (!factory.FreeSql.Select<Companys>().Any(x => x.CompanyName == "隔壁老王管理公司"))
+            Companys defaultcompany = new Companys() { Id = defaultCompanyguid, CompanyName = defaultCompanyName };
+            if (!factory.FreeSql.Select<Companys>().Any(x => x.Id == defaultCompanyguid))
             {
                 factory.FreeSql.Insert<Companys>(defaultcompany).ExecuteAffrows();
             }
@@ -96,58 +110,58 @@ namespace Core.AppSystemServices
         }
         #endregion
 
-        #region 初始化单位菜单
-        public void InitCompanyMenus()
-        {
-            factory.FreeSql.Select<Menus>().Where(x => x.IsDefault).ToList().ForEach(p=> {
-                CompanyMenus companyMenus = new CompanyMenus() { CompanysId = companyId ,MenusId = p.Id };
-                factory.FreeSql.Insert<CompanyMenus>(companyMenus).ExecuteAffrows();
-            });
+        //#region 初始化单位菜单
+        //public void InitCompanyMenus()
+        //{
+        //    factory.FreeSql.Select<Menus>().Where(x => x.IsDefault).ToList().ForEach(p=> {
+        //        CompanyMenus companyMenus = new CompanyMenus() { CompanysId = defaultSelfCompany ,MenusId = p.Id };
+        //        factory.FreeSql.Insert<CompanyMenus>(companyMenus).ExecuteAffrows();
+        //    });
 
-            factory.FreeSql.Select<Menus>().Where(x => x.IsDefault).ToList().ForEach(p => {
-                CompanyMenus companyMenus = new CompanyMenus() { CompanysId = defaultguid, MenusId = p.Id };
-                factory.FreeSql.Insert<CompanyMenus>(companyMenus).ExecuteAffrows();
-            });
+        //    factory.FreeSql.Select<Menus>().Where(x => x.IsDefault).ToList().ForEach(p => {
+        //        CompanyMenus companyMenus = new CompanyMenus() { CompanysId = defaultCompanyguid, MenusId = p.Id };
+        //        factory.FreeSql.Insert<CompanyMenus>(companyMenus).ExecuteAffrows();
+        //    });
 
-            factory.FreeSql.Select<Menus>().Where(x => x.IsSupper).ToList().ForEach(p => {
-                CompanyMenus companyMenus = new CompanyMenus() { CompanysId = companyId, MenusId = p.Id };
-                factory.FreeSql.Insert<CompanyMenus>(companyMenus).ExecuteAffrows();
-            });
+        //    factory.FreeSql.Select<Menus>().Where(x => x.IsSupper).ToList().ForEach(p => {
+        //        CompanyMenus companyMenus = new CompanyMenus() { CompanysId = defaultSelfCompany, MenusId = p.Id };
+        //        factory.FreeSql.Insert<CompanyMenus>(companyMenus).ExecuteAffrows();
+        //    });
 
-        }
-        #endregion
+        //}
+        //#endregion
 
         #region 初始化用户
         public void InitUsers()
         {
             Users users = new Users()
             {
-                Id = Guid.NewGuid(),
+                Id = defaultCompanyUser,
                 UserName = "007admin",
                 NikeName = "老王",
                 Phone = "13700000000",
                 Email = "13700000000@qq.com",
                 PassWord = "007admin".Tomd5(),
                 IsAdmin = true,
-                DefaultCompany = defaultguid
+                DefaultCompany = defaultCompanyguid
             };
-            if (!factory.FreeSql.Select<Users>().Any(x => x.UserName == users.UserName))
+            if (!factory.FreeSql.Select<Users>().Any(x => x.Id == defaultCompanyUser))
             {
                 factory.FreeSql.Insert<Users>(users).ExecuteAffrows();
             }
 
             Users selfusers = new Users()
             {
-                Id = Guid.NewGuid(),
+                Id = defaultSelfUser,
                 UserName = "admin",
                 NikeName = "老施",
                 Phone = "13701859214",
                 Email = "13701859214@qq.com",
                 IsAdmin = true,
                 PassWord = "admin".Tomd5(),
-                DefaultCompany = companyId
+                DefaultCompany = defaultSelfCompany
             };
-            if (!factory.FreeSql.Select<Users>().Any(x => x.UserName == selfusers.UserName))
+            if (!factory.FreeSql.Select<Users>().Any(x => x.Id == defaultSelfUser))
             {
                 factory.FreeSql.Insert<Users>(selfusers).ExecuteAffrows();
             }
@@ -156,11 +170,78 @@ namespace Core.AppSystemServices
 
 
         #region 初始化角色
-        Roles roles = new Roles() { Name = DefaultCommonEnum.defaultRole.GetDescription() };
+        public void InitRole()
+        {
+            //初始化角色
+            Roles roleself = new Roles() {Id = defaultSelfRole , Name = DefaultCommonEnum.defaultRole.GetDescription(), CompanysId = defaultSelfCompany };
+            if (!factory.FreeSql.Select<Roles>().Any(x => x.Id == defaultSelfRole && x.CompanysId == defaultSelfCompany))
+                factory.FreeSql.Insert<Roles>(roleself).ExecuteAffrows();
+            
+            Roles roles = new Roles() { Id = defaultCompanyRole, Name = DefaultCommonEnum.defaultRole.GetDescription(), CompanysId = defaultCompanyguid };
+            if (!factory.FreeSql.Select<Roles>().Any(x => x.Id == defaultCompanyRole && x.CompanysId == defaultCompanyguid))
+                factory.FreeSql.Insert<Roles>(roles).ExecuteAffrows();
+
+            //初始化角色用户
+            RoleUsers roleselfUsers = new RoleUsers() { RolesId = defaultSelfRole,UsersId = defaultSelfUser };
+            if (!factory.FreeSql.Select<RoleUsers>().Any(x => x.RolesId == defaultSelfRole && x.UsersId == defaultSelfUser))
+                factory.FreeSql.Insert<RoleUsers>(roleselfUsers).ExecuteAffrows();
+
+            RoleUsers roleUsers = new RoleUsers() { RolesId = defaultCompanyRole, UsersId = defaultCompanyUser };
+            if (!factory.FreeSql.Select<RoleUsers>().Any(x => x.RolesId == defaultCompanyRole && x.UsersId == defaultCompanyUser))
+                factory.FreeSql.Insert<RoleUsers>(roleUsers).ExecuteAffrows();
+
+            // 初始化角色菜单
+            factory.FreeSql.Select<Menus>().Where(x => x.IsDefault || x.IsSupper).ToList().ForEach(p => {
+                RoleMenus roleselfMenus = new RoleMenus() { RolesId = defaultSelfRole, MenusId = p.Id };
+                if (!factory.FreeSql.Select<RoleMenus>().Any(x => x.RolesId == defaultSelfRole && x.MenusId == p.Id))
+                    factory.FreeSql.Insert<RoleMenus>(roleselfMenus).ExecuteAffrows();
+            });
+
+            factory.FreeSql.Select<Menus>().Where(x => x.IsDefault).ToList().ForEach(p => {
+                RoleMenus RoleMenus = new RoleMenus() { RolesId = defaultCompanyRole, MenusId = p.Id };
+                if (!factory.FreeSql.Select<RoleMenus>().Any(x => x.RolesId == defaultCompanyRole && x.MenusId == p.Id))
+                    factory.FreeSql.Insert<RoleMenus>(RoleMenus).ExecuteAffrows();
+            });
+          
+        }
+
+
         #endregion
 
         #region 初始化组织机构
+        public void InitOrganization()
+        {
+            //初始化组织机构
+            Organizations organizationself = new Organizations() { Id = defaultSelfOrganization, Name = defaultSelfCompanyName, CompanysId = defaultSelfCompany };
+            if (!factory.FreeSql.Select<Organizations>().Any(x => x.Id == defaultSelfOrganization && x.CompanysId == defaultSelfCompany))
+                factory.FreeSql.Insert<Organizations>(organizationself).ExecuteAffrows();
 
+            Organizations organization = new Organizations() { Id = defaultOrganization, Name =defaultCompanyName, CompanysId = defaultCompanyguid };
+            if (!factory.FreeSql.Select<Organizations>().Any(x => x.Id == defaultOrganization && x.CompanysId == defaultCompanyguid))
+                factory.FreeSql.Insert<Organizations>(organization).ExecuteAffrows();
+
+            //初始化组织机构用户
+            OrganizationUsers organizationSelfUsers = new OrganizationUsers() { OrganizationsId = defaultOrganization, UsersId = defaultSelfUser };
+            if (!factory.FreeSql.Select<OrganizationUsers>().Any(x => x.OrganizationsId == defaultOrganization && x.UsersId == defaultSelfUser))
+                factory.FreeSql.Insert<OrganizationUsers>(organizationSelfUsers).ExecuteAffrows();
+
+            OrganizationUsers organizationUsers = new OrganizationUsers() { OrganizationsId = defaultCompanyRole, UsersId = defaultCompanyUser };
+            if (!factory.FreeSql.Select<OrganizationUsers>().Any(x => x.OrganizationsId == defaultCompanyRole && x.UsersId == defaultCompanyUser))
+                factory.FreeSql.Insert<OrganizationUsers>(organizationUsers).ExecuteAffrows();
+
+            // 初始化组织机构菜单
+            factory.FreeSql.Select<Menus>().Where(x => x.IsDefault || x.IsSupper).ToList().ForEach(p => {
+                OrganizationMenus organizationselfMenus = new OrganizationMenus() { OraganizationsId = defaultSelfOrganization, MenusId = p.Id };
+                if (!factory.FreeSql.Select<OrganizationMenus>().Any(x => x.OraganizationsId == defaultSelfOrganization && x.MenusId == p.Id))
+                    factory.FreeSql.Insert<OrganizationMenus>(organizationselfMenus).ExecuteAffrows();
+            });
+
+            factory.FreeSql.Select<Menus>().Where(x => x.IsDefault).ToList().ForEach(p => {
+                OrganizationMenus organizationMenus = new OrganizationMenus() { OraganizationsId = defaultOrganization, MenusId = p.Id };
+                if (!factory.FreeSql.Select<OrganizationMenus>().Any(x => x.OraganizationsId == defaultOrganization && x.MenusId == p.Id))
+                    factory.FreeSql.Insert<OrganizationMenus>(organizationMenus).ExecuteAffrows();
+            });
+        }
         #endregion
 
     }

@@ -19,5 +19,11 @@ namespace Core.AppSystemServices
         [Description("角色名称")]
         [Column(StringLength = 50)]
         public string Name { get; set; }
+
+        /// <summary>
+        /// 单位
+        /// </summary>
+        [Description("单位")]
+        public Guid CompanysId { get; set; }
     }
 }

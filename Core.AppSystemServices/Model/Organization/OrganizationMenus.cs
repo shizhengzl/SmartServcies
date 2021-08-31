@@ -6,16 +6,16 @@ using System.Text;
 namespace Core.AppSystemServices
 {
     /// <summary>
-    /// 部门菜单表
+    /// 组织机构菜单表
     /// </summary>
-    [Description("部门菜单表")]
-    public class DepartmentMenus
+    [Description("组织机构菜单表")]
+    public class OrganizationMenus
     {
         /// <summary>
         /// 部门
         /// </summary>
-        [Description("部门")]
-        public Guid DepartmentsId { get; set; }
+        [Description("组织机构")]
+        public Guid OraganizationsId { get; set; }
 
         /// <summary>
         /// 菜单
