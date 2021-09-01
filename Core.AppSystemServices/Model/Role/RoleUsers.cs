@@ -22,5 +22,11 @@ namespace Core.AppSystemServices
         /// </summary>
         [Description("用户")]
         public Guid UsersId { get; set; }
+
+        /// <summary>
+        /// 单位
+        /// </summary>
+        [Description("单位")]
+        public Guid CompanysId { get; set; }
     }
 }

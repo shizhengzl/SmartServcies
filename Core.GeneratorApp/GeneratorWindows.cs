@@ -18,13 +18,13 @@ namespace Core.GeneratorApp
     public partial class GeneratorWindows : Form
     {
         public Form self { get; set; }
-        public GeneratorWindows()
+        public CurrentUsers _currentUser { get; set;  }
+        public GeneratorWindows(CurrentUsers currentUse)
         {
-            InitDataBase initDataBase = new InitDataBase();
-            initDataBase.Init();
-
+            _currentUser = currentUse;
             InitializeComponent();
             LoadTree();
+            
             self = this;
         }
         public FreeSqlFactory factory = new FreeSqlFactory();
@@ -45,7 +45,7 @@ namespace Core.GeneratorApp
 
         public void LoadTree()
         {
-            var allmenus = factory.FreeSql.Select<Menus>().ToList();
+            var allmenus = _currentUser.UserMenus;// factory.FreeSql.Select<Menus>().ToList();
             var menus = allmenus.Where(x => x.MenusId == Guid.Empty).ToList();
             menus.ForEach(x => {
                 TreeNode root = new TreeNode();

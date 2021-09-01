@@ -22,5 +22,12 @@ namespace Core.AppSystemServices
         /// </summary>
         [Description("菜单")]
         public Guid MenusId { get; set; }
+
+
+        /// <summary>
+        /// 单位
+        /// </summary>
+        [Description("单位")]
+        public Guid CompanysId { get; set; }
     }
 }

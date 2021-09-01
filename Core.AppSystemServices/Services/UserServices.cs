@@ -5,7 +5,7 @@ using Core.FreeSqlServices;
 using Core.UsuallyCommon;
 using System.Linq;
 
-namespace Core.AppSystemServices.Services
+namespace Core.AppSystemServices
 {
     /// <summary>
     /// 用户服务
@@ -15,32 +15,38 @@ namespace Core.AppSystemServices.Services
         public UserServices()
         {
 
-        }
-
-     
-
-        public Response<String> Login(Users user)
+        } 
+        public Response<CurrentUsers> Login(Users user)
         {
-            Response<String> response = new Response<string>(); 
+            Response<CurrentUsers> response = new Response<CurrentUsers>(); 
             CurrentUsers current = new CurrentUsers();
 
             // check username
             if (!UserIsExists(user))
-                response.Data = "用户不存在";
+                response.Message = "用户不存在";
             // check password
             if (!ValidPassword(user))
-                response.Data = "用户密码不正确";
+                response.Message = "用户密码不正确";
+
+            if (!string.IsNullOrEmpty(response.Message))
+            {
+                response.Success = false;
+                return response;
+            }
+
             // add cache  
             current.CurrentUser = GetUsers(user);
 
             // 获取菜单
-            if(IsSupperAdmin(user))
+            if(IsSupperAdmin(current.CurrentUser))
                 current.UserMenus = GetSupperMenus();
+            else if(current.CurrentUser.IsAdmin)
+                current.UserMenus = GetAdminMenus(current.CurrentUser);
             else
-                current.UserMenus = GetSupperMenus();
+                current.UserMenus = GetUserMenus(current.CurrentUser);
 
             CacheServices.MemoryCacheManager.SetCache<CurrentUsers>(user.UserName, current,null);
-
+            response.Data = current;
             return response;
         }
 
@@ -56,9 +62,51 @@ namespace Core.AppSystemServices.Services
         /// </summary>
         public List<Menus> GetUserMenus(Users user)
         {
-            var companyId = user.DefaultCompany;
-            var menus = GetEntitys<CompanyMenus>().Where(x => x.CompanysId == companyId).ToList().Select(p => p.MenusId).ToList();
-            return GetEntitys<Menus>().Where(x => menus.Contains(x.MenusId)).ToList();
+            var defaultcompany = GetEntitys<Companys>().Where(x => x.Id == user.DefaultCompany).ToList().FirstOrDefault();
+            List<Guid> menuids = new List<Guid>();
+            switch (defaultcompany.GrantMode)
+            {
+                case GrantMode.CompanyGrant:
+                    menuids = GetEntitys<CompanyMenus>().Where(x => x.CompanysId == user.DefaultCompany).ToList().Select(p => p.MenusId).ToList();
+                    break;
+                case GrantMode.RoleGrant:
+                    // 获取用户角色
+                    var uerroles = GetUserRole(user).Select(x=>x.RolesId).ToList();
+                    menuids = GetEntitys<RoleMenus>().Where(x => uerroles.Contains(x.RolesId)).ToList().Select(p => p.MenusId).ToList();
+                    break;
+                case GrantMode.OrganizationGrant:
+                    // 获取用户角色
+                    var userOrganization = GetUserOrganization(user).Select(x => x.OrganizationsId).ToList();
+                    menuids = GetEntitys<OrganizationMenus>().Where(x => userOrganization.Contains(x.OraganizationsId)).ToList().Select(p => p.MenusId).ToList();
+                    break;
+                case GrantMode.UserGrant:
+                    break;
+                default:
+                    break;
+            }
+           
+            return GetEntitys<Menus>().Where(x => menuids.Contains(x.MenusId)).ToList();
+        }
+
+        /// <summary>
+        /// 获取用户组织机构
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public List<OrganizationUsers> GetUserOrganization(Users user)
+        {
+            return GetEntitys<OrganizationUsers>().Where(x => x.UsersId == user.Id && x.CompanysId == user.DefaultCompany).ToList();
+        }
+
+
+        /// <summary>
+        /// 获取用户角色
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public List<RoleUsers> GetUserRole(Users user)
+        {
+            return GetEntitys<RoleUsers>().Where(x=>x.UsersId == user.Id && x.CompanysId == user.DefaultCompany).ToList();
         }
 
         /// <summary>
@@ -67,8 +115,8 @@ namespace Core.AppSystemServices.Services
         public List<Menus> GetAdminMenus(Users user)
         {
             var companyId = user.DefaultCompany;
-            var menus = GetEntitys<CompanyMenus>().Where(x=>x.CompanysId == companyId).ToList().Select(p=>p.MenusId).ToList();
-            return GetEntitys<Menus>().Where(x => menus.Contains(x.MenusId)).ToList();
+            var menus = GetEntitys<CompanyMenus>().Where(x=>x.CompanysId == companyId).ToList().Select(p=>p.MenusId.ToString().ToUpper()).ToList();
+            return GetEntitys<Menus>().Where(x => menus.Contains(x.Id.ToString().ToUpper())).ToList();
         }
 
         /// <summary>

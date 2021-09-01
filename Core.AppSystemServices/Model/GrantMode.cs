@@ -16,7 +16,7 @@ namespace Core.AppSystemServices
         [Description("角色授权")]
         RoleGrant = 1,
         [Description("部门授权")]
-        DepartmentGrant = 2,
+        OrganizationGrant = 2,
         [Description("用户授权")]
         UserGrant = 3
     }
