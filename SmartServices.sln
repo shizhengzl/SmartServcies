@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.AppSystemServices", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.SnippetServices", "Core.Snippets\Core.SnippetServices.csproj", "{ECCD55A7-B3F2-489C-B9BB-39F554DB3A2D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.CefChrome", "Core.CefChrome\Core.CefChrome.csproj", "{935977C6-EB2E-4501-9953-7DC2CF0C70E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{ECCD55A7-B3F2-489C-B9BB-39F554DB3A2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECCD55A7-B3F2-489C-B9BB-39F554DB3A2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECCD55A7-B3F2-489C-B9BB-39F554DB3A2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{935977C6-EB2E-4501-9953-7DC2CF0C70E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{935977C6-EB2E-4501-9953-7DC2CF0C70E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{935977C6-EB2E-4501-9953-7DC2CF0C70E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{935977C6-EB2E-4501-9953-7DC2CF0C70E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +119,7 @@ Global
 		{D10C539E-74A6-4B47-878E-1099A5866128} = {BA073F79-62BE-4ED4-9125-687707092D97}
 		{91EBF269-FF44-475A-B313-B287CDA99D3C} = {BA073F79-62BE-4ED4-9125-687707092D97}
 		{ECCD55A7-B3F2-489C-B9BB-39F554DB3A2D} = {BA073F79-62BE-4ED4-9125-687707092D97}
+		{935977C6-EB2E-4501-9953-7DC2CF0C70E1} = {B8F3AC72-2176-40F4-B70F-06A17E1B7675}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {81289EAF-5169-4FE6-B757-5A4659CB347F}
