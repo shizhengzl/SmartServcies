@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using CefSharp;
 using System.Net;
 using CefSharp.DevTools.Network;
+using Core.UsuallyCommon;
+using Newtonsoft.Json;
 
 namespace Core.CefChrome
 {
@@ -37,12 +39,15 @@ namespace Core.CefChrome
             this.Controls.Add(chromiumWebBrowser);
 
             chromiumWebBrowser.Dock = DockStyle.Fill;
+            // sid=5d114f3b494acfaa406b7db08745d29b690b916f
+            var searchurl = @"https://prolivey.com/ipl/portal.php/game/betrecord_search/kind3?GameCode=1&GameType=3001&sid={0}&lang=cn&rnd1630578589476";
+
+          
         }
 
         private void ChromiumWebBrowser_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
         {
-            chromiumWebBrowser.GetBrowser().MainFrame.ExecuteJavaScriptAsync("document.getElementById('username').value='shizhengzl'");
-            chromiumWebBrowser.GetBrowser().MainFrame.ExecuteJavaScriptAsync("document.getElementById('passwd').value='shizi120'");
+            
         }
 
         private void CoreCefChrome_FormClosing(object sender, FormClosingEventArgs e)
@@ -84,6 +89,46 @@ namespace Core.CefChrome
         {
             if(!cookies.Any(x=>x.Name == cookie.Name && x.Value == cookie.Value))
                 cookies.Add(cookie); 
+        }
+
+        private void btnGetJson_Click(object sender, EventArgs e)
+        {
+            //var jsonurl = @"https://vip337.com:8866/infe/macenter/account/moneyswitchcontroller/translist.json";//
+            //var jsonurl = @"https://prolivey.com/ipl/portal.php/game/betrecord_search/kind3?GameCode=1&GameType=3001&lang=cn&rnd1630578589476&sid=";
+
+            var jsonurl = @"https://vip337.com:8866/infe/macenter/record/betrecordcontroller/getliverecord.json";
+            CookieContainer cookieContainer= new CookieContainer();
+            CookieCollection cookieCollection= new CookieCollection();
+            cookies.ForEach(cookie => {
+                //if(cookie.Name == "BBSESSID")
+                //    jsonurl =jsonurl + cookie.Value + "&";
+                cookieCollection.Add(new System.Net.Cookie()
+                {
+                    Name = cookie.Name,
+                    Value = cookie.Value,
+                    Secure = cookie.Secure,
+                    Domain = cookie.Domain,
+                    Path = cookie.Path
+                });
+
+                cookieContainer.Add(new System.Net.Cookie() { 
+                    Name = cookie.Name,
+                    Value = cookie.Value, 
+                    Secure = cookie.Secure,
+                    Domain= cookie.Domain,
+                    Path= cookie.Path
+                });
+            });
+
+            //var result = HttpClientHelper.GetAsync(jsonurl, cookieContainer);
+            var response = HttpClientHelper.CreateGetHttpResponse(jsonurl,10000,"", cookieCollection);
+            var result = HttpClientHelper.GetResponseString(response);
+            var root = JsonConvert.DeserializeObject<Root>(result);
+            //var money = root.balance_list.Where(x => x.name == "BBIN").FirstOrDefault().balance;
+
+            var money = root.data..Where(x => x.name == "BBIN").FirstOrDefault().balance;
+            MessageBox.Show(money);
+
         }
     }
 

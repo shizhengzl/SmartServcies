@@ -30,14 +30,16 @@ namespace Core.CefChrome
         private void InitializeComponent()
         {
             this.ptop = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.btnGo = new System.Windows.Forms.Button();
             this.BtnGetCookie = new System.Windows.Forms.Button();
+            this.btnGo = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.btnGetJson = new System.Windows.Forms.Button();
             this.ptop.SuspendLayout();
             this.SuspendLayout();
             // 
             // ptop
             // 
+            this.ptop.Controls.Add(this.btnGetJson);
             this.ptop.Controls.Add(this.BtnGetCookie);
             this.ptop.Controls.Add(this.btnGo);
             this.ptop.Controls.Add(this.textBox1);
@@ -47,12 +49,15 @@ namespace Core.CefChrome
             this.ptop.Size = new System.Drawing.Size(1044, 67);
             this.ptop.TabIndex = 0;
             // 
-            // textBox1
+            // BtnGetCookie
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 12);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(941, 21);
-            this.textBox1.TabIndex = 0;
+            this.BtnGetCookie.Location = new System.Drawing.Point(800, 39);
+            this.BtnGetCookie.Name = "BtnGetCookie";
+            this.BtnGetCookie.Size = new System.Drawing.Size(75, 23);
+            this.BtnGetCookie.TabIndex = 2;
+            this.BtnGetCookie.Text = "GetCookie";
+            this.BtnGetCookie.UseVisualStyleBackColor = true;
+            this.BtnGetCookie.Click += new System.EventHandler(this.BtnGetCookie_Click);
             // 
             // btnGo
             // 
@@ -64,15 +69,22 @@ namespace Core.CefChrome
             this.btnGo.UseVisualStyleBackColor = true;
             this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
             // 
-            // BtnGetCookie
+            // textBox1
             // 
-            this.BtnGetCookie.Location = new System.Drawing.Point(878, 39);
-            this.BtnGetCookie.Name = "BtnGetCookie";
-            this.BtnGetCookie.Size = new System.Drawing.Size(75, 23);
-            this.BtnGetCookie.TabIndex = 2;
-            this.BtnGetCookie.Text = "GetCookie";
-            this.BtnGetCookie.UseVisualStyleBackColor = true;
-            this.BtnGetCookie.Click += new System.EventHandler(this.BtnGetCookie_Click);
+            this.textBox1.Location = new System.Drawing.Point(12, 12);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(941, 21);
+            this.textBox1.TabIndex = 0;
+            // 
+            // btnGetJson
+            // 
+            this.btnGetJson.Location = new System.Drawing.Point(878, 39);
+            this.btnGetJson.Name = "btnGetJson";
+            this.btnGetJson.Size = new System.Drawing.Size(75, 23);
+            this.btnGetJson.TabIndex = 3;
+            this.btnGetJson.Text = "GetJson";
+            this.btnGetJson.UseVisualStyleBackColor = true;
+            this.btnGetJson.Click += new System.EventHandler(this.btnGetJson_Click);
             // 
             // CoreCefChrome
             // 
@@ -95,6 +107,7 @@ namespace Core.CefChrome
         private System.Windows.Forms.Button btnGo;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button BtnGetCookie;
+        private System.Windows.Forms.Button btnGetJson;
     }
 }
 
