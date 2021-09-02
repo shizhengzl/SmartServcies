@@ -126,7 +126,7 @@ namespace Core.CefChrome
             var root = JsonConvert.DeserializeObject<Root>(result);
             //var money = root.balance_list.Where(x => x.name == "BBIN").FirstOrDefault().balance;
 
-            var money = root.data..Where(x => x.name == "BBIN").FirstOrDefault().balance;
+            var money = root.data.FirstOrDefault().payoff;
             MessageBox.Show(money);
 
         }

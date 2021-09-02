@@ -19,7 +19,7 @@ namespace Core.CefChrome
         /// <summary>
         /// 
         /// </summary>
-        public int wagers_id { get; set; }
+        public long  wagers_id { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -27,7 +27,7 @@ namespace Core.CefChrome
         /// <summary>
         /// 
         /// </summary>
-        public int roundserial { get; set; }
+        public long  roundserial { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -39,7 +39,7 @@ namespace Core.CefChrome
         /// <summary>
         /// 
         /// </summary>
-        public int gamecode { get; set; }
+        public long  gamecode { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -95,7 +95,7 @@ namespace Core.CefChrome
         /// <summary>
         /// 
         /// </summary>
-        public int gametype_id { get; set; }
+        public long  gametype_id { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -116,7 +116,7 @@ namespace Core.CefChrome
         /// <summary>
         /// 
         /// </summary>
-        public int subCount { get; set; }
+        public long subCount { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -132,11 +132,11 @@ namespace Core.CefChrome
         /// <summary>
         /// 
         /// </summary>
-        public int totalCount { get; set; }
+        public long  totalCount { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public int totalPages { get; set; }
+        public long  totalPages { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -168,11 +168,11 @@ namespace Core.CefChrome
         /// <summary>
         /// 
         /// </summary>
-        public int page { get; set; }
+        public long  page { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public RPage rPage { get; set; }
+       
         /// <summary>
         /// 
         /// </summary>
@@ -232,7 +232,7 @@ namespace Core.CefChrome
             /// <summary>
             /// 
             /// </summary>
-            public int wallet_status { get; set; }
+            public long  wallet_status { get; set; }
             /// <summary>
             /// 
             /// </summary>
