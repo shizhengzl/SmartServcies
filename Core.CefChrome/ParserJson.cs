@@ -91,7 +91,7 @@ namespace Core.CefChrome
         /// <summary>
         /// 
         /// </summary>
-        public string detail_status { get; set; }
+        public bool detail_status { get; set; }
         /// <summary>
         /// 
         /// </summary>
