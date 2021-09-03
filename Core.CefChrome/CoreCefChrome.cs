@@ -17,6 +17,7 @@ using Core.CefChrome.Properties;
 using System.Xml.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Runtime.InteropServices;
+using Core.FreeSqlServices;
 
 namespace Core.CefChrome
 {
@@ -27,6 +28,8 @@ namespace Core.CefChrome
 
         public CoreCefChrome()
         {
+           // this.FormBorderStyle = FormBorderStyle.None;     //设置窗体为无边框样式
+            this.WindowState = FormWindowState.Maximized;    //最大化窗体
             InitializeComponent();
 
             InitChrome();
@@ -36,7 +39,7 @@ namespace Core.CefChrome
         {
             var tragerurl = string.Empty;// txtTargetUrl.Text.Trim(); 
             if (string.IsNullOrEmpty(tragerurl))
-                tragerurl = "https://www.baidu.com";//"http://vip337.com:8866";
+                tragerurl ="http://vip337.com:8866"; //"https://www.baidu.com";//
             CefSettings settings = new CefSettings();
             settings.Locale = "zh-CN";
             Cef.Initialize(settings, true); 
@@ -57,16 +60,6 @@ namespace Core.CefChrome
             if (!e.IsLoading)
             {
                
-                //var js = @"(function (){ return document.querySelectorAll('a');})(); ";
-                //chromiumWebBrowser.EvaluateScriptAsync(js).ContinueWith(x =>
-                //{
-                //    var response = x.Result;
-                //    if (response.Success && response.Result != null)
-                //    {
-
-                //    }
-                //});
-                //chromiumWebBrowser.ExecuteScriptAsyncWhenPageLoaded("alert('All Resources Have Loaded');");
             }
         }
 
@@ -115,8 +108,8 @@ namespace Core.CefChrome
         private void btnGetJson_Click(object sender, EventArgs e)
         {
             var jsonurl = @"https://vip337.com:8866/infe/macenter/record/betrecordcontroller/getliverecord.json";
-            CookieContainer cookieContainer= new CookieContainer();
-            CookieCollection cookieCollection= new CookieCollection();
+            CookieContainer cookieContainer = new CookieContainer();
+            CookieCollection cookieCollection = new CookieCollection();
             cookies.ForEach(cookie => {
                 cookieCollection.Add(new System.Net.Cookie()
                 {
@@ -127,24 +120,27 @@ namespace Core.CefChrome
                     Path = cookie.Path
                 });
 
-                cookieContainer.Add(new System.Net.Cookie() { 
+                cookieContainer.Add(new System.Net.Cookie()
+                {
                     Name = cookie.Name,
-                    Value = cookie.Value, 
+                    Value = cookie.Value,
                     Secure = cookie.Secure,
-                    Domain= cookie.Domain,
-                    Path= cookie.Path
+                    Domain = cookie.Domain,
+                    Path = cookie.Path
                 });
             });
-             
-            var response = HttpClientHelper.CreateGetHttpResponse(jsonurl,10000,"", cookieCollection);
+
+            var response = HttpClientHelper.CreateGetHttpResponse(jsonurl, 10000, "", cookieCollection);
             var result = HttpClientHelper.GetResponseString(response);
             var root = JsonConvert.DeserializeObject<Root>(result);
-   
-            var data = root.data.FirstOrDefault();
-            if(data != null)
+
+            if(root != null && root.data != null)
             {
-                Cdata(data, zMSetting);
-            }  
+                root.data.ForEach(x => {
+                    if (!factory.FreeSql.Select<DataItem>().Any(p => p.roundserial == x.roundserial))
+                        factory.FreeSql.Insert<DataItem>(x).ExecuteAffrowsAsync();
+                });
+            }
         }
 
         private void btnInitUer_Click(object sender, EventArgs e)
@@ -154,35 +150,10 @@ namespace Core.CefChrome
             list.ToList().ForEach(x => {
                 chromiumWebBrowser.GetBrowser().GetFrame(x).ExecuteJavaScriptAsync("document.getElementById('username').value='shizhengzl'");
                 chromiumWebBrowser.GetBrowser().GetFrame(x).ExecuteJavaScriptAsync("document.getElementById('passwd').value='shizi120'");
-                //chromiumWebBrowser.GetBrowser().GetFrame(x).ExecuteJavaScriptAsync("document.getElementById('LoginForm').submit()");
             });
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("1");
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("2");
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("3");
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("4");
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("5");
-        }
-
+ 
         private void CoreCefChrome_KeyDown(object sender, KeyEventArgs e)
         {
             string value = string.Format("{0},{1}", Cursor.Position.X.ToStringExtension(), Cursor.Position.Y.ToStringExtension());
@@ -246,6 +217,77 @@ namespace Core.CefChrome
             timeserver.Start();
         }
 
+        public void InitData()
+        {
+            txtmessage.AppendText("insert" + Environment.NewLine);
+
+            var txtten = txtTen.Text.Trim();
+            var txtok = txtOk.Text.Trim();
+
+            var zhuang = txtzhuang.Text.Trim();
+            var xian = txtxian.Text.Trim();
+            var he = txtHe.Text.Trim();
+
+
+            zMSetting = new ZMSetting()
+            {
+                Ten = new GnameSettig() { point = new Point() { X = txtten.Split(',')[0].ToInt32(), Y = txtten.Split(',')[1].ToInt32() } },
+                OK = new GnameSettig() { point = new Point() { X = txtok.Split(',')[0].ToInt32(), Y = txtok.Split(',')[1].ToInt32() } },
+                Zhuang = new GnameSettig() { point = new Point() { X = zhuang.Split(',')[0].ToInt32(), Y = zhuang.Split(',')[1].ToInt32() } },
+                Xian = new GnameSettig() { point = new Point() { X = xian.Split(',')[0].ToInt32(), Y = xian.Split(',')[1].ToInt32() } },
+                He = new GnameSettig() { point = new Point() { X = he.Split(',')[0].ToInt32(), Y = he.Split(',')[1].ToInt32() } }
+            };
+            switch (commode.SelectedText)
+            {
+                case "Z":
+                    zMSetting.inverstMode = InverstMode.Zhuang;
+                    break;
+                case "X":
+                    zMSetting.inverstMode = InverstMode.Xian;
+                    break;
+                case "H":
+                    zMSetting.inverstMode = InverstMode.He;
+                    break;
+                case "Rondom":
+                    zMSetting.inverstMode = InverstMode.Random;
+                    break;
+            }
+
+            var jsonurl = @"https://vip337.com:8866/infe/macenter/record/betrecordcontroller/getliverecord.json";
+            CookieContainer cookieContainer = new CookieContainer();
+            CookieCollection cookieCollection = new CookieCollection();
+            cookies.ForEach(cookie => {
+                cookieCollection.Add(new System.Net.Cookie()
+                {
+                    Name = cookie.Name,
+                    Value = cookie.Value,
+                    Secure = cookie.Secure,
+                    Domain = cookie.Domain,
+                    Path = cookie.Path
+                });
+
+                cookieContainer.Add(new System.Net.Cookie()
+                {
+                    Name = cookie.Name,
+                    Value = cookie.Value,
+                    Secure = cookie.Secure,
+                    Domain = cookie.Domain,
+                    Path = cookie.Path
+                });
+            });
+
+            var response = HttpClientHelper.CreateGetHttpResponse(jsonurl, 10000, "", cookieCollection);
+            var result = HttpClientHelper.GetResponseString(response);
+            var root = JsonConvert.DeserializeObject<Root>(result);
+
+            var data = root.data.FirstOrDefault();
+            if (data != null)
+            {
+                Cdata(data, zMSetting);
+            }
+
+        }
+
         private void btnstopserver_Click(object sender, EventArgs e)
         {
             timeserver.Enabled = false;
@@ -255,12 +297,26 @@ namespace Core.CefChrome
         public ZMSetting zMSetting { get; set; }
 
         private void timeserver_Tick(object sender, EventArgs e)
-        { 
-            Cdata(new DataItem() { detail_status = true }, zMSetting);
+        {
+            InitData();
         }
 
+
+        public FreeSqlFactory factory = new FreeSqlFactory();
         public void Cdata(DataItem dataItem, ZMSetting zMSetting)
         {
+            if (dataItem != null)
+            {
+                if (dataItem.detail_status) {
+                    if (!factory.FreeSql.Select<DataItem>().Any(x => x.roundserial == dataItem.roundserial))
+                        factory.FreeSql.Insert<DataItem>(dataItem).ExecuteAffrowsAsync();
+                }
+                else
+                {
+                    txtmessage.AppendText(JsonConvert.SerializeObject(dataItem) + Environment.NewLine);
+                }
+            }
+
             if (dataItem.detail_status)
             {
                 Point point = new Point();
@@ -285,12 +341,12 @@ namespace Core.CefChrome
                 txtmessage.AppendText(string.Format("{0}，{1}", zMSetting.Ten.point.X, zMSetting.Ten.point.Y) + Environment.NewLine);
                 txtmessage.AppendText(string.Format("{0}，{1}", point.X,point.Y) + Environment.NewLine);
                 txtmessage.AppendText(string.Format("{0}，{1}", zMSetting.OK.point.X, zMSetting.OK.point.Y) + Environment.NewLine);
-                //// ten
-                //MouseHelper.DoClick(zMSetting.Ten.point.X, zMSetting.Ten.point.Y);
-                //// inverst
-                //MouseHelper.DoClick(point.X, point.Y);
-                //// ok
-                //MouseHelper.DoClick(zMSetting.OK.point.X,zMSetting.OK.point.Y);
+                // ten
+                MouseHelper.DoClick(zMSetting.Ten.point.X, zMSetting.Ten.point.Y);
+                // inverst
+                MouseHelper.DoClick(point.X, point.Y);
+                // ok
+                MouseHelper.DoClick(zMSetting.OK.point.X, zMSetting.OK.point.Y);
             }
         }
     }

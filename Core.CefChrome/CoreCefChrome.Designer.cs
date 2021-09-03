@@ -37,17 +37,13 @@ namespace Core.CefChrome
             this.btnGo = new System.Windows.Forms.Button();
             this.txtTargetUrl = new System.Windows.Forms.TextBox();
             this.panleft = new System.Windows.Forms.Panel();
+            this.txtmessage = new System.Windows.Forms.TextBox();
             this.lblMode = new System.Windows.Forms.Label();
             this.commode = new System.Windows.Forms.ComboBox();
             this.txtJg = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnstopserver = new System.Windows.Forms.Button();
             this.btnstartserver = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.txtTen = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -59,7 +55,6 @@ namespace Core.CefChrome
             this.lblzhuang = new System.Windows.Forms.Label();
             this.txtzhuang = new System.Windows.Forms.TextBox();
             this.timeserver = new System.Windows.Forms.Timer(this.components);
-            this.txtmessage = new System.Windows.Forms.TextBox();
             this.ptop.SuspendLayout();
             this.panleft.SuspendLayout();
             this.SuspendLayout();
@@ -134,11 +129,6 @@ namespace Core.CefChrome
             this.panleft.Controls.Add(this.label1);
             this.panleft.Controls.Add(this.btnstopserver);
             this.panleft.Controls.Add(this.btnstartserver);
-            this.panleft.Controls.Add(this.button5);
-            this.panleft.Controls.Add(this.button4);
-            this.panleft.Controls.Add(this.button3);
-            this.panleft.Controls.Add(this.button2);
-            this.panleft.Controls.Add(this.button1);
             this.panleft.Controls.Add(this.label5);
             this.panleft.Controls.Add(this.txtTen);
             this.panleft.Controls.Add(this.label3);
@@ -155,10 +145,18 @@ namespace Core.CefChrome
             this.panleft.Size = new System.Drawing.Size(279, 729);
             this.panleft.TabIndex = 1;
             // 
+            // txtmessage
+            // 
+            this.txtmessage.Location = new System.Drawing.Point(14, 433);
+            this.txtmessage.Multiline = true;
+            this.txtmessage.Name = "txtmessage";
+            this.txtmessage.Size = new System.Drawing.Size(247, 266);
+            this.txtmessage.TabIndex = 26;
+            // 
             // lblMode
             // 
             this.lblMode.AutoSize = true;
-            this.lblMode.Location = new System.Drawing.Point(30, 411);
+            this.lblMode.Location = new System.Drawing.Point(58, 302);
             this.lblMode.Name = "lblMode";
             this.lblMode.Size = new System.Drawing.Size(29, 12);
             this.lblMode.TabIndex = 25;
@@ -172,7 +170,7 @@ namespace Core.CefChrome
             "X",
             "H",
             "Rondom"});
-            this.commode.Location = new System.Drawing.Point(74, 403);
+            this.commode.Location = new System.Drawing.Point(103, 300);
             this.commode.Name = "commode";
             this.commode.Size = new System.Drawing.Size(121, 20);
             this.commode.TabIndex = 24;
@@ -180,7 +178,7 @@ namespace Core.CefChrome
             // 
             // txtJg
             // 
-            this.txtJg.Location = new System.Drawing.Point(74, 366);
+            this.txtJg.Location = new System.Drawing.Point(104, 263);
             this.txtJg.Name = "txtJg";
             this.txtJg.Size = new System.Drawing.Size(116, 21);
             this.txtJg.TabIndex = 23;
@@ -189,7 +187,7 @@ namespace Core.CefChrome
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 369);
+            this.label1.Location = new System.Drawing.Point(54, 266);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 12);
             this.label1.TabIndex = 22;
@@ -197,7 +195,7 @@ namespace Core.CefChrome
             // 
             // btnstopserver
             // 
-            this.btnstopserver.Location = new System.Drawing.Point(147, 453);
+            this.btnstopserver.Location = new System.Drawing.Point(147, 404);
             this.btnstopserver.Name = "btnstopserver";
             this.btnstopserver.Size = new System.Drawing.Size(75, 23);
             this.btnstopserver.TabIndex = 21;
@@ -207,7 +205,7 @@ namespace Core.CefChrome
             // 
             // btnstartserver
             // 
-            this.btnstartserver.Location = new System.Drawing.Point(53, 453);
+            this.btnstartserver.Location = new System.Drawing.Point(53, 404);
             this.btnstartserver.Name = "btnstartserver";
             this.btnstartserver.Size = new System.Drawing.Size(75, 23);
             this.btnstartserver.TabIndex = 20;
@@ -215,60 +213,10 @@ namespace Core.CefChrome
             this.btnstartserver.UseVisualStyleBackColor = true;
             this.btnstartserver.Click += new System.EventHandler(this.btnstartserver_Click);
             // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(78, 144);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 19;
-            this.button5.Text = "button5";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(77, 115);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 18;
-            this.button4.Text = "button4";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(77, 84);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 17;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(78, 55);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 16;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(78, 25);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 15;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 328);
+            this.label5.Location = new System.Drawing.Point(42, 225);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(53, 12);
             this.label5.TabIndex = 14;
@@ -276,15 +224,16 @@ namespace Core.CefChrome
             // 
             // txtTen
             // 
-            this.txtTen.Location = new System.Drawing.Point(74, 323);
+            this.txtTen.Location = new System.Drawing.Point(104, 220);
             this.txtTen.Name = "txtTen";
             this.txtTen.Size = new System.Drawing.Size(116, 21);
             this.txtTen.TabIndex = 13;
+            this.txtTen.Text = "658,645";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 290);
+            this.label3.Location = new System.Drawing.Point(42, 187);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(47, 12);
             this.label3.TabIndex = 11;
@@ -292,15 +241,16 @@ namespace Core.CefChrome
             // 
             // txtOk
             // 
-            this.txtOk.Location = new System.Drawing.Point(74, 285);
+            this.txtOk.Location = new System.Drawing.Point(104, 182);
             this.txtOk.Name = "txtOk";
             this.txtOk.Size = new System.Drawing.Size(116, 21);
             this.txtOk.TabIndex = 10;
+            this.txtOk.Text = "1096,631";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 253);
+            this.label4.Location = new System.Drawing.Point(42, 150);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(41, 12);
             this.label4.TabIndex = 8;
@@ -308,15 +258,16 @@ namespace Core.CefChrome
             // 
             // txtHe
             // 
-            this.txtHe.Location = new System.Drawing.Point(74, 248);
+            this.txtHe.Location = new System.Drawing.Point(104, 145);
             this.txtHe.Name = "txtHe";
             this.txtHe.Size = new System.Drawing.Size(116, 21);
             this.txtHe.TabIndex = 7;
+            this.txtHe.Text = "780,544";
             // 
             // lblxian
             // 
             this.lblxian.AutoSize = true;
-            this.lblxian.Location = new System.Drawing.Point(12, 215);
+            this.lblxian.Location = new System.Drawing.Point(42, 112);
             this.lblxian.Name = "lblxian";
             this.lblxian.Size = new System.Drawing.Size(41, 12);
             this.lblxian.TabIndex = 5;
@@ -324,15 +275,16 @@ namespace Core.CefChrome
             // 
             // txtxian
             // 
-            this.txtxian.Location = new System.Drawing.Point(74, 210);
+            this.txtxian.Location = new System.Drawing.Point(104, 107);
             this.txtxian.Name = "txtxian";
             this.txtxian.Size = new System.Drawing.Size(116, 21);
             this.txtxian.TabIndex = 4;
+            this.txtxian.Text = "499,550";
             // 
             // lblzhuang
             // 
             this.lblzhuang.AutoSize = true;
-            this.lblzhuang.Location = new System.Drawing.Point(12, 178);
+            this.lblzhuang.Location = new System.Drawing.Point(42, 75);
             this.lblzhuang.Name = "lblzhuang";
             this.lblzhuang.Size = new System.Drawing.Size(41, 12);
             this.lblzhuang.TabIndex = 2;
@@ -340,23 +292,16 @@ namespace Core.CefChrome
             // 
             // txtzhuang
             // 
-            this.txtzhuang.Location = new System.Drawing.Point(74, 173);
+            this.txtzhuang.Location = new System.Drawing.Point(104, 70);
             this.txtzhuang.Name = "txtzhuang";
             this.txtzhuang.Size = new System.Drawing.Size(116, 21);
             this.txtzhuang.TabIndex = 1;
+            this.txtzhuang.Text = "1102,551";
             // 
             // timeserver
             // 
             this.timeserver.Interval = 5000;
             this.timeserver.Tick += new System.EventHandler(this.timeserver_Tick);
-            // 
-            // txtmessage
-            // 
-            this.txtmessage.Location = new System.Drawing.Point(14, 500);
-            this.txtmessage.Multiline = true;
-            this.txtmessage.Name = "txtmessage";
-            this.txtmessage.Size = new System.Drawing.Size(247, 199);
-            this.txtmessage.TabIndex = 26;
             // 
             // CoreCefChrome
             // 
@@ -397,11 +342,6 @@ namespace Core.CefChrome
         private System.Windows.Forms.TextBox txtxian;
         private System.Windows.Forms.Label lblzhuang;
         private System.Windows.Forms.TextBox txtzhuang;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnstopserver;
         private System.Windows.Forms.Button btnstartserver;
         private System.Windows.Forms.Timer timeserver;
