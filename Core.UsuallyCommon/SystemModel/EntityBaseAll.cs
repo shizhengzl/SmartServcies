@@ -39,13 +39,7 @@ namespace Core.UsuallyCommon
         /// 修改用户
         /// </summary>
         [Description("修改用户")]
-        public Guid? ModifyUserId { get; set; }
+        public Guid? ModifyUserId { get; set; } 
 
-
-        /// <summary>
-        /// 描述
-        /// </summary>
-        [Description("描述")]
-        public String Description { get; set; }
     }
 }

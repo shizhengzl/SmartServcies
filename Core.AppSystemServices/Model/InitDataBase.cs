@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Core.UsuallyCommon;
+using System.Linq;
 
 namespace Core.AppSystemServices
 {
@@ -96,6 +97,13 @@ namespace Core.AppSystemServices
             if (!factory.FreeSql.Select<Menus>().Any(x => x.Name == "研发管理"))
             {
                 factory.FreeSql.Insert<Menus>(softtoolsmenus).ExecuteAffrows();
+            }
+
+            var father = factory.FreeSql.Select<Menus>().Where(x => x.Name == "研发管理").ToList<Menus>().FirstOrDefault();
+            Menus snippet = new Menus() { Id = Guid.NewGuid(), IsDefault = true, Url = "SnippetRecord", Name = "代码片段", MenusId = father.Id };
+            if (!factory.FreeSql.Select<Menus>().Any(x => x.Name == "代码片段"))
+            {
+                factory.FreeSql.Insert<Menus>(snippet).ExecuteAffrows();
             }
         }
         #endregion

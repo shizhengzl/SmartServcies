@@ -63,7 +63,7 @@ namespace Core.CefChrome
         /// <summary>
         /// 
         /// </summary>
-        public string payoff { get; set; }
+        public Decimal payoff { get; set; }
         /// <summary>
         /// 
         /// </summary>

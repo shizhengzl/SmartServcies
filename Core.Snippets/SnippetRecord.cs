@@ -30,12 +30,7 @@ namespace Core.SnippetServices
         [Description("快捷键")]
         [Column(StringLength = 500)]
         public string Shortcut { get; set; }
-        /// <summary>
-        /// 描述
-        /// </summary>
-        [Description("描述")]
-        [Column(StringLength = -1)]
-        public string Note { get; set; }
+
         /// <summary>
         /// 作者
         /// </summary>
@@ -49,5 +44,13 @@ namespace Core.SnippetServices
         [Description("代码")]
         [Column(StringLength = -1)]
         public string Code { get; set; }
+
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        [Description("描述")]
+        [Column(StringLength = -1)]
+        public String Description { get; set; }
     }
 }
