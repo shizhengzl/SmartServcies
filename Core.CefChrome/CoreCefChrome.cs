@@ -37,7 +37,7 @@ namespace Core.CefChrome
         {
             var tragerurl = string.Empty;// txtTargetUrl.Text.Trim(); 
             if (string.IsNullOrEmpty(tragerurl))
-                tragerurl ="http://vip337.com:8866"; //"https://www.baidu.com";//
+                tragerurl ="https://vip337.com:8866"; //"https://www.baidu.com";//
             CefSettings settings = new CefSettings();
             settings.Locale = "zh-CN";
             Cef.Initialize(settings, true);  
@@ -82,15 +82,19 @@ namespace Core.CefChrome
             });
 
             var response = HttpClientHelper.CreateGetHttpResponse(jsonurl, 10000, "", cookieCollection);
-            var result = HttpClientHelper.GetResponseString(response);
-            var root = JsonConvert.DeserializeObject<Root>(result);
-
-            if(root != null && root.data != null)
+            if (response != null)
             {
-                root.data.ForEach(x => {
-                    if (!factory.FreeSql.Select<DataItem>().Any(p => p.roundserial == x.roundserial))
-                        factory.FreeSql.Insert<DataItem>(x).ExecuteAffrowsAsync();
-                });
+                var result = HttpClientHelper.GetResponseString(response);
+                var root = JsonConvert.DeserializeObject<Root>(result);
+
+                if (root != null && root.data != null)
+                {
+                    root.data.ForEach(x =>
+                    {
+                        if (!factory.FreeSql.Select<DataItem>().Any(p => p.roundserial == x.roundserial))
+                            factory.FreeSql.Insert<DataItem>(x).ExecuteAffrowsAsync();
+                    });
+                }
             }
         }
 
@@ -162,7 +166,7 @@ namespace Core.CefChrome
         } 
         public void InitData()
         {
-            txtmessage.AppendText("insert" + Environment.NewLine);
+            ShowText("start===============================");
 
             var txtten = txtTen.Text.Trim();
             var txtok = txtOk.Text.Trim(); 
@@ -180,7 +184,8 @@ namespace Core.CefChrome
                 One = new GnameSettig() { point = new Point() { X = one.Split(',')[0].ToInt32(), Y = one.Split(',')[1].ToInt32() } }
                 , Add = txtAdd.Text.Trim().ToInt32()
                 , Min = txtMin.Text.Trim().ToInt32()
-                , Imode = comIMode.SelectedText.ToEnum<IMode>()
+                , Imode = comIMode.SelectedItem.ToStringExtension().ToEnum<IMode>(),
+                wRandom = comrandom.SelectedItem.ToStringExtension().ToEnum<WRandom>()
             };
             switch (commode.SelectedText)
             {
@@ -198,38 +203,48 @@ namespace Core.CefChrome
                     break;
             }
 
-            var jsonurl = @"https://vip337.com:8866/infe/macenter/record/betrecordcontroller/getliverecord.json";
-            CookieContainer cookieContainer = new CookieContainer();
-            CookieCollection cookieCollection = new CookieCollection();
-            cookies.ForEach(cookie => {
-                cookieCollection.Add(new System.Net.Cookie()
-                {
-                    Name = cookie.Name,
-                    Value = cookie.Value,
-                    Secure = cookie.Secure,
-                    Domain = cookie.Domain,
-                    Path = cookie.Path
-                });
-
-                cookieContainer.Add(new System.Net.Cookie()
-                {
-                    Name = cookie.Name,
-                    Value = cookie.Value,
-                    Secure = cookie.Secure,
-                    Domain = cookie.Domain,
-                    Path = cookie.Path
-                });
-            }); 
-            var response = HttpClientHelper.CreateGetHttpResponse(jsonurl, 10000, "", cookieCollection);
-            var result = HttpClientHelper.GetResponseString(response);
-            var root = JsonConvert.DeserializeObject<Root>(result);
-
-            var data = root.data.FirstOrDefault();
-            if (data != null)
+            if (Moni)
             {
+                var data = GetMoni(zMSetting);
                 Cdata(data, zMSetting);
             }
+            else
+            {
+                var jsonurl = @"https://vip337.com:8866/infe/macenter/record/betrecordcontroller/getliverecord.json";
+                CookieContainer cookieContainer = new CookieContainer();
+                CookieCollection cookieCollection = new CookieCollection();
+                cookies.ForEach(cookie => {
+                    cookieCollection.Add(new System.Net.Cookie()
+                    {
+                        Name = cookie.Name,
+                        Value = cookie.Value,
+                        Secure = cookie.Secure,
+                        Domain = cookie.Domain,
+                        Path = cookie.Path
+                    });
 
+                    cookieContainer.Add(new System.Net.Cookie()
+                    {
+                        Name = cookie.Name,
+                        Value = cookie.Value,
+                        Secure = cookie.Secure,
+                        Domain = cookie.Domain,
+                        Path = cookie.Path
+                    });
+                });
+                var response = HttpClientHelper.CreateGetHttpResponse(jsonurl, 10000, "", cookieCollection);
+                if (response != null)
+                {
+                    var result = HttpClientHelper.GetResponseString(response);
+                    var root = JsonConvert.DeserializeObject<Root>(result);
+
+                    var data = root.data.FirstOrDefault();
+                    if (data != null)
+                    {
+                        Cdata(data, zMSetting);
+                    }
+                }
+            }
         } 
 
        
@@ -238,6 +253,8 @@ namespace Core.CefChrome
             if (dataItem != null)
             {
                 if (dataItem.detail_status) {
+
+
                     if (!factory.FreeSql.Select<DataItem>().Any(x => x.roundserial == dataItem.roundserial))
                         factory.FreeSql.Insert<DataItem>(dataItem).ExecuteAffrowsAsync();
                 }
@@ -246,6 +263,7 @@ namespace Core.CefChrome
             if (dataItem.detail_status)
             {
                 Point point = new Point();
+                ShowText($"投注:{zMSetting.inverstMode.ToString()}");
                 // 开始
                 switch (zMSetting.inverstMode)
                 {
@@ -264,66 +282,101 @@ namespace Core.CefChrome
                     default:
                         break;
                 }
-                //txtmessage.AppendText(string.Format("{0}，{1}", zMSetting.Ten.point.X, zMSetting.Ten.point.Y) + Environment.NewLine);
-                //txtmessage.AppendText(string.Format("{0}，{1}", point.X,point.Y) + Environment.NewLine);
-                //txtmessage.AppendText(string.Format("{0}，{1}", zMSetting.OK.point.X, zMSetting.OK.point.Y) + Environment.NewLine);
-                
-                if(zMSetting.Imode == IMode.Await)
+
+                ShowText($"选择I模式:{zMSetting.Imode.ToString()}");
+                if (zMSetting.Imode == IMode.Await)
                 {
-                    var clicknum = zMSetting.DefaultInverstMoney.ToInt32() / 10;
+                    ShowText($"上一把{(dataItem.payoff.ToDecimal() > 0 ? "赢": "输")}了{dataItem.betamount}");
+                    var clicknum = zMSetting.DefaultInverstMoney.ToDecimal() / 10;
+
+                    ShowText($"选择金额10，坐标{zMSetting.Ten.point.X},{zMSetting.Ten.point.Y}");
                     // ten
-                    MouseHelper.DoClick(zMSetting.Ten.point.X, zMSetting.Ten.point.Y);
+                    if (!Moni)
+                        MouseHelper.DoClick(zMSetting.Ten.point.X, zMSetting.Ten.point.Y);
+                    ShowText($"选择投注点击次数{clicknum}");
                     for (int i = 0; i < clicknum; i++)
                     {
                         // inverst
-                        MouseHelper.DoClick(point.X, point.Y);
+                        if(!Moni)
+                            MouseHelper.DoClick(point.X, point.Y);
                     }
                     // ok
-                    MouseHelper.DoClick(zMSetting.OK.point.X, zMSetting.OK.point.Y);
+                    ShowText($"点击ok,坐标:{zMSetting.OK.point.X},{zMSetting.OK.point.Y}");
+                    if (!Moni)
+                        MouseHelper.DoClick(zMSetting.OK.point.X, zMSetting.OK.point.Y);
                 }
                 if (zMSetting.Imode == IMode.Add)
-                { 
+                {
+                    ShowText($"选择金额1，坐标{zMSetting.Ten.point.X},{zMSetting.Ten.point.Y}");
                     // one
-                    MouseHelper.DoClick(zMSetting.One.point.X, zMSetting.One.point.Y);
-                     
+                    if (!Moni)
+                        MouseHelper.DoClick(zMSetting.One.point.X, zMSetting.One.point.Y);
 
-                    var investmoney = 0;
-                    if (dataItem.payoff.ToInt32() > 0) {
-                        if ((investmoney - zMSetting.Min.ToInt32()) / zMSetting.Add.ToInt32() >= 20)
-                            investmoney = zMSetting.Min.ToInt32();
-                        else
-                            investmoney = dataItem.payoff.ToInt32() - zMSetting.Add.ToInt32();
-                    }
-                    if (dataItem.payoff.ToInt32() == 0)
-                    {
-                        investmoney = dataItem.betamount.ToInt32() ;
-                    }
-                    if (dataItem.payoff.ToInt32() < 0)
-                    {  
-                        if ((investmoney - zMSetting.Min.ToInt32()) / zMSetting.Add.ToInt32() >= 20)
+                    decimal investmoney = 0;
+                    if (dataItem.payoff.ToDecimal() > 0) {
+                        ShowText($"上一把赢了{dataItem.payoff.ToDecimal()}");
+                        if ((dataItem.payoff.ToDecimal() - zMSetting.Min.ToDecimal()) / zMSetting.Add.ToDecimal() >= 20)
                         {
-                            investmoney = (zMSetting.Min.ToInt32() + investmoney)
-                                *
-                                ((investmoney - zMSetting.Min.ToInt32()) / zMSetting.Add.ToInt32()) / 2;
+                            ShowText($"满足20次 (投注-最小)/add >=20,{dataItem.payoff.ToDecimal()},{ zMSetting.Min.ToDecimal()},{zMSetting.Add.ToDecimal() } ");
+                            investmoney = zMSetting.Min.ToDecimal();
                         }
                         else
-                            investmoney = 0 - dataItem.payoff.ToInt32() + zMSetting.Add.ToInt32();
+                        {
+                            investmoney = dataItem.payoff.ToDecimal() - zMSetting.Add.ToDecimal();
+                        }
+                           
+                    }
+                    if (dataItem.payoff.ToDecimal() == 0)
+                    {
+                        ShowText($"上一把和了,{dataItem.betamount.ToDecimal()}");
+                        investmoney = dataItem.betamount.ToDecimal() ;
+                    }
+                    if (dataItem.payoff.ToDecimal() < 0)
+                    {
+                        ShowText($"上一把输了,{dataItem.betamount.ToDecimal()}");
+                        if ((dataItem.betamount.ToDecimal() - zMSetting.Min.ToDecimal()) / zMSetting.Add.ToDecimal() == 20)
+                        {
+                            ShowText($"满足20次 (投注-最小)/add >=20, { dataItem.betamount.ToDecimal()},{ zMSetting.Min.ToDecimal() },{ zMSetting.Add.ToDecimal() }");
+                            investmoney = (zMSetting.Min.ToDecimal() + dataItem.betamount.ToDecimal())
+                                *
+                                ((dataItem.betamount.ToDecimal() - zMSetting.Min.ToDecimal()) / zMSetting.Add.ToDecimal()) / 2;
+                        }
+                        else if ((dataItem.betamount.ToDecimal() - zMSetting.Min.ToDecimal()) / zMSetting.Add.ToDecimal()>  20)
+                        {
+                            investmoney = dataItem.betamount.ToDecimal() * 2;
+                        }
+                        else
+                            investmoney = 0 - dataItem.payoff.ToDecimal() + zMSetting.Add.ToDecimal();
                     }
 
-                    if (investmoney < zMSetting.Min.ToInt32())
-                        investmoney = zMSetting.Min.ToInt32();
+                    if (investmoney < zMSetting.Min.ToDecimal())
+                    {
+                        ShowText($"投注低于最小,{investmoney},{zMSetting.Min.ToDecimal()}");
+                        investmoney = zMSetting.Min.ToDecimal();
+                    }
 
+                    ShowText($"最终投注:{investmoney}");
 
+                    ShowText($"选择投注点击次数{investmoney}");
                     for (int i = 0; i < investmoney; i++)
                     {
                         // inverst
-                        MouseHelper.DoClick(point.X, point.Y);
+                        if (!Moni)
+                            MouseHelper.DoClick(point.X, point.Y);
                     }
-
+                    ShowText($"点击ok,坐标:{zMSetting.OK.point.X},{zMSetting.OK.point.Y}");
                     // ok
-                    MouseHelper.DoClick(zMSetting.OK.point.X, zMSetting.OK.point.Y);
+                    if (!Moni)
+                        MouseHelper.DoClick(zMSetting.OK.point.X, zMSetting.OK.point.Y);
                 }
             }
+        }
+
+        #region 其他代码
+
+        private void ShowText(string text)
+        {
+            txtmessage.AppendText(text + Environment.NewLine);
         }
 
         private void btnInitUer_Click(object sender, EventArgs e)
@@ -386,6 +439,7 @@ namespace Core.CefChrome
             if (!cookies.Any(x => x.Name == cookie.Name && x.Value == cookie.Value))
                 cookies.Add(cookie);
         }
+        #endregion
 
         public bool Moni = true;
 
@@ -398,10 +452,80 @@ namespace Core.CefChrome
 
         private DataItem GetMoni(ZMSetting settings)
         {
-            return new DataItem() { 
-                detail_status = true,
-                payoff = RandomExtensions.RandomBool() ? settings.Min : 0 - settings.Min,
-            };
+            var dataItem = factory.FreeSql.Select<DataItem>().OrderByDescending(x => x.roundserial).ToOne();
+            var win = true;
+            switch(zMSetting.wRandom)
+            {
+                case WRandom.Random:
+                    win = RandomExtensions.RandomBool();
+                    break;
+                case WRandom.Random095:
+                    win = RandomExtensions.RandomBool095();
+                    break;
+                case WRandom.Win:
+                    win = true;
+                    break;
+                case WRandom.Lost:
+                    win = false;
+                    break;
+
+            }
+            if(dataItem == null)
+            {
+                return new DataItem()
+                {
+                    detail_status = true,
+                    payoff = win ? settings.Min : 0 - settings.Min,
+                    betamount = settings.Min,
+                    roundserial = 1
+                };
+
+            }
+            decimal investmoney = zMSetting.DefaultInverstMoney;
+            if (zMSetting.Imode == IMode.Add)
+            {
+                if (dataItem.payoff.ToDecimal() > 0)
+                {
+                    if ((dataItem.payoff.ToDecimal() - zMSetting.Min.ToDecimal()) / zMSetting.Add.ToDecimal() >= 20)
+                    {
+                        investmoney = zMSetting.Min.ToDecimal();
+                    }
+                    else
+                    {
+                        investmoney = dataItem.payoff.ToDecimal() - zMSetting.Add.ToDecimal();
+                    }
+
+                }
+                if (dataItem.payoff.ToDecimal() == 0)
+                {
+                    investmoney = dataItem.betamount.ToDecimal();
+                }
+                if (dataItem.payoff.ToDecimal() < 0)
+                {
+                    if ((dataItem.betamount.ToDecimal() - zMSetting.Min.ToDecimal()) / zMSetting.Add.ToDecimal() == 20)
+                    {
+                        investmoney = (zMSetting.Min.ToDecimal() + dataItem.betamount.ToDecimal())
+                            *
+                            ((dataItem.betamount.ToDecimal() - zMSetting.Min.ToDecimal()) / zMSetting.Add.ToDecimal()) / 2;
+                    }
+                    else if ((dataItem.betamount.ToDecimal() - zMSetting.Min.ToDecimal()) / zMSetting.Add.ToDecimal() > 20)
+                    {
+                        investmoney = dataItem.betamount.ToDecimal() * 2;
+                    }
+                    else
+                        investmoney = 0 - dataItem.payoff.ToDecimal() + zMSetting.Add.ToDecimal();
+                }
+
+                if (investmoney < zMSetting.Min.ToDecimal())
+                {
+                    investmoney = zMSetting.Min.ToDecimal();
+                }
+            }
+
+            dataItem.betamount = investmoney;
+            dataItem.roundserial += 1;
+            dataItem.payoff =win ? investmoney : 0 - investmoney;
+            return dataItem;
         }
     }
 }

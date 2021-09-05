@@ -55,7 +55,7 @@ namespace Core.CefChrome
         /// <summary>
         /// 
         /// </summary>
-        public string betamount { get; set; }
+        public decimal betamount { get; set; }
         /// <summary>
         /// 
         /// </summary>

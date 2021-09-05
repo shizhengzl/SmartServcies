@@ -8,6 +8,8 @@ namespace Core.CefChrome
 {
     public class ZMSetting
     {
+
+       
         public int DefaultInverstMoney { get; set; } = 10;
 
         public InverstMode inverstMode { get; set; } = InverstMode.Xian;
@@ -34,6 +36,17 @@ namespace Core.CefChrome
         public int Min { get; set; } = 10;
 
         public IMode Imode { get; set; } = IMode.Await;
+
+        public WRandom wRandom { get; set; } = WRandom.Random;
+    }
+
+    public enum WRandom
+    {
+
+        Random,
+        Random095,
+        Win,
+        Lost
     }
 
     public enum IMode

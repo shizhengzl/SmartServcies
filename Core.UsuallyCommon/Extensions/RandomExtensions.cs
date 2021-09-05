@@ -9,6 +9,16 @@ namespace Core.UsuallyCommon
     /// </summary>
     public static class RandomExtensions
     {
+
+        /// <summary>
+        /// 随机生成bool
+        /// </summary>
+        /// <returns></returns>
+        public static bool RandomBool095()
+        {
+            return RamdoInt32(200) > 102;
+        }
+
         /// <summary>
         /// 随机生成bool
         /// </summary>

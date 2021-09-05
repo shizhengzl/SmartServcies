@@ -41,29 +41,39 @@ namespace Core.UsuallyCommon
         /// </summary>  
         public static HttpWebResponse CreateGetHttpResponse(string url, int timeout, string userAgent, CookieCollection cookies)
         {
-            HttpWebRequest request = null;
-            if (url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+            HttpWebResponse response = null;
+            try
             {
-                //对服务端证书进行有效性校验（非第三方权威机构颁发的证书，如自己生成的，不进行验证，这里返回true）
-                ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
-                request = WebRequest.Create(url) as HttpWebRequest;
-                request.ProtocolVersion = HttpVersion.Version10;    //http版本，默认是1.1,这里设置为1.0
-            }
-            else
-            {
-                request = WebRequest.Create(url) as HttpWebRequest;
-            }
-            request.Method = "GET";
+                HttpWebRequest request = null;
+                if (url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+                {
+                    //对服务端证书进行有效性校验（非第三方权威机构颁发的证书，如自己生成的，不进行验证，这里返回true）
+                    ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
+                    request = WebRequest.Create(url) as HttpWebRequest;
+                    request.ProtocolVersion = HttpVersion.Version10;    //http版本，默认是1.1,这里设置为1.0
+                }
+                else
+                {
+                    request = WebRequest.Create(url) as HttpWebRequest;
+                }
+                request.Method = "GET";
 
-            //设置代理UserAgent和超时
-            //request.UserAgent = userAgent;
-            //request.Timeout = timeout;
-            if (cookies != null)
-            {
-                request.CookieContainer = new CookieContainer();
-                request.CookieContainer.Add(cookies);
+                //设置代理UserAgent和超时
+                //request.UserAgent = userAgent;
+                //request.Timeout = timeout;
+                if (cookies != null)
+                {
+                    request.CookieContainer = new CookieContainer();
+                    request.CookieContainer.Add(cookies);
+                }
+                return request.GetResponse() as HttpWebResponse;
             }
-            return request.GetResponse() as HttpWebResponse;
+            catch (Exception)
+            {
+
+            }
+            return response;
+          
         }
 
 
