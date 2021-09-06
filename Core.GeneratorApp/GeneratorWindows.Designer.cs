@@ -117,7 +117,9 @@ namespace Core.GeneratorApp
             this.Controls.Add(this.pantree);
             this.Controls.Add(this.工具栏);
             this.Name = "GeneratorWindows";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "生成器窗口";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.工具栏.ResumeLayout(false);
             this.工具栏.PerformLayout();
             this.pantree.ResumeLayout(false);

@@ -16,7 +16,10 @@ namespace Core.GeneratorApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Login());
+
+            var from = new GeneratorWindows();
+            if(!from.colsed)
+                Application.Run(from);
         }
     }
 }

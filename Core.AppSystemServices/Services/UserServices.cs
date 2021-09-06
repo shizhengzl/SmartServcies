@@ -15,25 +15,84 @@ namespace Core.AppSystemServices
         public UserServices()
         {
 
-        } 
-        public Response<CurrentUsers> Login(Users user)
+        }
+
+        public Response<CurrentUsers> RegisterUser(Users user)
         {
-            Response<CurrentUsers> response = new Response<CurrentUsers>(); 
-            CurrentUsers current = new CurrentUsers();
-
-            // check username
-            if (!UserIsExists(user))
-                response.Message = "用户不存在";
-            // check password
-            if (!ValidPassword(user))
-                response.Message = "用户密码不正确";
-
-            if (!string.IsNullOrEmpty(response.Message))
+            Response<CurrentUsers> response = new Response<CurrentUsers>() { Success = false };
+            CurrentUsers current = new CurrentUsers(); 
+            if (user.UserName.IsNullOrEmpty())
             {
-                response.Success = false;
+                response.Message = "用户名不能为空";
+                return response;
+            } 
+            if (user.PassWord.IsNullOrEmpty())
+            {
+                response.Message = "密码不能为空";
+                return response;
+            }
+            if (user.Email.IsNullOrEmpty())
+            {
+                response.Message = "邮箱不能为空";
+                return response;
+            }
+            // check username
+            if (UserIsExists(user))
+            {
+                response.Message = "用户已经存在";
                 return response;
             }
 
+            var rs = this.Create<Users>(user);
+            if (rs == 0) {
+                response.Message = "注册失败";
+                return response;
+            }
+
+            // add cache  
+            current.CurrentUser = GetUsers(user);
+
+            // 获取菜单
+            if (IsSupperAdmin(current.CurrentUser))
+                current.UserMenus = GetSupperMenus();
+            else if (current.CurrentUser.IsAdmin)
+                current.UserMenus = GetAdminMenus(current.CurrentUser);
+            else
+                current.UserMenus = GetUserMenus(current.CurrentUser);
+
+            CacheServices.MemoryCacheManager.SetCache<CurrentUsers>(user.UserName, current, null);
+            response.Data = current;
+            response.Success = true;
+            return response;
+        }
+
+        public Response<CurrentUsers> Login(Users user)
+        {
+            Response<CurrentUsers> response = new Response<CurrentUsers>() { Success = false }; 
+            CurrentUsers current = new CurrentUsers();
+
+            if (user.UserName.IsNullOrEmpty())
+            {
+                response.Message = "用户名不能为空";
+                return response;
+            }
+                
+            if (user.PassWord.IsNullOrEmpty())
+            { 
+                response.Message = "密码不能为空";
+                return response;
+            }
+            // check username
+            if (!UserIsExists(user)) {
+                response.Message = "用户不存在";
+                return response;
+            }
+            // check password
+            if (!ValidPassword(user))
+            {
+                response.Message = "用户密码不正确";
+                return response;
+            } 
             // add cache  
             current.CurrentUser = GetUsers(user);
 
@@ -47,6 +106,7 @@ namespace Core.AppSystemServices
 
             CacheServices.MemoryCacheManager.SetCache<CurrentUsers>(user.UserName, current,null);
             response.Data = current;
+            response.Success = true;
             return response;
         }
 

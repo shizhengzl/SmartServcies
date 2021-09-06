@@ -47,9 +47,7 @@ namespace Core.CefChrome
             chromiumWebBrowser.LoadingStateChanged += ChromiumWebBrowser_LoadingStateChanged; 
             this.panchrome.Controls.Add(chromiumWebBrowser); 
             chromiumWebBrowser.Dock = DockStyle.Fill;   
-        }
-
-
+        } 
 
         private void btnGo_Click(object sender, EventArgs e)
         {
@@ -96,10 +94,7 @@ namespace Core.CefChrome
                     });
                 }
             }
-        }
-
-       
-        
+        } 
         private void CoreCefChrome_KeyDown(object sender, KeyEventArgs e)
         {
             string value = string.Format("{0},{1}", Cursor.Position.X.ToStringExtension(), Cursor.Position.Y.ToStringExtension());
@@ -127,39 +122,7 @@ namespace Core.CefChrome
 
         }
         private void btnstartserver_Click(object sender, EventArgs e)
-        {
-            txtmessage.AppendText("start" + Environment.NewLine);
-            
-            var txtten = txtTen.Text.Trim();
-            var txtok = txtOk.Text.Trim();
-
-            var zhuang = txtzhuang.Text.Trim();
-            var xian = txtxian.Text.Trim();
-            var he = txtHe.Text.Trim();
-           
-
-            zMSetting = new ZMSetting() { 
-                Ten = new GnameSettig() {  point = new Point() { X = txtten.Split(',')[0].ToInt32(), Y = txtten.Split(',')[1].ToInt32() } },
-                OK = new GnameSettig() { point = new Point() { X = txtok.Split(',')[0].ToInt32(), Y = txtok.Split(',')[1].ToInt32() } },
-                Zhuang = new GnameSettig() { point = new Point() { X = zhuang.Split(',')[0].ToInt32(), Y = zhuang.Split(',')[1].ToInt32() } },
-                Xian = new GnameSettig() { point = new Point() { X = xian.Split(',')[0].ToInt32(), Y = xian.Split(',')[1].ToInt32() } },
-                He = new GnameSettig() { point = new Point() { X = he.Split(',')[0].ToInt32(), Y = he.Split(',')[1].ToInt32() } }
-            };
-            switch (commode.SelectedText)
-            {
-                case "Z":
-                    zMSetting.inverstMode = InverstMode.Zhuang;
-                    break;
-                case "X":
-                    zMSetting.inverstMode = InverstMode.Xian;
-                    break;
-                case "H":
-                    zMSetting.inverstMode = InverstMode.He;
-                    break;
-                case "Rondom":
-                    zMSetting.inverstMode = InverstMode.Random;
-                    break;
-            }
+        { 
             timeserver.Interval = txtJg.Text.ToInt32() * 1000;
             timeserver.Enabled = true;
             timeserver.Start();
@@ -181,10 +144,10 @@ namespace Core.CefChrome
                 Zhuang = new GnameSettig() { point = new Point() { X = zhuang.Split(',')[0].ToInt32(), Y = zhuang.Split(',')[1].ToInt32() } },
                 Xian = new GnameSettig() { point = new Point() { X = xian.Split(',')[0].ToInt32(), Y = xian.Split(',')[1].ToInt32() } },
                 He = new GnameSettig() { point = new Point() { X = he.Split(',')[0].ToInt32(), Y = he.Split(',')[1].ToInt32() } },
-                One = new GnameSettig() { point = new Point() { X = one.Split(',')[0].ToInt32(), Y = one.Split(',')[1].ToInt32() } }
-                , Add = txtAdd.Text.Trim().ToInt32()
-                , Min = txtMin.Text.Trim().ToInt32()
-                , Imode = comIMode.SelectedItem.ToStringExtension().ToEnum<IMode>(),
+                One = new GnameSettig() { point = new Point() { X = one.Split(',')[0].ToInt32(), Y = one.Split(',')[1].ToInt32() } },
+                Add = txtAdd.Text.Trim().ToInt32(),
+                Min = txtMin.Text.Trim().ToInt32(),
+                Imode = comIMode.SelectedItem.ToStringExtension().ToEnum<IMode>(),
                 wRandom = comrandom.SelectedItem.ToStringExtension().ToEnum<WRandom>()
             };
             switch (commode.SelectedText)
@@ -242,6 +205,10 @@ namespace Core.CefChrome
                     if (data != null)
                     {
                         Cdata(data, zMSetting);
+                    }
+                    else
+                    { 
+                        Cdata(GetMoni(zMSetting), zMSetting);
                     }
                 }
             }

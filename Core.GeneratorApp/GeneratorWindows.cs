@@ -18,10 +18,20 @@ namespace Core.GeneratorApp
     public partial class GeneratorWindows : Form
     {
         public Form self { get; set; }
-        public CurrentUsers _currentUser { get; set;  }
-        public GeneratorWindows(CurrentUsers currentUse)
+        public static CurrentUsers _currentUser { get; set;  }
+
+        public bool colsed { get; set; }
+
+        public GeneratorWindows()
         {
-            _currentUser = currentUse;
+            Login winlogin = new Login();
+            winlogin.ShowDialog();
+            if (winlogin.DialogResult == DialogResult.Cancel)
+            {
+                colsed = true;
+                return;
+            }
+            //_currentUser = currentUse;
             InitializeComponent();
             LoadTree();
             

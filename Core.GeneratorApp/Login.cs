@@ -27,17 +27,17 @@ namespace Core.GeneratorApp
 
         private void btncanel_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.DialogResult = DialogResult.Cancel;
         }
 
         private void btnregistercanel_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.DialogResult = DialogResult.Cancel;
         }
 
         private void btncompanycanel_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.DialogResult = DialogResult.Cancel;
         }
 
         private void linkregister_Click(object sender, EventArgs e)
@@ -55,42 +55,12 @@ namespace Core.GeneratorApp
             var username = txtregusername.Text.Trim();
             var password = txtregpassword.Text.Trim();
             var passwordconfirm = txtregconfirmpassword.Text.Trim();
-            var email = txtregemail.Text.Trim();
-            if (username.IsNull())
-            {
-                MessageBox.Show("用户名不能为空");
-                return;
-            }
-            if (password.IsNull())
-            {
-                MessageBox.Show("密码不能为空");
-                return;
-            }
-            if (email.IsNull())
-            {
-                MessageBox.Show("邮箱不能为空");
-                return;
-            }
+            var email = txtregemail.Text.Trim(); 
             if (!password.Equals(passwordconfirm))
             {
                 MessageBox.Show("密码和确认密码不一致");
                 return;
-            }
-
-            // 检查用户名是否存在
-            if (factory.FreeSql.Select<Users>().Any(x => x.UserName == username))
-            {
-                MessageBox.Show("用户名已经存在");
-                return;
-            }
-
-            // 检查邮箱否存在
-            if (factory.FreeSql.Select<Users>().Any(x => x.Email == email))
-            {
-                MessageBox.Show("邮箱已经存在");
-                return;
-            }
-
+            }  
             Users users = new Users() {
                 UserName = username,
                 Email = email,
@@ -98,65 +68,46 @@ namespace Core.GeneratorApp
                 Id = Guid.NewGuid()
             };
 
-          
+            var response = userservices.RegisterUser(users);
 
-            if (factory.FreeSql.Insert<Users>(users).ExecuteAffrows() > 0)
+            if (!response.Success)
             {
-                GeneratorWindows windows = new GeneratorWindows(null);
-                windows.ShowDialog();
-                this.Close();
-            }
-            else {
-                MessageBox.Show("注册失败");
+                MessageBox.Show(response.Message);
                 return;
             }
-               
+            GeneratorWindows._currentUser = response.Data;
+            this.DialogResult = DialogResult.OK;
         }
 
         private void btnlogin_Click(object sender, EventArgs e)
         {
             var username = txtUsername.Text.Trim();
-            var password = txtpassword.Text.Trim();
-            //if (username.IsNull())
-            //{
-            //    MessageBox.Show("用户名不能为空");
-            //    return;
-            //}
-            //if (password.IsNull())
-            //{
-            //    MessageBox.Show("密码不能为空");
-            //    return;
-            //}
-
-            //// 检查邮箱否存在
-            //if (!factory.FreeSql.Select<Users>().Any(x => x.UserName == username ||
-            // x.Email == username || x.Phone == username
-            //))
-            //{
-            //    MessageBox.Show("用户名不存在");
-            //    return;
-            //}
-
-            //password = password.Tomd5();
-            //// 检查邮箱否存在
-            //if (!factory.FreeSql.Select<Users>().Any(x => (x.UserName == username ||
-            // x.Email == username || x.Phone == username) && x.PassWord == password
-            //))
-            //{
-            //    MessageBox.Show("用户名不存在");
-            //    return;
-            //}
+            var password = txtpassword.Text.Trim(); 
             Users users = new Users() { UserName = username, PassWord = password.Tomd5() };
-            var response = userservices.Login(users);
-
+            var response = userservices.Login(users); 
             if (!response.Success)
             { 
                 MessageBox.Show(response.Message);
                 return;
-            } 
-            GeneratorWindows windows = new GeneratorWindows(response.Data);
-            windows.ShowDialog();
-            this.Close();
+            }  
+            GeneratorWindows._currentUser = response.Data; 
+            this.DialogResult = DialogResult.OK;
+        }
+
+        private void txtUsername_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if(e.KeyChar == 13)
+            {
+                txtpassword.Focus();
+            }
+        }
+
+        private void txtpassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                btnlogin.Focus();
+            }
         }
     }
 }

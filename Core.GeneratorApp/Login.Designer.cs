@@ -40,6 +40,8 @@ namespace Core.GeneratorApp
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.txtregemail = new System.Windows.Forms.TextBox();
+            this.labregemail = new System.Windows.Forms.Label();
             this.btnregister = new System.Windows.Forms.Button();
             this.txtregconfirmpassword = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -61,8 +63,6 @@ namespace Core.GeneratorApp
             this.txtcomusername = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.txtregemail = new System.Windows.Forms.TextBox();
-            this.labregemail = new System.Windows.Forms.Label();
             this.registertable.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -78,7 +78,7 @@ namespace Core.GeneratorApp
             this.registertable.Location = new System.Drawing.Point(0, 0);
             this.registertable.Name = "registertable";
             this.registertable.SelectedIndex = 0;
-            this.registertable.Size = new System.Drawing.Size(751, 478);
+            this.registertable.Size = new System.Drawing.Size(572, 395);
             this.registertable.TabIndex = 6;
             // 
             // tabPage1
@@ -94,7 +94,7 @@ namespace Core.GeneratorApp
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(743, 452);
+            this.tabPage1.Size = new System.Drawing.Size(564, 369);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "登录";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -102,7 +102,7 @@ namespace Core.GeneratorApp
             // linkcompanyregister
             // 
             this.linkcompanyregister.AutoSize = true;
-            this.linkcompanyregister.Location = new System.Drawing.Point(443, 241);
+            this.linkcompanyregister.Location = new System.Drawing.Point(366, 217);
             this.linkcompanyregister.Name = "linkcompanyregister";
             this.linkcompanyregister.Size = new System.Drawing.Size(53, 12);
             this.linkcompanyregister.TabIndex = 13;
@@ -113,7 +113,7 @@ namespace Core.GeneratorApp
             // linkregister
             // 
             this.linkregister.AutoSize = true;
-            this.linkregister.Location = new System.Drawing.Point(367, 241);
+            this.linkregister.Location = new System.Drawing.Point(290, 217);
             this.linkregister.Name = "linkregister";
             this.linkregister.Size = new System.Drawing.Size(53, 12);
             this.linkregister.TabIndex = 12;
@@ -123,9 +123,10 @@ namespace Core.GeneratorApp
             // 
             // btncanel
             // 
-            this.btncanel.Location = new System.Drawing.Point(306, 270);
+            this.btncanel.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btncanel.Location = new System.Drawing.Point(232, 246);
             this.btncanel.Name = "btncanel";
-            this.btncanel.Size = new System.Drawing.Size(75, 23);
+            this.btncanel.Size = new System.Drawing.Size(73, 31);
             this.btncanel.TabIndex = 11;
             this.btncanel.Text = "取消";
             this.btncanel.UseVisualStyleBackColor = true;
@@ -133,44 +134,53 @@ namespace Core.GeneratorApp
             // 
             // btnlogin
             // 
-            this.btnlogin.Location = new System.Drawing.Point(422, 270);
+            this.btnlogin.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnlogin.Location = new System.Drawing.Point(348, 246);
             this.btnlogin.Name = "btnlogin";
-            this.btnlogin.Size = new System.Drawing.Size(75, 23);
-            this.btnlogin.TabIndex = 10;
+            this.btnlogin.Size = new System.Drawing.Size(75, 31);
+            this.btnlogin.TabIndex = 3;
             this.btnlogin.Text = "确认";
             this.btnlogin.UseVisualStyleBackColor = true;
             this.btnlogin.Click += new System.EventHandler(this.btnlogin_Click);
             // 
             // txtpassword
             // 
-            this.txtpassword.Location = new System.Drawing.Point(296, 201);
+            this.txtpassword.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtpassword.Location = new System.Drawing.Point(221, 176);
             this.txtpassword.Name = "txtpassword";
             this.txtpassword.PasswordChar = '*';
-            this.txtpassword.Size = new System.Drawing.Size(200, 21);
-            this.txtpassword.TabIndex = 9;
+            this.txtpassword.Size = new System.Drawing.Size(200, 29);
+            this.txtpassword.TabIndex = 2;
+            this.txtpassword.Text = "admin";
+            this.txtpassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtpassword_KeyPress);
             // 
             // txtUsername
             // 
-            this.txtUsername.Location = new System.Drawing.Point(297, 130);
+            this.txtUsername.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtUsername.Location = new System.Drawing.Point(221, 108);
             this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(200, 21);
-            this.txtUsername.TabIndex = 8;
+            this.txtUsername.Size = new System.Drawing.Size(200, 29);
+            this.txtUsername.TabIndex = 1;
+            this.txtUsername.Text = "admin";
+            this.txtUsername.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtUsername_KeyPress);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(233, 206);
+            this.label2.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label2.Location = new System.Drawing.Point(152, 181);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 12);
+            this.label2.Size = new System.Drawing.Size(66, 19);
             this.label2.TabIndex = 7;
             this.label2.Text = "密码：";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(221, 133);
+            this.label1.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Location = new System.Drawing.Point(133, 112);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 12);
+            this.label1.Size = new System.Drawing.Size(85, 19);
             this.label1.TabIndex = 6;
             this.label1.Text = "用户名：";
             // 
@@ -189,43 +199,65 @@ namespace Core.GeneratorApp
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(743, 452);
+            this.tabPage2.Size = new System.Drawing.Size(564, 369);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "注册";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // txtregemail
+            // 
+            this.txtregemail.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtregemail.Location = new System.Drawing.Point(222, 127);
+            this.txtregemail.Name = "txtregemail";
+            this.txtregemail.Size = new System.Drawing.Size(200, 29);
+            this.txtregemail.TabIndex = 101;
+            // 
+            // labregemail
+            // 
+            this.labregemail.AutoSize = true;
+            this.labregemail.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.labregemail.Location = new System.Drawing.Point(150, 132);
+            this.labregemail.Name = "labregemail";
+            this.labregemail.Size = new System.Drawing.Size(66, 19);
+            this.labregemail.TabIndex = 21;
+            this.labregemail.Text = "邮箱：";
+            // 
             // btnregister
             // 
-            this.btnregister.Location = new System.Drawing.Point(434, 292);
+            this.btnregister.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnregister.Location = new System.Drawing.Point(347, 275);
             this.btnregister.Name = "btnregister";
-            this.btnregister.Size = new System.Drawing.Size(75, 23);
-            this.btnregister.TabIndex = 20;
+            this.btnregister.Size = new System.Drawing.Size(75, 30);
+            this.btnregister.TabIndex = 104;
             this.btnregister.Text = "注册";
             this.btnregister.UseVisualStyleBackColor = true;
             this.btnregister.Click += new System.EventHandler(this.btnregister_Click);
             // 
             // txtregconfirmpassword
             // 
-            this.txtregconfirmpassword.Location = new System.Drawing.Point(309, 193);
+            this.txtregconfirmpassword.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtregconfirmpassword.Location = new System.Drawing.Point(222, 219);
             this.txtregconfirmpassword.Name = "txtregconfirmpassword";
             this.txtregconfirmpassword.PasswordChar = '*';
-            this.txtregconfirmpassword.Size = new System.Drawing.Size(200, 21);
-            this.txtregconfirmpassword.TabIndex = 19;
+            this.txtregconfirmpassword.Size = new System.Drawing.Size(200, 29);
+            this.txtregconfirmpassword.TabIndex = 103;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(233, 199);
+            this.label5.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label5.Location = new System.Drawing.Point(112, 225);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(65, 12);
+            this.label5.Size = new System.Drawing.Size(104, 19);
             this.label5.TabIndex = 18;
             this.label5.Text = "确认密码：";
             // 
             // btnregistercanel
             // 
-            this.btnregistercanel.Location = new System.Drawing.Point(309, 292);
+            this.btnregistercanel.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnregistercanel.Location = new System.Drawing.Point(234, 275);
             this.btnregistercanel.Name = "btnregistercanel";
-            this.btnregistercanel.Size = new System.Drawing.Size(75, 23);
+            this.btnregistercanel.Size = new System.Drawing.Size(75, 30);
             this.btnregistercanel.TabIndex = 17;
             this.btnregistercanel.Text = "取消";
             this.btnregistercanel.UseVisualStyleBackColor = true;
@@ -233,34 +265,38 @@ namespace Core.GeneratorApp
             // 
             // txtregpassword
             // 
-            this.txtregpassword.Location = new System.Drawing.Point(309, 154);
+            this.txtregpassword.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtregpassword.Location = new System.Drawing.Point(222, 173);
             this.txtregpassword.Name = "txtregpassword";
             this.txtregpassword.PasswordChar = '*';
-            this.txtregpassword.Size = new System.Drawing.Size(200, 21);
-            this.txtregpassword.TabIndex = 15;
+            this.txtregpassword.Size = new System.Drawing.Size(200, 29);
+            this.txtregpassword.TabIndex = 102;
             // 
             // txtregusername
             // 
-            this.txtregusername.Location = new System.Drawing.Point(309, 85);
+            this.txtregusername.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtregusername.Location = new System.Drawing.Point(222, 78);
             this.txtregusername.Name = "txtregusername";
-            this.txtregusername.Size = new System.Drawing.Size(200, 21);
-            this.txtregusername.TabIndex = 14;
+            this.txtregusername.Size = new System.Drawing.Size(200, 29);
+            this.txtregusername.TabIndex = 100;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(250, 158);
+            this.label3.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label3.Location = new System.Drawing.Point(150, 177);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(41, 12);
+            this.label3.Size = new System.Drawing.Size(66, 19);
             this.label3.TabIndex = 13;
             this.label3.Text = "密码：";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(240, 88);
+            this.label4.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label4.Location = new System.Drawing.Point(131, 81);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(53, 12);
+            this.label4.Size = new System.Drawing.Size(85, 19);
             this.label4.TabIndex = 12;
             this.label4.Text = "用户名：";
             // 
@@ -281,74 +317,82 @@ namespace Core.GeneratorApp
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(743, 452);
+            this.tabPage3.Size = new System.Drawing.Size(564, 369);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "单位注册";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // txtcomsimplename
             // 
-            this.txtcomsimplename.Location = new System.Drawing.Point(306, 278);
+            this.txtcomsimplename.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtcomsimplename.Location = new System.Drawing.Point(221, 242);
             this.txtcomsimplename.Name = "txtcomsimplename";
-            this.txtcomsimplename.Size = new System.Drawing.Size(200, 21);
-            this.txtcomsimplename.TabIndex = 36;
+            this.txtcomsimplename.Size = new System.Drawing.Size(200, 29);
+            this.txtcomsimplename.TabIndex = 204;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(237, 281);
+            this.label8.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label8.Location = new System.Drawing.Point(115, 247);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(65, 12);
+            this.label8.Size = new System.Drawing.Size(104, 19);
             this.label8.TabIndex = 35;
             this.label8.Text = "单位简称：";
             // 
             // txtcompanyname
             // 
-            this.txtcompanyname.Location = new System.Drawing.Point(308, 233);
+            this.txtcompanyname.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtcompanyname.Location = new System.Drawing.Point(221, 194);
             this.txtcompanyname.Name = "txtcompanyname";
-            this.txtcompanyname.Size = new System.Drawing.Size(200, 21);
-            this.txtcompanyname.TabIndex = 34;
+            this.txtcompanyname.Size = new System.Drawing.Size(200, 29);
+            this.txtcompanyname.TabIndex = 203;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(237, 240);
+            this.label9.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label9.Location = new System.Drawing.Point(114, 200);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(65, 12);
+            this.label9.Size = new System.Drawing.Size(104, 19);
             this.label9.TabIndex = 33;
             this.label9.Text = "单位名称：";
             // 
             // btncomregister
             // 
-            this.btncomregister.Location = new System.Drawing.Point(434, 336);
+            this.btncomregister.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btncomregister.Location = new System.Drawing.Point(347, 295);
             this.btncomregister.Name = "btncomregister";
-            this.btncomregister.Size = new System.Drawing.Size(75, 23);
-            this.btncomregister.TabIndex = 32;
+            this.btncomregister.Size = new System.Drawing.Size(75, 30);
+            this.btncomregister.TabIndex = 205;
             this.btncomregister.Text = "注册";
             this.btncomregister.UseVisualStyleBackColor = true;
             // 
             // txtcomconfirmpassword
             // 
-            this.txtcomconfirmpassword.Location = new System.Drawing.Point(309, 181);
+            this.txtcomconfirmpassword.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtcomconfirmpassword.Location = new System.Drawing.Point(222, 145);
             this.txtcomconfirmpassword.Name = "txtcomconfirmpassword";
             this.txtcomconfirmpassword.PasswordChar = '*';
-            this.txtcomconfirmpassword.Size = new System.Drawing.Size(200, 21);
-            this.txtcomconfirmpassword.TabIndex = 31;
+            this.txtcomconfirmpassword.Size = new System.Drawing.Size(200, 29);
+            this.txtcomconfirmpassword.TabIndex = 202;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(233, 187);
+            this.label10.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label10.Location = new System.Drawing.Point(115, 150);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(65, 12);
+            this.label10.Size = new System.Drawing.Size(104, 19);
             this.label10.TabIndex = 30;
             this.label10.Text = "确认密码：";
             // 
             // btncompanycanel
             // 
-            this.btncompanycanel.Location = new System.Drawing.Point(309, 336);
+            this.btncompanycanel.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btncompanycanel.Location = new System.Drawing.Point(222, 295);
             this.btncompanycanel.Name = "btncompanycanel";
-            this.btncompanycanel.Size = new System.Drawing.Size(75, 23);
+            this.btncompanycanel.Size = new System.Drawing.Size(75, 30);
             this.btncompanycanel.TabIndex = 29;
             this.btncompanycanel.Text = "取消";
             this.btncompanycanel.UseVisualStyleBackColor = true;
@@ -356,60 +400,49 @@ namespace Core.GeneratorApp
             // 
             // txtcompassword
             // 
-            this.txtcompassword.Location = new System.Drawing.Point(309, 129);
+            this.txtcompassword.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtcompassword.Location = new System.Drawing.Point(222, 95);
             this.txtcompassword.Name = "txtcompassword";
             this.txtcompassword.PasswordChar = '*';
-            this.txtcompassword.Size = new System.Drawing.Size(200, 21);
-            this.txtcompassword.TabIndex = 28;
+            this.txtcompassword.Size = new System.Drawing.Size(200, 29);
+            this.txtcompassword.TabIndex = 201;
             // 
             // txtcomusername
             // 
-            this.txtcomusername.Location = new System.Drawing.Point(309, 73);
+            this.txtcomusername.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtcomusername.Location = new System.Drawing.Point(222, 45);
             this.txtcomusername.Name = "txtcomusername";
-            this.txtcomusername.Size = new System.Drawing.Size(200, 21);
-            this.txtcomusername.TabIndex = 27;
+            this.txtcomusername.Size = new System.Drawing.Size(200, 29);
+            this.txtcomusername.TabIndex = 200;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(250, 133);
+            this.label11.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label11.Location = new System.Drawing.Point(153, 101);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(41, 12);
+            this.label11.Size = new System.Drawing.Size(66, 19);
             this.label11.TabIndex = 26;
             this.label11.Text = "密码：";
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(240, 76);
+            this.label12.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label12.Location = new System.Drawing.Point(134, 51);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(53, 12);
+            this.label12.Size = new System.Drawing.Size(85, 19);
             this.label12.TabIndex = 25;
             this.label12.Text = "用户名：";
-            // 
-            // txtregemail
-            // 
-            this.txtregemail.Location = new System.Drawing.Point(309, 116);
-            this.txtregemail.Name = "txtregemail";
-            this.txtregemail.Size = new System.Drawing.Size(200, 21);
-            this.txtregemail.TabIndex = 22;
-            // 
-            // labregemail
-            // 
-            this.labregemail.AutoSize = true;
-            this.labregemail.Location = new System.Drawing.Point(238, 120);
-            this.labregemail.Name = "labregemail";
-            this.labregemail.Size = new System.Drawing.Size(41, 12);
-            this.labregemail.TabIndex = 21;
-            this.labregemail.Text = "邮箱：";
             // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(751, 478);
+            this.ClientSize = new System.Drawing.Size(572, 395);
             this.Controls.Add(this.registertable);
             this.Name = "Login";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "登录";
             this.registertable.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
