@@ -43,8 +43,10 @@ namespace Core.AppSystemServices
                 return response;
             }
 
-            var rs = this.Create<Users>(user);
-            if (rs == 0) {
+            user.DefaultCompany = DefaultCommonEnum.defaultCompany.GetDescription().ToGuid();
+
+            var cusers = this.Create<Users>(user);
+            if (cusers.IsNull() || cusers.Id.IsNull()) {
                 response.Message = "注册失败";
                 return response;
             }

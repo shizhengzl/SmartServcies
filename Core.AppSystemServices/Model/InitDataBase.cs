@@ -11,7 +11,9 @@ namespace Core.AppSystemServices
     {
 
         public FreeSqlFactory factory = new FreeSqlFactory();
-        public Guid defaultSelfCompany = DefaultCommonEnum.defaultCompany.GetDescription().ToGuid();
+        public Guid defaultSelfCompany = DefaultCommonEnum.defaulfSelfCompany.GetDescription().ToGuid();
+
+
         Guid defaultsuppermenuid = DefaultCommonEnum.defaultsuppermenuid.GetDescription().ToGuid();
         Guid defaultsystemmenuid = DefaultCommonEnum.defaultsystemmenuid.GetDescription().ToGuid();
 
@@ -28,7 +30,7 @@ namespace Core.AppSystemServices
         string defaultSelfCompanyName = DefaultCommonEnum.defaultSelfCompanyName.GetDescription();
         string defaultCompanyName = DefaultCommonEnum.defaultCompanyName.GetDescription();
 
-        public Guid defaultCompanyguid = Guid.Empty;
+        public Guid defaultCompanyguid = DefaultCommonEnum.defaultCompany.GetDescription().ToGuid();
 
         public void Init()
         {

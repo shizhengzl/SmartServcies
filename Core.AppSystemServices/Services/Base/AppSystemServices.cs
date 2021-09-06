@@ -55,11 +55,12 @@ namespace Core.AppSystemServices
         /// <param name="where"></param>
         /// <param name="orderby"></param>
         /// <returns></returns>
-        public Int64 Create<T>(T t) where T : class
+        public T Create<T>(T t) where T : class
         {
             ResponseList<T> response = new ResponseList<T>();
-
-            return factory.FreeSql.Insert<T>(t).ExecuteIdentity();
+            SetCreateModel<T>(t);
+            factory.FreeSql.Insert<T>(t).ExecuteIdentity();
+            return t;
         }
 
 
@@ -71,11 +72,17 @@ namespace Core.AppSystemServices
         /// <param name="where"></param>
         /// <param name="orderby"></param>
         /// <returns></returns>
-        public Boolean Create<T>(T[] t) where T : class
+        public T[] Create<T>(T[] t) where T : class
         {
             ResponseList<T> response = new ResponseList<T>();
+            foreach (var item in t)
+            {
+                SetCreateModel<T>(item);
+            }
+            
+            factory.FreeSql.Insert<T>(t).ExecuteAffrows();
 
-            return factory.FreeSql.Insert<T>(t).ExecuteAffrows() > 0;
+            return t;
         }
 
         /// <summary>
@@ -89,6 +96,7 @@ namespace Core.AppSystemServices
         public Boolean Modify<T>(T t) where T : class
         {
             ResponseList<T> response = new ResponseList<T>();
+            SetModifyModel<T>(t);
             return factory.FreeSql.Update<T>().SetSource(t).ExecuteAffrows() > 1;
         }
 
@@ -103,6 +111,10 @@ namespace Core.AppSystemServices
         public Boolean Modify<T>(T[] t) where T : class
         {
             ResponseList<T> response = new ResponseList<T>();
+            foreach (var item in t)
+            {
+                SetModifyModel<T>(item);
+            }
             return factory.FreeSql.Update<T>().SetSource(t).ExecuteAffrows() > 1;
         }
 

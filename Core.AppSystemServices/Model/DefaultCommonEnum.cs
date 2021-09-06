@@ -10,7 +10,8 @@ namespace Core.AppSystemServices
         [Description("admin")]
         defaultAdmin =0,
         [Description("00000000-0000-0000-0000-000000000001")]
-        defaultCompany = 1,
+        defaulfSelfCompany = 1,
+
         [Description("00000000-0000-0000-0000-000000000002")]
         defaultsuppermenuid = 2,
         [Description("00000000-0000-0000-0000-000000000003")]
@@ -31,10 +32,11 @@ namespace Core.AppSystemServices
         defaultSelfOrganization = 9,
         [Description("00000000-0000-0000-0000-000000000010")]
         defaultOrganization = 10,
-
+        [Description("00000000-0000-0000-0000-000000000011")]
+        defaultCompany = 11,
         [Description("智能科技云计算技术有限公司")]
-        defaultSelfCompanyName = 11,
+        defaultSelfCompanyName = 12,
         [Description("隔壁老王管理公司")]
-        defaultCompanyName = 12
+        defaultCompanyName = 13
     }
 }
