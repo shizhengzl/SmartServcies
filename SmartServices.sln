@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.OfficeServices", "Core
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Testings", "Core.Testings\Core.Testings.csproj", "{0D479D17-3EB4-416B-8F70-D71A5A645B5C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core.BaseServices", "Core.BaseServices", "{944AA2CD-6564-476B-8015-2E9253CFA07E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core.01.BaseServices", "Core.01.BaseServices", "{944AA2CD-6564-476B-8015-2E9253CFA07E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core.AppSystem", "Core.AppSystem", "{FC9ED48C-3143-430E-BFDC-CBBB455F1383}"
 EndProject

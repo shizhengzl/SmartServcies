@@ -55,12 +55,11 @@ namespace Core.AppSystemServices
         /// <param name="where"></param>
         /// <param name="orderby"></param>
         /// <returns></returns>
-        public T Create<T>(T t) where T : class
+        public Boolean Create<T>(T t) where T : class
         {
             ResponseList<T> response = new ResponseList<T>();
             SetCreateModel<T>(t);
-            factory.FreeSql.Insert<T>(t).ExecuteIdentity();
-            return t;
+            return factory.FreeSql.Insert<T>(t).ExecuteIdentity() > 0;
         }
 
 

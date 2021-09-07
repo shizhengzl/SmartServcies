@@ -17,6 +17,76 @@ namespace Core.AppSystemServices
 
         }
 
+        public Response<CurrentUsers> RegisterCompany(Users user,string companyName)
+        {
+            Response<CurrentUsers> response = new Response<CurrentUsers>() { Success = false };
+            CurrentUsers current = new CurrentUsers();
+            if (companyName.IsNullOrEmpty())
+            {
+                response.Message = "单位名不能为空";
+                return response;
+            }
+            if (user.UserName.IsNullOrEmpty())
+            {
+                response.Message = "用户名不能为空";
+                return response;
+            }
+            if (user.PassWord.IsNullOrEmpty())
+            {
+                response.Message = "密码不能为空";
+                return response;
+            }
+            // check username
+            if (UserIsExists(user))
+            {
+                response.Message = "用户已经存在";
+                return response;
+            }
+
+            var company = new Companys() { CompanyName = companyName   };
+            this.Create<Companys>(company);
+            if (company.Id.IsNull())
+                user.DefaultCompany = company.Id;
+            else {
+                response.Message = "单位注册失败";
+                return response;
+            }
+            // 默认管理员
+            user.IsAdmin = true;
+            user.NikeName = user.UserName;
+            user.Phone = user.UserName;
+
+            this.Create<Users>(user);
+            if (user.Id.IsNull())
+            {
+                this.Remove<Companys>(company);
+                response.Message = "注册失败";
+                return response;
+            }
+
+            InitDataBase initdata = new InitDataBase();
+            initdata.InitRole(company.Id,user.Id);
+            initdata.InitOrganization(company.Id, user.Id);
+            initdata.InitCompanyMenuAndUser(company.Id, user.Id);
+
+
+            // add cache  
+            current.CurrentUser = GetUsers(user);
+
+            // 获取菜单
+            if (IsSupperAdmin(current.CurrentUser))
+                current.UserMenus = GetSupperMenus();
+            else if (current.CurrentUser.IsAdmin)
+                current.UserMenus = GetAdminMenus(current.CurrentUser);
+            else
+                current.UserMenus = GetUserMenus(current.CurrentUser);
+
+            CacheServices.MemoryCacheManager.SetCache<CurrentUsers>(user.UserName, current, null);
+            response.Data = current;
+            response.Success = true;
+            return response;
+        }
+
         public Response<CurrentUsers> RegisterUser(Users user)
         {
             Response<CurrentUsers> response = new Response<CurrentUsers>() { Success = false };
@@ -31,11 +101,6 @@ namespace Core.AppSystemServices
                 response.Message = "密码不能为空";
                 return response;
             }
-            if (user.Email.IsNullOrEmpty())
-            {
-                response.Message = "邮箱不能为空";
-                return response;
-            }
             // check username
             if (UserIsExists(user))
             {
@@ -44,9 +109,10 @@ namespace Core.AppSystemServices
             }
 
             user.DefaultCompany = DefaultCommonEnum.defaultCompany.GetDescription().ToGuid();
-
-            var cusers = this.Create<Users>(user);
-            if (cusers.IsNull() || cusers.Id.IsNull()) {
+            user.NikeName = user.UserName;
+            user.Phone = user.UserName;
+            this.Create<Users>(user);
+            if (user.Id.IsNull()) {
                 response.Message = "注册失败";
                 return response;
             }

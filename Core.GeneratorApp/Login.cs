@@ -50,12 +50,42 @@ namespace Core.GeneratorApp
             registertable.SelectedIndex = 2;
         }
 
+        private void btncomregister_Click(object sender, EventArgs e)
+        {
+            var username = txtregusername.Text.Trim();
+            var password = txtregpassword.Text.Trim();
+            var passwordconfirm = txtregconfirmpassword.Text.Trim();
+            var companyname = txtcompanyname.Text.Trim();
+
+            if (!password.Equals(passwordconfirm))
+            {
+                MessageBox.Show("密码和确认密码不一致");
+                return;
+            }
+            Users users = new Users()
+            {
+                UserName = username,
+                PassWord = password.Tomd5(),
+                Id = Guid.NewGuid()
+            };
+
+            var response = userservices.RegisterUser(users);
+
+            if (!response.Success)
+            {
+                MessageBox.Show(response.Message);
+                return;
+            }
+            GeneratorWindows._currentUser = response.Data;
+            this.DialogResult = DialogResult.OK;
+        }
+
         private void btnregister_Click(object sender, EventArgs e)
         {
             var username = txtregusername.Text.Trim();
             var password = txtregpassword.Text.Trim();
             var passwordconfirm = txtregconfirmpassword.Text.Trim();
-            var email = txtregemail.Text.Trim(); 
+ 
             if (!password.Equals(passwordconfirm))
             {
                 MessageBox.Show("密码和确认密码不一致");
@@ -63,7 +93,6 @@ namespace Core.GeneratorApp
             }  
             Users users = new Users() {
                 UserName = username,
-                Email = email,
                 PassWord = password.Tomd5(),
                 Id = Guid.NewGuid()
             };
@@ -94,6 +123,9 @@ namespace Core.GeneratorApp
             this.DialogResult = DialogResult.OK;
         }
 
+       
+
+        #region 文本框焦点事件 
         private void txtUsername_KeyPress(object sender, KeyPressEventArgs e)
         {
             if(e.KeyChar == 13)
@@ -109,5 +141,63 @@ namespace Core.GeneratorApp
                 btnlogin.Focus();
             }
         }
+
+        private void txtregusername_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                txtregpassword.Focus();
+            }
+        }
+
+        private void txtregpassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                txtregconfirmpassword.Focus();
+            }
+        }
+
+        private void txtregconfirmpassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                btnregister.Focus();
+            }
+        }
+
+        private void txtcomusername_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                txtcompassword.Focus();
+            }
+        }
+
+        private void txtcompassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                txtcomconfirmpassword.Focus();
+            }
+        }
+
+        private void txtcomconfirmpassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                txtcompanyname.Focus();
+            }
+        }
+
+        private void txtcompanyname_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                btncomregister.Focus();
+            }
+        }
+        #endregion
+      
     }
 }
