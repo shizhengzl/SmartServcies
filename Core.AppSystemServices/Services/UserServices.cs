@@ -65,8 +65,8 @@ namespace Core.AppSystemServices
             }
 
             InitDataBase initdata = new InitDataBase();
-            initdata.InitRole(company.Id,user.Id);
-            initdata.InitOrganization(company.Id, user.Id);
+            initdata.InitRole(company.Id,user.Id,Guid.NewGuid());
+            initdata.InitOrganization(company.Id, user.Id,Guid.NewGuid(),company.CompanyName);
             initdata.InitCompanyMenuAndUser(company.Id, user.Id);
 
 
@@ -213,7 +213,7 @@ namespace Core.AppSystemServices
                     break;
             }
            
-            return GetEntitys<Menus>().Where(x => menuids.Contains(x.MenusId)).ToList();
+            return GetEntitys<Menus>().Where(x => menuids.Contains(x.Id)).ToList();
         }
 
         /// <summary>
