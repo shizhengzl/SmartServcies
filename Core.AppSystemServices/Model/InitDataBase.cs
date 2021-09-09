@@ -183,7 +183,7 @@ namespace Core.AppSystemServices
                 factory.FreeSql.Insert<RoleUsers>(roleselfUsers).ExecuteAffrows(); 
 
             // 初始化角色菜单
-            factory.FreeSql.Select<Menus>().Where(x => !!x.IsDefault || !!x.IsSupper).ToList().ForEach(p => {
+            factory.FreeSql.Select<Menus>().Where(x => !!x.IsDefault).ToList().ForEach(p => {
                 RoleMenus roleselfMenus = new RoleMenus() {CompanysId = companyid, RolesId = id, MenusId = p.Id };
                 if (!factory.FreeSql.Select<RoleMenus>().Any(x => x.RolesId == id && x.MenusId == p.Id))
                     factory.FreeSql.Insert<RoleMenus>(roleselfMenus).ExecuteAffrows();
@@ -209,7 +209,7 @@ namespace Core.AppSystemServices
 
 
             // 初始化组织机构菜单
-            factory.FreeSql.Select<Menus>().Where(x => !!x.IsDefault || !!x.IsSupper).ToList().ForEach(p => {
+            factory.FreeSql.Select<Menus>().Where(x => !!x.IsDefault).ToList().ForEach(p => {
                 OrganizationMenus organizationselfMenus = new OrganizationMenus() {CompanysId = companyid,  OraganizationsId = id, MenusId = p.Id };
                 if (!factory.FreeSql.Select<OrganizationMenus>().Any(x => x.OraganizationsId == id && x.MenusId == p.Id))
                     factory.FreeSql.Insert<OrganizationMenus>(organizationselfMenus).ExecuteAffrows();
@@ -227,7 +227,7 @@ namespace Core.AppSystemServices
                 factory.FreeSql.Insert<CompanyUsers>(companyselfUsers).ExecuteAffrows(); 
 
             // 初始单位菜单
-            factory.FreeSql.Select<Menus>().Where(x => !!x.IsDefault || !!x.IsSupper).ToList().ForEach(p => {
+            factory.FreeSql.Select<Menus>().Where(x => !!x.IsDefault).ToList().ForEach(p => {
                 CompanyMenus companyselfMenus = new CompanyMenus() { CompanysId = companyid, MenusId = p.Id };
                 if (!factory.FreeSql.Select<CompanyMenus>().Any(x => x.CompanysId == companyid && x.MenusId == p.Id))
                     factory.FreeSql.Insert<CompanyMenus>(companyselfMenus).ExecuteAffrows();
