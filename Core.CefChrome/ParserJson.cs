@@ -23,7 +23,7 @@ namespace Core.CefChrome
         /// <summary>
         /// 
         /// </summary>
-        public string wagers_date { get; set; }
+        public DateTime wagers_date { get; set; }
         /// <summary>
         /// 
         /// </summary>

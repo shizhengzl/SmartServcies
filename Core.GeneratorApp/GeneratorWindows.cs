@@ -1,5 +1,5 @@
 ﻿using Core.AppSystemServices;
-using Core.DataBaseServices.DataBaseEntitys;
+using Core.DataBaseServices;
 using Core.FreeSqlServices;
 using System;
 using System.Collections.Generic;
@@ -119,6 +119,7 @@ namespace Core.GeneratorApp
             {
                 // 初始化dll
                 SnippetRecord snippetRecord = new SnippetRecord();
+                ConnectionStringManage connectionStringManage= new ConnectionStringManage();    
                 Type classType = Type.GetType("Core.GeneratorApp.BaseList`1");
                 Type constructedType = classType.MakeGenericType(menus.Url.ToStringExtension().GetClassType());
                 var instance = Activator.CreateInstance(constructedType, new object[] {menus.IsSupper.ToBoolean().ToString().ToUpper() });

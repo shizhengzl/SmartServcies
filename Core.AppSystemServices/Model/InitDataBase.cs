@@ -139,6 +139,12 @@ namespace Core.AppSystemServices
             {
                 factory.FreeSql.Insert<Menus>(snippet).ExecuteAffrows();
             }
+
+            Menus connectionstring = new Menus() { Id = Guid.NewGuid(), IsDefault = true, Url = "ConnectionStringManage", Name = "数据库连接管理", MenusId = father.Id };
+            if (!factory.FreeSql.Select<Menus>().Any(x => x.Name == "数据库连接管理"))
+            {
+                factory.FreeSql.Insert<Menus>(connectionstring).ExecuteAffrows();
+            }
         }
         #endregion
 

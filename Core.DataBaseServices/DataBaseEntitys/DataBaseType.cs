@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.DataBaseServices.DataBaseEntitys
+namespace Core.DataBaseServices
 {
     /// <summary>
     /// 数据库类型管理

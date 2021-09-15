@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Core.AppSystemServices;
-using Core.DataBaseServices.DataBaseEntitys;
+using Core.DataBaseServices;
 using Core.FreeSqlServices;
 using Core.SnippetServices;
 using Core.UsuallyCommon;

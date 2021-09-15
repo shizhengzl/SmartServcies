@@ -23,6 +23,16 @@ namespace Core.UsuallyCommon
         /// 随机生成bool
         /// </summary>
         /// <returns></returns>
+        public static bool RandomBoolTwo()
+        {
+            return RamdoInt32(2) == 1;
+        }
+
+
+        /// <summary>
+        /// 随机生成bool
+        /// </summary>
+        /// <returns></returns>
         public static bool RandomBool()
         {
             return RamdoInt32() % 2 == 0;

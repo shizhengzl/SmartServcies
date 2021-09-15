@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Core.UsuallyCommon;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace Core.DataBaseServices.DataBaseEntitys
+namespace Core.DataBaseServices
 {
     /// <summary>
     /// 连接字符串管理
     /// </summary>
-    public class ConnectionStringManage
+    public class ConnectionStringManage:BaseCompany
     {
         /// <summary>
         /// 数据库类型
