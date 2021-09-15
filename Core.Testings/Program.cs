@@ -22,6 +22,7 @@ namespace Core.Testings
 
             //InitdataBase database = new InitdataBase();
             //Console.WriteLine("Completed");
+       
 
             InverstData inverstData = new InverstData();
             bool result = false;
@@ -47,8 +48,8 @@ namespace Core.Testings
         ZMSetting setting = new ZMSetting()
         {
             Min = 10,
-            Add = 10,
-            toatl = 10000
+            Add = 0,
+            toatl = 2000
         };
 
         public bool start() 
@@ -82,7 +83,7 @@ namespace Core.Testings
          
 
             var data = autoCacle.Invest(setting, last);
-            var allmoney = list.Sum(x => x.payoff).ToInt32();
+            var allmoney = list.Sum(x => x.payoff.ToDecimal());
           
            
             if (setting.toatl + allmoney < 0)
@@ -90,8 +91,11 @@ namespace Core.Testings
                 Console.WriteLine($"光");
                 result = true;
             }
-            Console.WriteLine($"总计数:{list.Count} {message}，下投{Math.Abs(data.payoff)},余:{setting.toatl + allmoney}");
-            data.yuer = setting.toatl + allmoney;
+            var wincount = list.Where(x => x.payoff > 0).Count();
+            var lostcount = list.Where(x => x.payoff < 0).Count();
+            var hecount = list.Where(x => x.payoff == 0).Count();
+            Console.WriteLine($"总计数:{list.Count} {message}，下投{Math.Abs(data.betamount)},赢{wincount},输{lostcount},和{hecount},余:{setting.toatl + allmoney}");
+            data.yuer = setting.toatl.ToDecimal() + allmoney;
             list.Add(data);
 
             return result;
@@ -106,17 +110,19 @@ namespace Core.Testings
         public decimal cacle(ZMSetting setting,DataItem data) {
 
             decimal response = 0;
-            InvestStatus status = CacleStatus(data.payoff);
+            InvestStatus status = CacleStatus(data.payoff.ToDecimal());
 
             switch (status)
             {
                 case InvestStatus.Win:
-                    response = data.payoff - ((data.payoff / 200) + 1) * setting.Add;
+                    //response = data.payoff - ((data.payoff / 200) + 1) * setting.Add;
+                    response = data.betamount.ToInt32() -  setting.Add;
                     break;
                 case InvestStatus.He:
                     break;
                 case InvestStatus.Lost:
-                    response = 0 - data.payoff + (Math.Abs(data.payoff) / 200 + 1) * setting.Add;
+                    //response = 0 - data.payoff + (Math.Abs(data.payoff) / 200 + 1) * setting.Add;
+                    response =  data.betamount.ToInt32() +  setting.Add;
                     break;
                 default:
                     break;
@@ -141,15 +147,16 @@ namespace Core.Testings
 
         public DataItem Invest(ZMSetting setting, DataItem data)
         {
-          
-            var money = cacle(setting, data).ToInt32();
 
+            var zs = Core.UsuallyCommon.RandomExtensions.RandomBoolTwo();
+            var money = cacle(setting, data).ToInt32();
+            var newmoney = zs ? money * 0.95 : money;
             var rondom = Core.UsuallyCommon.RandomExtensions.RandomBoolTwo();
  
             DataItem response = new DataItem()
             {
                 wagers_date = DateTime.Now,
-                payoff = rondom ? money : 0- money,
+                payoff = rondom ? money : 0-money,
                 betamount = money,
                 gamecode = data.gamecode + 1
             };
@@ -166,7 +173,7 @@ namespace Core.Testings
     }
     public class DataItem
     {
-        public int yuer { get; set; }
+        public decimal yuer { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -218,7 +225,7 @@ namespace Core.Testings
         /// <summary>
         /// 
         /// </summary>
-        public Int64 payoff { get; set; }
+        public double payoff { get; set; }
         /// <summary>
         /// 
         /// </summary>
