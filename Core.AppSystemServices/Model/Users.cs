@@ -11,7 +11,7 @@ namespace Core.AppSystemServices
     /// 用户表
     /// </summary>
     [Description("用户表")]
-    public class Users : EntityBaseAll
+    public class Users : BaseCompany
     {
         /// <summary>
         /// 用户名称
@@ -43,15 +43,7 @@ namespace Core.AppSystemServices
         [Description("用户邮箱")]
         [Column(StringLength = 50)]
         public String Email { get; set; }
-
-
-        /// <summary>
-        /// 默认单位
-        /// </summary>
-        [Description("默认单位")]
-        public Guid? DefaultCompany { get; set; }
-
-
+         
         /// <summary>
         /// 管理员
         /// </summary>

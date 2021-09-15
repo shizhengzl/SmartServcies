@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.UsuallyCommon;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Core.AppSystemServices
     /// 用户菜单表
     /// </summary>
     [Description("用户菜单表")]
-    public class UserMenus
+    public class UserMenus:BaseCompany
     {
         /// <summary>
         /// 用户

@@ -13,6 +13,10 @@ using System.Windows.Forms;
 using Core.UsuallyCommon;
 using System.Reflection;
 using Core.SnippetServices;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Security.Policy;
+using System.Xml.Linq;
+
 namespace Core.GeneratorApp
 {
     public partial class GeneratorWindows : Form
@@ -26,6 +30,7 @@ namespace Core.GeneratorApp
         {
             Login winlogin = new Login();
             winlogin.ShowDialog();
+             
             if (winlogin.DialogResult == DialogResult.Cancel)
             {
                 colsed = true;
@@ -87,27 +92,49 @@ namespace Core.GeneratorApp
             if (menus.Url.IsNullOrEmpty() || menus.Url.ToStringExtension().GetClassType().IsNull())
                 return;
 
-            // 初始化dll
-            SnippetRecord snippetRecord = new SnippetRecord(); 
-            Type classType = Type.GetType("Core.GeneratorApp.BaseList`1"); 
-            Type constructedType = classType.MakeGenericType(menus.Url.ToStringExtension().GetClassType());
-            var instance = Activator.CreateInstance(constructedType);
+            var grant = "Grant";
 
+            if (menus.Url == grant)
+            {
+                Grant form = new Grant(); 
+                form.TopLevel = false;     //设置为非顶级控件
 
-            var from = ((Panel)instance); 
-            
-         
-            from.Dock = DockStyle.Fill;
-            TabPage tabpage = new TabPage();
-            var name = menus.Url.ToStringExtension().GetClassType().Name;
-            tabpage.Text = name;
-            tabpage.Name = name;
-             
-            tabpage.Controls.Add(from);
-            from.Tag = this.imagelistall;
-            if (!tabControls.TabPages.ContainsKey(name))
-                tabControls.TabPages.Add(tabpage);
-            tabControls.SelectTab(name);
+                TabPage tabgrant = new TabPage();
+                tabgrant.Text = "授权";
+                tabgrant.Name = grant;
+                tabgrant.Controls.Add(form);
+                form.Dock = DockStyle.Fill;
+                    //让窗体form显示出来 
+                form.FormBorderStyle = FormBorderStyle.None;  //外边框干掉
+                form.WindowState = FormWindowState.Maximized;
+                
+
+                if (!tabControls.TabPages.ContainsKey(grant))
+                    tabControls.TabPages.Add(tabgrant);
+                tabControls.SelectTab(grant);
+
+                form.Show();
+            }
+            else
+            {
+                // 初始化dll
+                SnippetRecord snippetRecord = new SnippetRecord();
+                Type classType = Type.GetType("Core.GeneratorApp.BaseList`1");
+                Type constructedType = classType.MakeGenericType(menus.Url.ToStringExtension().GetClassType());
+                var instance = Activator.CreateInstance(constructedType, new object[] {menus.IsSupper.ToBoolean().ToString().ToUpper() });
+                var from = ((Panel)instance); 
+                from.Dock = DockStyle.Fill;
+                TabPage tabpage = new TabPage();
+                var name = menus.Url.ToStringExtension().GetClassType().Name;
+                tabpage.Text = name;
+                tabpage.Name = name;
+
+                tabpage.Controls.Add(from);
+                from.Tag = this.imagelistall;
+                if (!tabControls.TabPages.ContainsKey(name))
+                    tabControls.TabPages.Add(tabpage);
+                tabControls.SelectTab(name);
+            }
         }
     }
 }

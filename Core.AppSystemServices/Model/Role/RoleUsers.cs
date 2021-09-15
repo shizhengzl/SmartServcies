@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.UsuallyCommon;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Core.AppSystemServices
     /// 角色用户
     /// </summary>
     [Description("角色用户")]
-    public class RoleUsers
+    public class RoleUsers:BaseCompany
     {
         /// <summary>
         /// 角色
@@ -22,11 +23,6 @@ namespace Core.AppSystemServices
         /// </summary>
         [Description("用户")]
         public Guid UsersId { get; set; }
-
-        /// <summary>
-        /// 单位
-        /// </summary>
-        [Description("单位")]
-        public Guid CompanysId { get; set; }
+         
     }
 }

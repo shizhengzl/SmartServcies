@@ -1,4 +1,5 @@
-﻿using FreeSql.DataAnnotations;
+﻿using Core.UsuallyCommon;
+using FreeSql.DataAnnotations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,14 +11,8 @@ namespace Core.AppSystemServices
     /// 单位菜单表
     /// </summary>
     [Description("单位菜单表")]
-    public class CompanyMenus
-    {
-        /// <summary>
-        /// 单位
-        /// </summary>
-        [Description("单位")]
-        public Guid CompanysId { get; set; }
-
+    public class CompanyMenus :  BaseCompany
+    { 
         /// <summary>
         /// 菜单
         /// </summary>

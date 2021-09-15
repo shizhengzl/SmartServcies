@@ -7,12 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Core.UsuallyCommon;
+using Core.AppSystemServices;
+
 namespace Core.GeneratorApp
 {
     /// <summary>
     /// 列表展示
     /// </summary>
-    public class BaseList<T> : Panel where T : class, new()
+    public class BaseList<T> : Panel where T : BaseCompany, new()
     {
         private ToolStripButton toolcreate;
         private ToolStripButton toolmodify;
@@ -25,21 +27,33 @@ namespace Core.GeneratorApp
         public FreeSqlFactory factory = new FreeSqlFactory();
 
         public Panel self { get; set; }
-        public BaseList()
+
+        UserServices userServices = new UserServices();
+
+        public string _IsSupper { get; set; }
+
+        public BaseList(string IsSupper)
         {
             self = this;
             InitializeComponent();
             this.listview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             this.listview.MultiSelect = false;
-            LoadList(); 
+            _IsSupper = IsSupper;
+            LoadList();
 
-             
+        
         }
 
         public void LoadList()
-        { 
+        {
              
-            var list = factory.FreeSql.Select<T>().Where(x=> 1==1).ToList();
+            var issupper = userServices.IsSupperAdmin(GeneratorWindows._currentUser.CurrentUser);
+            List<T> list =new List<T>();
+            if(issupper && _IsSupper == true.ToString().ToUpper())
+                list = factory.FreeSql.Select<T>().Where(x =>1==1).ToList();
+            else
+                list = factory.FreeSql.Select<T>().Where(x => x.CompanysId == GeneratorWindows._currentUser.CurrentUser.CompanysId).ToList();
+        
             listview.DataSource = list;
             listview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             listview.ReadOnly = true;
@@ -206,7 +220,7 @@ namespace Core.GeneratorApp
 
         private void toolremove_Click(object sender, EventArgs e)
         {
-            var sources = (List<Core.AppSystemServices.Menus>)listview.DataSource;
+            var sources = (List<T>)listview.DataSource;
             foreach (DataGridViewRow item in listview.SelectedRows)
             {
                 var key = sources[item.Index].Id;

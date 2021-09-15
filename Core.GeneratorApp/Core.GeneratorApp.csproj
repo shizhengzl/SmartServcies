@@ -117,6 +117,12 @@
     <Compile Include="GeneratorWindows.Designer.cs">
       <DependentUpon>GeneratorWindows.cs</DependentUpon>
     </Compile>
+    <Compile Include="Grant.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Grant.Designer.cs">
+      <DependentUpon>Grant.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,6 +139,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GeneratorWindows.resx">
       <DependentUpon>GeneratorWindows.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Grant.resx">
+      <DependentUpon>Grant.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

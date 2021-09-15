@@ -46,7 +46,7 @@ namespace Core.AppSystemServices
             var company = new Companys() { CompanyName = companyName   };
             this.Create<Companys>(company);
             if (company.Id.IsNull())
-                user.DefaultCompany = company.Id;
+                user.CompanysId = company.Id;
             else {
                 response.Message = "单位注册失败";
                 return response;
@@ -108,7 +108,7 @@ namespace Core.AppSystemServices
                 return response;
             }
 
-            user.DefaultCompany = DefaultCommonEnum.defaultCompany.GetDescription().ToGuid();
+            user.CompanysId = DefaultCommonEnum.defaultCompany.GetDescription().ToGuid();
             user.NikeName = user.UserName;
             user.Phone = user.UserName;
             this.Create<Users>(user);
@@ -186,16 +186,32 @@ namespace Core.AppSystemServices
         }
 
         /// <summary>
+        /// 获取授权菜单
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public List<Menus> GetGrantMenus(Users user,Companys company) 
+        {
+            List<Menus> response = new List<Menus>();
+            // 获取菜单
+            if (IsSupperAdmin(user))
+                response = GetSupperMenus();
+            else
+                response = GetCompanyMenus(company);
+            return response;
+        }
+
+        /// <summary>
         /// 获取用户菜单
         /// </summary>
         public List<Menus> GetUserMenus(Users user)
         {
-            var defaultcompany = GetEntitys<Companys>().Where(x => x.Id == user.DefaultCompany).ToList().FirstOrDefault();
+            var defaultcompany = GetEntitys<Companys>().Where(x => x.Id == user.CompanysId).ToList().FirstOrDefault();
             List<Guid> menuids = new List<Guid>();
             switch (defaultcompany.GrantMode)
             {
                 case GrantMode.CompanyGrant:
-                    menuids = GetEntitys<CompanyMenus>().Where(x => x.CompanysId == user.DefaultCompany).ToList().Select(p => p.MenusId).ToList();
+                    menuids = GetEntitys<CompanyMenus>().Where(x => x.CompanysId == user.CompanysId).ToList().Select(p => p.MenusId).ToList();
                     break;
                 case GrantMode.RoleGrant:
                     // 获取用户角色
@@ -223,7 +239,7 @@ namespace Core.AppSystemServices
         /// <returns></returns>
         public List<OrganizationUsers> GetUserOrganization(Users user)
         {
-            return GetEntitys<OrganizationUsers>().Where(x => x.UsersId == user.Id && x.CompanysId == user.DefaultCompany).ToList();
+            return GetEntitys<OrganizationUsers>().Where(x => x.UsersId == user.Id && x.CompanysId == user.CompanysId).ToList();
         }
 
 
@@ -234,7 +250,18 @@ namespace Core.AppSystemServices
         /// <returns></returns>
         public List<RoleUsers> GetUserRole(Users user)
         {
-            return GetEntitys<RoleUsers>().Where(x=>x.UsersId == user.Id && x.CompanysId == user.DefaultCompany).ToList();
+            return GetEntitys<RoleUsers>().Where(x=>x.UsersId == user.Id && x.CompanysId == user.CompanysId).ToList();
+        }
+
+
+
+        /// <summary>
+        /// 获取单位菜单
+        /// </summary>
+        public List<Menus> GetCompanyMenus(Companys company)
+        {
+            var menus = GetEntitys<CompanyMenus>().Where(x => x.CompanysId == company.Id).ToList().Select(p => p.MenusId.ToString().ToUpper()).ToList();
+            return GetEntitys<Menus>().Where(x => menus.Contains(x.Id.ToString().ToUpper())).ToList();
         }
 
         /// <summary>
@@ -242,7 +269,7 @@ namespace Core.AppSystemServices
         /// </summary>
         public List<Menus> GetAdminMenus(Users user)
         {
-            var companyId = user.DefaultCompany;
+            var companyId = user.CompanysId;
             var menus = GetEntitys<CompanyMenus>().Where(x=>x.CompanysId == companyId).ToList().Select(p=>p.MenusId.ToString().ToUpper()).ToList();
             return GetEntitys<Menus>().Where(x => menus.Contains(x.Id.ToString().ToUpper())).ToList();
         }

@@ -11,7 +11,7 @@ namespace Core.SnippetServices
     /// 代码片段记录表
     /// </summary>
     [Description("代码片段记录表")]
-    public class SnippetRecord : EntityBaseAll
+    public class SnippetRecord : BaseCompany
     {
         /// <summary>
         /// 语言

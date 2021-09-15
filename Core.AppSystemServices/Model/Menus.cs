@@ -10,7 +10,7 @@ namespace Core.AppSystemServices
     /// 菜单表
     /// </summary>
     [Description("菜单表")]
-    public class Menus : EntityBaseAll
+    public class Menus : BaseCompany
     {
         /// <summary>
         /// 菜单名称

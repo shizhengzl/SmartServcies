@@ -11,7 +11,7 @@ namespace Core.AppSystemServices
     /// 单位表
     /// </summary>
     [Description("单位表")]
-    public class Companys : EntityBaseAll
+    public class Companys : BaseCompany
     {
         /// <summary>
         /// 租户名称

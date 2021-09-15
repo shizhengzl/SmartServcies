@@ -11,7 +11,7 @@ namespace Core.AppSystemServices
     /// 组织机构表
     /// </summary>
     [Description("组织机构表")]
-    public class Organizations : EntityBaseAll
+    public class Organizations : BaseCompany
     {
         /// <summary>
         /// 组织机构名称
@@ -19,11 +19,6 @@ namespace Core.AppSystemServices
         [Description("组织机构名称")]
         [Column(StringLength = 50)]
         public string Name { get; set; }
-
-        /// <summary>
-        /// 单位
-        /// </summary>
-        [Description("单位")]
-        public Guid CompanysId { get; set; }
+         
     }
 }

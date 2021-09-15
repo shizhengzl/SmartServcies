@@ -73,6 +73,12 @@ namespace Core.AppSystemServices
                 factory.FreeSql.Insert<Menus>(menumenus).ExecuteAffrows();
             }
 
+            Menus menugrant = new Menus() { Id = Guid.NewGuid(), IsSupper = true, Name = "超级授权管理", Sort = 4, Url = "Grant", MenusId = defaultsuppermenuid };
+            if (!factory.FreeSql.Select<Menus>().Any(x => x.Name == "超级授权管理"))
+            {
+                factory.FreeSql.Insert<Menus>(menugrant).ExecuteAffrows();
+            }
+
 
             Menus companymenus = new Menus() { Id = defaultsystemmenuid,IsDefault = true, Name = "系统管理", MenusId = Guid.Empty };
             if (!factory.FreeSql.Select<Menus>().Any(x => x.Name == "系统管理"))
@@ -97,6 +103,29 @@ namespace Core.AppSystemServices
             {
                 factory.FreeSql.Insert<Menus>(companymenumenus).ExecuteAffrows();
             }
+
+            Menus companygrant = new Menus() { Id = Guid.NewGuid(), IsDefault = true, Name = "菜单授权", Sort = 4, Url = "Grant", MenusId = defaultsystemmenuid };
+            if (!factory.FreeSql.Select<Menus>().Any(x => x.Name == "菜单授权"))
+            {
+                factory.FreeSql.Insert<Menus>(companygrant).ExecuteAffrows();
+            }
+
+
+            Menus companyrole = new Menus() { Id = Guid.NewGuid(), IsDefault = true, Name = "角色管理", Sort = 5, Url = typeof(Roles).Name, MenusId = defaultsystemmenuid };
+            if (!factory.FreeSql.Select<Menus>().Any(x => x.Name == "角色管理"))
+            {
+                factory.FreeSql.Insert<Menus>(companyrole).ExecuteAffrows();
+            }
+
+            Menus companyorganzition = new Menus() { Id = Guid.NewGuid(), IsDefault = true, Name = "组织机构管理", Sort = 6, Url = typeof(Organizations).Name, MenusId = defaultsystemmenuid };
+            if (!factory.FreeSql.Select<Menus>().Any(x => x.Name == "组织机构管理"))
+            {
+                factory.FreeSql.Insert<Menus>(companyorganzition).ExecuteAffrows();
+            }
+
+
+
+
 
             Menus softtoolsmenus = new Menus() { Id = Guid.NewGuid(), IsDefault = true, Name = "研发管理", MenusId = Guid.Empty };
             if (!factory.FreeSql.Select<Menus>().Any(x => x.Name == "研发管理"))
@@ -143,7 +172,7 @@ namespace Core.AppSystemServices
                 Email = "13700000000@qq.com",
                 PassWord = "007admin".Tomd5(),
                 IsAdmin = true,
-                DefaultCompany = defaultCompanyguid
+                CompanysId = defaultCompanyguid
             };
             if (!factory.FreeSql.Select<Users>().Any(x => x.Id == defaultCompanyUser))
             {
@@ -159,7 +188,7 @@ namespace Core.AppSystemServices
                 Email = "13701859214@qq.com",
                 IsAdmin = true,
                 PassWord = "admin".Tomd5(),
-                DefaultCompany = defaultSelfCompany
+                CompanysId = defaultSelfCompany
             };
             if (!factory.FreeSql.Select<Users>().Any(x => x.Id == defaultSelfUser))
             {

@@ -10,8 +10,8 @@ namespace Core.AppSystemServices
     /// <summary>
     /// 角色表
     /// </summary>
-    [Description("角色表")]
-    public class Roles : EntityBaseAll
+    [Description("角色表")] 
+    public class Roles : BaseCompany
     {
         /// <summary>
         /// 角色名称
@@ -19,11 +19,12 @@ namespace Core.AppSystemServices
         [Description("角色名称")]
         [Column(StringLength = 50)]
         public string Name { get; set; }
-
-        /// <summary>
-        /// 单位
-        /// </summary>
-        [Description("单位")]
-        public Guid CompanysId { get; set; }
+         
+        ///// <summary>
+        ///// ID
+        ///// </summary>
+        //[Description("ID")]
+        //[Column(IsPrimary = true)]
+        //public Guid Id { get; set; }
     }
 }

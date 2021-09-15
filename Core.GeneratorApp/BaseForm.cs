@@ -18,7 +18,7 @@ using FreeSql;
 
 namespace Core.GeneratorApp
 {
-    public class BaseForm<T> : Form where T : class, new() 
+    public class BaseForm<T> : Form where T : BaseCompany, new() 
     { 
         /// <summary>
         /// 默认工具栏
@@ -41,6 +41,7 @@ namespace Core.GeneratorApp
             Int32 startIndexX = 20;
             Int32 startIndexY = 20;
             typeof(T).GetProperties().ToList().ForEach(x => {
+                if (x.Name != "CompanysId") { 
                 var s = Nullable.GetUnderlyingType(x.PropertyType) ?? x.PropertyType;
                 var ptype = s.Name;
                 Label label = new Label();
@@ -127,6 +128,7 @@ namespace Core.GeneratorApp
                     panel.Controls.Add(textBox);
                     startIndexY += 20;
                 }
+                }
             });
 
             this.Height = startIndexY + 150;
@@ -161,108 +163,115 @@ namespace Core.GeneratorApp
             Int32 startIndexX = 20;
             Int32 startIndexY = 20; 
             typeof(T).GetProperties().ToList().ForEach(x=> {
-                var s = Nullable.GetUnderlyingType(x.PropertyType) ?? x.PropertyType;
-                var ptype = s.Name;
-                Label label= new Label();
-                label.Text = x.GetPropertyDescription(); 
-                label.Location = new Point(startIndexX, startIndexY);
-                label.Width = 100;
-                dynamic textBox = new TextBox();
-              
-                if (x.PropertyType.IsEnum) {
-                    textBox = new ComboBox();
-                    var listenum = x.Name.GetTypeByName().GetListEnumClass(); 
-                    textBox.DataSource = listenum;
-                    textBox.ValueMember = "Kyes";
-                    textBox.DisplayMember = "Name";
-                  
-                    textBox.Location = new Point(startIndexX + 150, startIndexY);
-                    textBox.Name = x.Name;
-                    startIndexY += 50;
-                    panel.Controls.Add(label);
-                    panel.Controls.Add(textBox);
-                    var item = new EnumClass();
-                    x.PropertyType.GetListEnumClass().ForEach(p => {
-                        if (p.Name == t.GetPropertyValue(x.Name)) {
-                            item = p;
-                        } 
-                    });
-                    textBox.Width = 300;
-                    textBox.SelectedText = item.Name;
-                    textBox.SelectedItem = item;
-                    textBox.SelectedValue = item.Keys;
-                    textBox.Text = item.Name; 
-                   
-                }
-                if (ptype == typeof(Boolean).Name)
+                if (x.Name != "CompanysId")
                 {
-                    textBox = new System.Windows.Forms.CheckBox(); 
-                    textBox.Location = new Point(startIndexX + 150, startIndexY);
-                    textBox.Name = x.Name;
-                    textBox.Width = 300;
-                    panel.Controls.Add(label);
-                    panel.Controls.Add(textBox);
-                    startIndexY += 20;
-                }
-                if (ptype == typeof(string).Name || ptype == typeof(Int64).Name || ptype == typeof(Int32).Name)
-                {
-                    textBox = new TextBox();
-                    var slength = x.GetPropertyDescription<FreeSql.DataAnnotations.ColumnAttribute>("StringLength").ToInt32();
-                    if (slength == -1 || slength > 500)
-                    {
-                        textBox = new RichTextBox(); 
-                    } 
-                    textBox.Location = new Point(startIndexX + 150, startIndexY);
-                    textBox.Name = x.Name;
-                    textBox.Text = t.GetPropertyValue(x.Name);
-                    textBox.Width = 300;
-                    panel.Controls.Add(label);
-                    panel.Controls.Add(textBox);
+                    var s = Nullable.GetUnderlyingType(x.PropertyType) ?? x.PropertyType;
+                    var ptype = s.Name;
+                    Label label = new Label();
+                    label.Text = x.GetPropertyDescription();
+                    label.Location = new Point(startIndexX, startIndexY);
+                    label.Width = 100;
+                    dynamic textBox = new TextBox();
 
-                    startIndexY += 30;
+                    if (x.PropertyType.IsEnum)
+                    {
+                        textBox = new ComboBox();
+                        var listenum = x.Name.GetTypeByName().GetListEnumClass();
+                        textBox.DataSource = listenum;
+                        textBox.ValueMember = "Kyes";
+                        textBox.DisplayMember = "Name";
 
-                }
-                // 说明是联动
-                if (ptype == typeof(Guid).Name && x.Name.EndsWith("sId")) {
-                    textBox = new ComboBox();
-                    textBox.Width = 300;
-                    textBox.Location = new Point(startIndexX + 150, startIndexY);
-                    panel.Controls.Add(label);
-                    panel.Controls.Add(textBox);
-                    Type type = (x.Name.Replace("sId", string.Empty) + "s").GetClassType();
-                    var list = factory.FreeSql.Select<object>().AsType(type).ToList(); 
-                   
-                    dynamic newdefault = System.Activator.CreateInstance(type);
-                    newdefault.Id = Guid.Empty;
-                    newdefault.Name = "默认";
-                    list.Insert(0, newdefault); 
-                    textBox.DataSource = list;
-                    textBox.Name = x.Name;
-                    textBox.ValueMember = "Id";
-                    textBox.DisplayMember = "Name";
-                  
-                    var item = list.Where(p => p.GetPropertyValue("Id") == t.GetPropertyValue(x.Name)).FirstOrDefault();
-                    if (item == null)
-                    {
-                        textBox.SelectedIndex = 0;
-                    }
-                    else
-                    {
-                        textBox.SelectedValue = item.GetPropertyValue("Id");
-                        textBox.Text = item.GetPropertyValue("Name").ToString();
+                        textBox.Location = new Point(startIndexX + 150, startIndexY);
+                        textBox.Name = x.Name;
+                        startIndexY += 50;
+                        panel.Controls.Add(label);
+                        panel.Controls.Add(textBox);
+                        var item = new EnumClass();
+                        x.PropertyType.GetListEnumClass().ForEach(p =>
+                        {
+                            if (p.Name == t.GetPropertyValue(x.Name))
+                            {
+                                item = p;
+                            }
+                        });
+                        textBox.Width = 300;
+                        textBox.SelectedText = item.Name;
                         textBox.SelectedItem = item;
-                    }
+                        textBox.SelectedValue = item.Keys;
+                        textBox.Text = item.Name;
 
-                    startIndexY += 20;
+                    }
+                    if (ptype == typeof(Boolean).Name)
+                    {
+                        textBox = new System.Windows.Forms.CheckBox();
+                        textBox.Location = new Point(startIndexX + 150, startIndexY);
+                        textBox.Name = x.Name;
+                        textBox.Width = 300;
+                        panel.Controls.Add(label);
+                        panel.Controls.Add(textBox);
+                        startIndexY += 20;
+                    }
+                    if (ptype == typeof(string).Name || ptype == typeof(Int64).Name || ptype == typeof(Int32).Name)
+                    {
+                        textBox = new TextBox();
+                        var slength = x.GetPropertyDescription<FreeSql.DataAnnotations.ColumnAttribute>("StringLength").ToInt32();
+                        if (slength == -1 || slength > 500)
+                        {
+                            textBox = new RichTextBox();
+                        }
+                        textBox.Location = new Point(startIndexX + 150, startIndexY);
+                        textBox.Name = x.Name;
+                        textBox.Text = t.GetPropertyValue(x.Name);
+                        textBox.Width = 300;
+                        panel.Controls.Add(label);
+                        panel.Controls.Add(textBox);
+
+                        startIndexY += 30;
+
+                    }
+                    // 说明是联动
+                    if (ptype == typeof(Guid).Name && x.Name.EndsWith("sId"))
+                    {
+                        textBox = new ComboBox();
+                        textBox.Width = 300;
+                        textBox.Location = new Point(startIndexX + 150, startIndexY);
+                        panel.Controls.Add(label);
+                        panel.Controls.Add(textBox);
+                        Type type = (x.Name.Replace("sId", string.Empty) + "s").GetClassType();
+                        var list = factory.FreeSql.Select<object>().AsType(type).ToList();
+
+                        dynamic newdefault = System.Activator.CreateInstance(type);
+                        newdefault.Id = Guid.Empty;
+                        newdefault.Name = "默认";
+                        list.Insert(0, newdefault);
+                        textBox.DataSource = list;
+                        textBox.Name = x.Name;
+                        textBox.ValueMember = "Id";
+                        textBox.DisplayMember = "Name";
+
+                        var item = list.Where(p => p.GetPropertyValue("Id") == t.GetPropertyValue(x.Name)).FirstOrDefault();
+                        if (item == null)
+                        {
+                            textBox.SelectedIndex = 0;
+                        }
+                        else
+                        {
+                            textBox.SelectedValue = item.GetPropertyValue("Id");
+                            textBox.Text = item.GetPropertyValue("Name").ToString();
+                            textBox.SelectedItem = item;
+                        }
+
+                        startIndexY += 20;
+                    }
+                    if (!x.PropertyType.IsEnum
+                    && (ptype != typeof(Guid).Name || ptype == typeof(Guid).Name && x.Name.EndsWith("sId"))
+                    && ptype != typeof(DateTime).Name)
+                    {
+                        panel.Controls.Add(label);
+                        panel.Controls.Add(textBox);
+                        startIndexY += 20;
+                    }
                 }
-                if (!x.PropertyType.IsEnum 
-                && (ptype != typeof(Guid).Name || ptype == typeof(Guid).Name && x.Name.EndsWith("sId"))
-                && ptype != typeof(DateTime).Name)
-                {
-                    panel.Controls.Add(label);
-                    panel.Controls.Add(textBox); 
-                    startIndexY += 20;
-                }  
             }) ;
 
             this.Height = startIndexY + 150;
@@ -335,10 +344,20 @@ namespace Core.GeneratorApp
                     }
                 }
             });
-            if(!IsEdit)
+            t.CompanysId = GeneratorWindows._currentUser.CurrentUser.CompanysId;
+            if (!IsEdit)
+            {
+                if (t.GetPropertyList().Any(x => x == "PassWord"))
+                {
+                    t.SetPropertyValue("PassWord", t.GetPropertyValue("PassWord").ToString().Tomd5());
+                }
                 factory.FreeSql.Insert<T>(t).ExecuteAffrows();
+            } 
             else
+            { 
                 factory.FreeSql.Update<T>().SetSource(t).ExecuteAffrows();
+            }
+               
 
             if ("Resovele" + typeof(T).Name == "ResoveleSnippetRecord")
                 ResoveleSnippetRecord(t);

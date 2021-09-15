@@ -198,6 +198,11 @@ namespace Core.GeneratorApp
             }
         }
         #endregion
-      
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+            txtUsername.SelectAll();
+            txtUsername.Focus();
+        }
     }
 }

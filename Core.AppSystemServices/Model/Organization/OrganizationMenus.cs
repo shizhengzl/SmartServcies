@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.UsuallyCommon;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Core.AppSystemServices
     /// 组织机构菜单表
     /// </summary>
     [Description("组织机构菜单表")]
-    public class OrganizationMenus
+    public class OrganizationMenus: BaseCompany
     {
         /// <summary>
         /// 部门
@@ -22,11 +23,6 @@ namespace Core.AppSystemServices
         /// </summary>
         [Description("菜单")]
         public Guid MenusId { get; set; }
-
-        /// <summary>
-        /// 单位
-        /// </summary>
-        [Description("单位")]
-        public Guid CompanysId { get; set; }
+         
     }
 }
