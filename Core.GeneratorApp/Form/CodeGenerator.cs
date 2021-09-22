@@ -7,14 +7,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Core.DataBaseServices;
 
 namespace Core.GeneratorApp
 {
     public partial class CodeGenerator : Form
     {
+
+      
+
         public CodeGenerator()
         {
             InitializeComponent();
+        }
+
+        public void InitDataBase()
+        {
+             
+
+            
         }
     }
 }

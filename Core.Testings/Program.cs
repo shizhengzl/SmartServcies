@@ -6,23 +6,64 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using Core.AppEntitys;
+using Core.DataBaseServices; 
 using Core.UsuallyCommon;
 using Microsoft.Office.Interop.Word;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Core.Testings
 {
+    public enum Testenum { 
+        A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q 
+    }
     class Program
     {
         static void Main()
         {
+            InitDatabase initDatabase= new InitDatabase();
+            var m = new ConnectionStringManage() { CompanysId = "00000000-0000-0000-0000-000000000001".ToGuid() };
+            ConnectionStringManageServices connection = new ConnectionStringManageServices();
+             
+            connection.GetConnections(m).ForEach(c => {
+                var s = c.GetConnectionString();
+                Console.WriteLine(s); 
+               
+                var dataBaseServices = new Core.DataBaseServices.DataBaseServices(c);
+                dataBaseServices.GetDataBase().ForEach(x => {
+                    Console.WriteLine(x.DataBaseName);
+
+                    var tables = dataBaseServices.GetTable(x.DataBaseName);
+
+                    tables.ForEach(p => {
+                        Console.WriteLine($"{p.DataBaseName}:{p.TableName}");
+                    });
+
+
+                    var columns = dataBaseServices.GetColumn(x.DataBaseName);
+
+                    columns.ForEach(p => {
+                        Console.WriteLine($"{p.DataBaseName}:{p.TableName}:{p.ColumnName}");
+                    });
+                });
+
+
+           
+
+            });
+            Console.ReadLine();
+            return;
 
             //var ds = OfficeServices.ExeclServices.GetDataTable(@"C:\Users\shizheng\Desktop\报表\房建进度款标准报表\3.3.xls");
             //var ds1 = OfficeServices.ExeclServices.GetDataTable(@"C:\Users\shizheng\Desktop\报表\房建进度款标准报表\3.进度款支付分项汇总表.xls");
 
             //InitdataBase database = new InitdataBase();
             //Console.WriteLine("Completed");
-       
+
+            Console.WriteLine(StringExtensions.ToFixedLeftWidth("44", 8));
+            Console.WriteLine(StringExtensions.ToFixedRightWidth("44", 8));
+            Console.WriteLine(StringExtensions.ToFixedWidth("44", 8,"P"));
+
+         
 
             InverstData inverstData = new InverstData();
             bool result = false;
@@ -55,7 +96,7 @@ namespace Core.Testings
         public bool start() 
         {
             var result = false;
-            var last = list.OrderByDescending(x => x.gamecode).FirstOrDefault();
+            var last = list.OrderByDescending(x => x.roundserial).FirstOrDefault();
             if (last == null) 
             {
                 last = new DataItem
@@ -63,7 +104,7 @@ namespace Core.Testings
                     wagers_date = DateTime.Now,
                     payoff = Core.UsuallyCommon.RandomExtensions.RandomBool() ? setting.Min : (0 - setting.Min),
                     betamount = setting.Min,
-                    gamecode = 1
+                    roundserial = 1
                 };
 
                 list.Add(last);
@@ -158,7 +199,7 @@ namespace Core.Testings
                 wagers_date = DateTime.Now,
                 payoff = rondom ? money : 0-money,
                 betamount = money,
-                gamecode = data.gamecode + 1
+                roundserial = data.roundserial + 1
             };
       
             return response;

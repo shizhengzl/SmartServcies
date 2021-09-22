@@ -92,6 +92,14 @@
       <Project>{191bd6e9-0130-4b90-b297-4c0f247e5253}</Project>
       <Name>Core.AppEntitys</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Core.DataBaseServices\Core.DataBaseServices.csproj">
+      <Project>{3DF5EB1A-30F5-4D4D-89F6-439E709DF12B}</Project>
+      <Name>Core.DataBaseServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core.FreeSql\Core.FreeSqlServices.csproj">
+      <Project>{D10C539E-74A6-4B47-878E-1099A5866128}</Project>
+      <Name>Core.FreeSqlServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core.OfficeServices\Core.OfficeServices.csproj">
       <Project>{bb115261-2578-47cd-b51a-b151720d9996}</Project>
       <Name>Core.OfficeServices</Name>

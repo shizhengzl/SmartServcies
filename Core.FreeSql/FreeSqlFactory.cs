@@ -26,7 +26,7 @@ namespace Core.FreeSqlServices
         /// <param name="DbType">数据库初始化类型</param>
         /// <param name="Connection">连接字符串</param>
         /// <param name="autoSync">自动同步</param>
-        public IFreeSql GetFreeSql(DataType DbType, String Connection,Boolean autoSync = false)
+        public static IFreeSql GetFreeSql(DataType DbType, String Connection,Boolean autoSync = false)
         {
             return new FreeSqlBuilder()
              .UseConnectionString(DbType, Connection)

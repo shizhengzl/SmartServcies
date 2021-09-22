@@ -11,6 +11,45 @@ namespace Core.UsuallyCommon
     public static class StringExtensions
     {
         /// <summary>
+        /// 固定宽度
+        /// </summary>
+        /// <param name="str">字符串</param>
+        /// <param name="fixedLength">固定宽度</param>
+        /// <param name="chars">填充字符</param>
+        /// <returns></returns>
+        public static String ToFixedWidth(this String str, Int32 fixedLength,string chars)
+        {
+            var express = string.Format("{0}:D{1}",chars.ToStringExtension(), fixedLength);
+            return String.Format(String.Format("{{{0}}}", express), str.ToStringExtension());
+        }
+
+
+        /// <summary>
+        /// 固定宽度左对齐
+        /// </summary>
+        /// <param name="str">字符串</param>
+        /// <param name="fixedLength">固定宽度</param>
+        /// <returns></returns>
+        public static String ToFixedLeftWidth(this String str,Int32 fixedLength)
+        {
+            var express = string.Format("0,{0}", fixedLength);
+            return String.Format(String.Format("{{{0}}}", express), str.ToStringExtension());
+        }
+
+        /// <summary>
+        /// 固定宽度右对齐
+        /// </summary>
+        /// <param name="str">字符串</param>
+        /// <param name="fixedLength">固定宽度</param>
+        /// <returns></returns>
+        public static String ToFixedRightWidth(this String str, Int32 fixedLength)
+        {
+            var express = string.Format("0,-{0}", fixedLength);
+            return String.Format(String.Format("{{{0}}}", express), str.ToStringExtension());
+        }
+
+
+        /// <summary>
         /// 获取MD5得值，没有转换成Base64的
         /// </summary>
         /// <param name="str">需要加密的字符串</param>
@@ -80,6 +119,18 @@ namespace Core.UsuallyCommon
         {
             if (str.ToStringExtension().Length > 0)
                 return str.Substring(0, 1).ToLower() + str.Substring(1);
+            return str;
+        }
+
+        /// <summary>
+        /// 首字母转大写
+        /// </summary>
+        /// <param name="str">字符串</param>
+        /// <returns></returns>
+        public static String ToFirstCharToUpper(this String str)
+        {
+            if (str.ToStringExtension().Length > 0)
+                return str.Substring(0, 1).ToUpper() + str.Substring(1);
             return str;
         }
     }

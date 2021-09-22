@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.AppSystemServices
+namespace Core.FreeSqlServices
 {
     /// <summary>
     /// 标记服务

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Core.FreeSqlServices;
 using Core.UsuallyCommon;
 namespace Core.AppSystemServices
 {

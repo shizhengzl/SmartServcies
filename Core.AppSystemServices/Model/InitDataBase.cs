@@ -104,7 +104,7 @@ namespace Core.AppSystemServices
                 factory.FreeSql.Insert<Menus>(companymenumenus).ExecuteAffrows();
             }
 
-            Menus companygrant = new Menus() { Id = Guid.NewGuid(), IsDefault = true, Name = "菜单授权", Sort = 4, Url = "Grant", MenusId = defaultsystemmenuid };
+            Menus companygrant = new Menus() { Id = Guid.NewGuid(), IsDefault = true, Name = "菜单授权", Sort = 4, Url = "Grant", IsAuto = false, MenusId = defaultsystemmenuid };
             if (!factory.FreeSql.Select<Menus>().Any(x => x.Name == "菜单授权"))
             {
                 factory.FreeSql.Insert<Menus>(companygrant).ExecuteAffrows();
@@ -134,6 +134,20 @@ namespace Core.AppSystemServices
             }
 
             var father = factory.FreeSql.Select<Menus>().Where(x => x.Name == "研发管理").ToList<Menus>().FirstOrDefault();
+
+            Menus codesnippet = new Menus() { Id = Guid.NewGuid(), IsDefault = true, Url = "CodeSnippet", Name = "生成模板", MenusId = father.Id };
+            if (!factory.FreeSql.Select<Menus>().Any(x => x.Name == "生成模板"))
+            {
+                factory.FreeSql.Insert<Menus>(codesnippet).ExecuteAffrows();
+            }
+
+            Menus codegenerator = new Menus() { Id = Guid.NewGuid(), IsDefault = true,IsAuto = false, Url = "CodeGenerator", Name = "生成代码", MenusId = father.Id };
+            if (!factory.FreeSql.Select<Menus>().Any(x => x.Name == "生成代码"))
+            {
+                factory.FreeSql.Insert<Menus>(codegenerator).ExecuteAffrows();
+            }
+
+
             Menus snippet = new Menus() { Id = Guid.NewGuid(), IsDefault = true, Url = "SnippetRecord", Name = "代码片段", MenusId = father.Id };
             if (!factory.FreeSql.Select<Menus>().Any(x => x.Name == "代码片段"))
             {

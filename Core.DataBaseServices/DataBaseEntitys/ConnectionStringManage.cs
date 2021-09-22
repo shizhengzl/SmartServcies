@@ -1,4 +1,5 @@
 ﻿using Core.UsuallyCommon;
+using FreeSql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +16,7 @@ namespace Core.DataBaseServices
         /// 数据库类型
         /// </summary>
         [Description("数据库类型")]
-        public DataBaseType DataBaseType { get; set; }
+        public DataType DataBaseType { get; set; }
 
         /// <summary>
         /// windows认证
@@ -46,5 +47,30 @@ namespace Core.DataBaseServices
         /// </summary>
         [Description("默认数据库")]
         public string DefaultDataBase { get; set; }
+
+        /// <summary>
+        /// 获取连接字符串
+        /// </summary>
+        /// <returns></returns>
+        public String GetConnectionString() {
+            string response = string.Empty;
+            var database = string.Format("database={0};", DefaultDataBase);
+            if (IsWindows && DataBaseType == DataType.SqlServer) {
+            
+                response = string.Format("server={0};{1}Integrated Security=True;" ,Address,DefaultDataBase.IsNullOrEmpty() ? string.Empty: database);
+            }
+            if (!IsWindows && DataBaseType == DataType.SqlServer)
+            {
+                response = string.Format("server={0};{1}uid={2},pwd={3};", Address,   DefaultDataBase.IsNullOrEmpty() ? string.Empty : database,UserIds,Password);
+            }
+            if (IsWindows && DataBaseType == DataType.MySql)
+            {
+
+            }
+            if (!IsWindows && DataBaseType == DataType.MySql) { 
+            
+            }
+            return response;
+        }
     }
 }

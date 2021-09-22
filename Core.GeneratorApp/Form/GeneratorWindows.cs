@@ -91,17 +91,21 @@ namespace Core.GeneratorApp
             Menus menus = (Menus)trNode.Tag;
             if (menus.Url.IsNullOrEmpty() || menus.Url.ToStringExtension().GetClassType().IsNull())
                 return;
+             
 
-            var grant = "Grant";
-
-            if (menus.Url == grant)
+            if (!menus.IsAuto.ToBoolean())
             {
-                Grant form = new Grant(); 
+
+
+                Type classType = Type.GetType("Core.GeneratorApp." + menus.Url); 
+                var instance = Activator.CreateInstance(classType);
+
+                Form form =(Form)instance; 
                 form.TopLevel = false;     //设置为非顶级控件
 
                 TabPage tabgrant = new TabPage();
-                tabgrant.Text = "授权";
-                tabgrant.Name = grant;
+                tabgrant.Text = menus.Name;
+                tabgrant.Name = menus.Url.ToStringExtension();
                 tabgrant.Controls.Add(form);
                 form.Dock = DockStyle.Fill;
                     //让窗体form显示出来 
@@ -109,9 +113,9 @@ namespace Core.GeneratorApp
                 form.WindowState = FormWindowState.Maximized;
                 
 
-                if (!tabControls.TabPages.ContainsKey(grant))
+                if (!tabControls.TabPages.ContainsKey(menus.Url.ToStringExtension()))
                     tabControls.TabPages.Add(tabgrant);
-                tabControls.SelectTab(grant);
+                tabControls.SelectTab(menus.Url.ToStringExtension());
 
                 form.Show();
             }

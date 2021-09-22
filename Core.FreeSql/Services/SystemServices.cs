@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Core.UsuallyCommon;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using Core.FreeSqlServices;
-using Core.UsuallyCommon;
 
-namespace Core.AppSystemServices
+namespace Core.FreeSqlServices
 {
     [AppServiceAttribute]
-    public class SystemServices : IServices
+    public class SystemServices 
     {
         public FreeSqlFactory factory = new FreeSqlFactory();
 
@@ -78,7 +77,7 @@ namespace Core.AppSystemServices
             {
                 SetCreateModel<T>(item);
             }
-            
+
             factory.FreeSql.Insert<T>(t).ExecuteAffrows();
 
             return t;
@@ -125,7 +124,7 @@ namespace Core.AppSystemServices
         private void SetCreateModel<T>(T t) where T : class
         {
             t.SetPropertyValue("CreateTime", DateTime.UtcNow);
-            if (t.GetPropertyValue("Id").IsNull()) 
+            if (t.GetPropertyValue("Id").IsNull())
             {
                 t.SetPropertyValue("Id", Guid.NewGuid());
             }

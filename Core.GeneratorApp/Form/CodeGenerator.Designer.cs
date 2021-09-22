@@ -1,5 +1,4 @@
-﻿
-namespace Core.GeneratorApp
+﻿namespace Core.GeneratorApp
 {
     partial class CodeGenerator
     {
@@ -29,13 +28,25 @@ namespace Core.GeneratorApp
         /// </summary>
         private void InitializeComponent()
         {
+            this.listDatabase = new System.Windows.Forms.ListView();
             this.SuspendLayout();
+            // 
+            // listDatabase
+            // 
+            this.listDatabase.Dock = System.Windows.Forms.DockStyle.Left;
+            this.listDatabase.HideSelection = false;
+            this.listDatabase.Location = new System.Drawing.Point(0, 0);
+            this.listDatabase.Name = "listDatabase";
+            this.listDatabase.Size = new System.Drawing.Size(299, 557);
+            this.listDatabase.TabIndex = 0;
+            this.listDatabase.UseCompatibleStateImageBehavior = false;
             // 
             // CodeGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1169, 783);
+            this.ClientSize = new System.Drawing.Size(1116, 557);
+            this.Controls.Add(this.listDatabase);
             this.Name = "CodeGenerator";
             this.Text = "CodeGenerator";
             this.ResumeLayout(false);
@@ -43,5 +54,7 @@ namespace Core.GeneratorApp
         }
 
         #endregion
+
+        private System.Windows.Forms.ListView listDatabase;
     }
 }

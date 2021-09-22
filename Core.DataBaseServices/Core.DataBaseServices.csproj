@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FreeSql" Version="2.5.200" />
+    <PackageReference Include="FreeSql.Provider.MySql" Version="2.5.200" />
+    <PackageReference Include="FreeSql.Provider.SqlServer" Version="2.5.200" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.FreeSql\Core.FreeSqlServices.csproj" />
     <ProjectReference Include="..\Core.UsuallyCommon\Core.UsuallyCommon.csproj" />
   </ItemGroup>
 

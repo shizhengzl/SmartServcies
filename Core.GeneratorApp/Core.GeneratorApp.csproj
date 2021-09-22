@@ -105,54 +105,55 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseForm.cs">
+    <Compile Include="Form\BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BaseList.cs">
+    <Compile Include="Form\BaseList.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CodeGenerator.cs">
+    <Compile Include="Form\CodeGenerator.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CodeGenerator.Designer.cs">
+    <Compile Include="Form\CodeGenerator.Designer.cs">
       <DependentUpon>CodeGenerator.cs</DependentUpon>
     </Compile>
-    <Compile Include="GeneratorWindows.cs">
+    <Compile Include="Form\GeneratorWindows.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GeneratorWindows.Designer.cs">
+    <Compile Include="Form\GeneratorWindows.Designer.cs">
       <DependentUpon>GeneratorWindows.cs</DependentUpon>
     </Compile>
-    <Compile Include="Grant.cs">
+    <Compile Include="Form\Grant.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Grant.Designer.cs">
+    <Compile Include="Form\Grant.Designer.cs">
       <DependentUpon>Grant.cs</DependentUpon>
     </Compile>
-    <Compile Include="Login.cs">
+    <Compile Include="Form\Login.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Login.Designer.cs">
+    <Compile Include="Form\Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\CodeSnippet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="BaseForm.resx">
+    <EmbeddedResource Include="Form\BaseForm.resx">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BaseList.resx">
+    <EmbeddedResource Include="Form\BaseList.resx">
       <DependentUpon>BaseList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CodeGenerator.resx">
+    <EmbeddedResource Include="Form\CodeGenerator.resx">
       <DependentUpon>CodeGenerator.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GeneratorWindows.resx">
+    <EmbeddedResource Include="Form\GeneratorWindows.resx">
       <DependentUpon>GeneratorWindows.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Grant.resx">
+    <EmbeddedResource Include="Form\Grant.resx">
       <DependentUpon>Grant.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Login.resx">
+    <EmbeddedResource Include="Form\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

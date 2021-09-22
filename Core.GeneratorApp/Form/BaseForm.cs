@@ -88,14 +88,15 @@ namespace Core.GeneratorApp
                     var slength = x.GetPropertyDescription<FreeSql.DataAnnotations.ColumnAttribute>("StringLength").ToInt32();
                     if (slength == -1 || slength > 500)
                     {
-                        textBox = new RichTextBox();
-                    }
+                        textBox = new RichTextBox(); 
+                     }
+                  
                     textBox.Location = new Point(startIndexX + 150, startIndexY);
                     textBox.Name = x.Name;
                     textBox.Width = 300;
                     panel.Controls.Add(label);
                     panel.Controls.Add(textBox);
-                    startIndexY += 30;
+                    startIndexY += (slength == -1 || slength > 500) ? 80 :30;
 
                 }
                 // 说明是联动
