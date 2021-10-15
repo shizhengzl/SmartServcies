@@ -28,8 +28,10 @@ namespace Core.CefChrome
         public FreeSqlFactory factory = new FreeSqlFactory();
         public ZMSetting zMSetting { get; set; }
         public CoreCefChrome()
-        { 
-            this.WindowState = FormWindowState.Maximized;    //最大化窗体
+        {
+            //this.WindowState = FormWindowState.;    //最大化窗体
+            this.Location = new System.Drawing.Point(0, 0);
+           
             InitializeComponent(); 
             InitChrome();
         } 
@@ -254,12 +256,12 @@ namespace Core.CefChrome
                 if (zMSetting.Imode == IMode.Await)
                 {
                     ShowText($"上一把{(dataItem.payoff.ToDecimal() > 0 ? "赢": "输")}了{dataItem.betamount}");
-                    var clicknum = zMSetting.DefaultInverstMoney.ToDecimal() / 10;
+                    var clicknum = zMSetting.DefaultInverstMoney.ToDecimal();
 
-                    ShowText($"选择金额10，坐标{zMSetting.Ten.point.X},{zMSetting.Ten.point.Y}");
+                    ShowText($"选择金额1，坐标{zMSetting.One.point.X},{zMSetting.One.point.Y}");
                     // ten
                     if (!Moni)
-                        MouseHelper.DoClick(zMSetting.Ten.point.X, zMSetting.Ten.point.Y);
+                        MouseHelper.DoClick(zMSetting.One.point.X, zMSetting.One.point.Y);
                     ShowText($"选择投注点击次数{clicknum}");
                     for (int i = 0; i < clicknum; i++)
                     {
@@ -274,24 +276,15 @@ namespace Core.CefChrome
                 }
                 if (zMSetting.Imode == IMode.Add)
                 {
-                    ShowText($"选择金额10，坐标{zMSetting.Ten.point.X},{zMSetting.Ten.point.Y}");
+                    ShowText($"选择金额1，坐标{zMSetting.One.point.X},{zMSetting.One.point.Y}");
                     // one
                     if (!Moni)
-                        MouseHelper.DoClick(zMSetting.Ten.point.X, zMSetting.Ten.point.Y);
+                        MouseHelper.DoClick(zMSetting.One.point.X, zMSetting.One.point.Y);
 
                     decimal investmoney = 0;
                     if (dataItem.payoff.ToDecimal() > 0) {
                         ShowText($"上一把赢了{dataItem.payoff.ToDecimal()}");
-                        //if ((dataItem.payoff.ToDecimal() - zMSetting.Min.ToDecimal()) / zMSetting.Add.ToDecimal() >= 20)
-                        //{
-                        //    ShowText($"满足20次 (投注-最小)/add >=20,{dataItem.payoff.ToDecimal()},{ zMSetting.Min.ToDecimal()},{zMSetting.Add.ToDecimal() } ");
-                        //    investmoney = zMSetting.Min.ToDecimal();
-                        //}
-                        //else
-                        //{
-                            investmoney = dataItem.payoff.ToDecimal() - zMSetting.Add.ToDecimal();
-                        //}
-                           
+                        investmoney = dataItem.payoff.ToDecimal() - zMSetting.Add.ToDecimal();
                     }
                     if (dataItem.payoff.ToDecimal() == 0)
                     {
@@ -301,19 +294,7 @@ namespace Core.CefChrome
                     if (dataItem.payoff.ToDecimal() < 0)
                     {
                         ShowText($"上一把输了,{dataItem.betamount.ToDecimal()}");
-                        //if ((dataItem.betamount.ToDecimal() - zMSetting.Min.ToDecimal()) / zMSetting.Add.ToDecimal() == 20)
-                        //{
-                        //    ShowText($"满足20次 (投注-最小)/add >=20, { dataItem.betamount.ToDecimal()},{ zMSetting.Min.ToDecimal() },{ zMSetting.Add.ToDecimal() }");
-                        //    investmoney = (zMSetting.Min.ToDecimal() + dataItem.betamount.ToDecimal())
-                        //        *
-                        //        ((dataItem.betamount.ToDecimal() - zMSetting.Min.ToDecimal()) / zMSetting.Add.ToDecimal()) / 2;
-                        //}
-                        //else if ((dataItem.betamount.ToDecimal() - zMSetting.Min.ToDecimal()) / zMSetting.Add.ToDecimal()>  20)
-                        //{
-                        //    investmoney = dataItem.betamount.ToDecimal() * 2;
-                        //}
-                        //else
-                            investmoney = 0 - dataItem.payoff.ToDecimal() + zMSetting.Add.ToDecimal();
+                        investmoney = 0 - dataItem.payoff.ToDecimal() + zMSetting.Add.ToDecimal();
                     }
 
                     if (investmoney < zMSetting.Min.ToDecimal())
@@ -324,8 +305,8 @@ namespace Core.CefChrome
 
                     ShowText($"最终投注:{investmoney}");
 
-                    ShowText($"选择投注点击次数{investmoney/10}");
-                    for (int i = 0; i < investmoney/10; i++)
+                    ShowText($"选择投注点击次数{investmoney}");
+                    for (int i = 0; i < investmoney; i++)
                     {
                         // inverst
                         if (!Moni)

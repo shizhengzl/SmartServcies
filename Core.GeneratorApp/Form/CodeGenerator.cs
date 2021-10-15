@@ -12,20 +12,17 @@ using Core.DataBaseServices;
 namespace Core.GeneratorApp
 {
     public partial class CodeGenerator : Form
-    {
-
-      
-
+    { 
         public CodeGenerator()
         {
             InitializeComponent();
+            InitDataBase();
         }
 
         public void InitDataBase()
         {
-             
-
-            
+            this.dataBaseTrees.Companyid = GeneratorWindows._currentUser.User.CompanysId;
+            this.dataBaseTrees.InitTree();
         }
     }
 }

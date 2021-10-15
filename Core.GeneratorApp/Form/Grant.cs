@@ -35,10 +35,10 @@ namespace Core.GeneratorApp
         public void LoadTreeView(List<Menus> hasmenus,Companys company)
         {
             treegrangview.Nodes.Clear();
-            var menus = userServices.GetGrantMenus(GeneratorWindows._currentUser.CurrentUser, company);
+            var menus = userServices.GetGrantMenus(GeneratorWindows._currentUser.User, company);
             menus.Where(x => x.MenusId == Guid.Empty).ToList().ForEach(x => {
                 TreeNode root = new TreeNode();
-                root.Text = x.Name;
+                root.Text = x.MenuName;
                 root.Tag = x;
 
                 root.Checked = hasmenus.ToList().Any(u => u.Id == x.Id);
@@ -53,7 +53,7 @@ namespace Core.GeneratorApp
         {
             menus.Where(p => p.MenusId == self.Id).ToList().ForEach(x=> {
                 TreeNode root = new TreeNode();
-                root.Text = x.Name;
+                root.Text = x.MenuName;
                 root.Tag = x;
                 root.Checked = hasmenus.ToList().Any(u => u.Id == x.Id);
                 treeNode.Nodes.Add(root); 

@@ -345,7 +345,7 @@ namespace Core.GeneratorApp
                     }
                 }
             });
-            t.CompanysId = GeneratorWindows._currentUser.CurrentUser.CompanysId;
+            t.CompanysId = GeneratorWindows._currentUser.User.CompanysId;
             if (!IsEdit)
             {
                 if (t.GetPropertyList().Any(x => x == "PassWord"))

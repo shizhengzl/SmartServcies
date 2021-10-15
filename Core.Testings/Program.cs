@@ -5,8 +5,8 @@ using System.Linq;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
-using Core.AppEntitys;
-using Core.DataBaseServices; 
+using Core.DataBaseServices;
+using Core.FreeSqlServices;
 using Core.UsuallyCommon;
 using Microsoft.Office.Interop.Word;
 using static System.Net.Mime.MediaTypeNames;
@@ -20,80 +20,62 @@ namespace Core.Testings
     {
         static void Main()
         {
-            InitDatabase initDatabase= new InitDatabase();
-            var m = new ConnectionStringManage() { CompanysId = "00000000-0000-0000-0000-000000000001".ToGuid() };
-            ConnectionStringManageServices connection = new ConnectionStringManageServices();
-             
-            connection.GetConnections(m).ForEach(c => {
-                var s = c.GetConnectionString();
-                Console.WriteLine(s); 
-               
-                var dataBaseServices = new Core.DataBaseServices.DataBaseServices(c);
-                dataBaseServices.GetDataBase().ForEach(x => {
-                    Console.WriteLine(x.DataBaseName);
-
-                    var tables = dataBaseServices.GetTable(x.DataBaseName);
-
-                    tables.ForEach(p => {
-                        Console.WriteLine($"{p.DataBaseName}:{p.TableName}");
-                    });
-
-
-                    var columns = dataBaseServices.GetColumn(x.DataBaseName);
-
-                    columns.ForEach(p => {
-                        Console.WriteLine($"{p.DataBaseName}:{p.TableName}:{p.ColumnName}");
-                    });
-                });
-
-
-           
-
-            });
-            Console.ReadLine();
-            return;
 
             //var ds = OfficeServices.ExeclServices.GetDataTable(@"C:\Users\shizheng\Desktop\报表\房建进度款标准报表\3.3.xls");
             //var ds1 = OfficeServices.ExeclServices.GetDataTable(@"C:\Users\shizheng\Desktop\报表\房建进度款标准报表\3.进度款支付分项汇总表.xls");
 
             //InitdataBase database = new InitdataBase();
-            //Console.WriteLine("Completed");
+            //Console.WriteLine("Completed"); 
 
-            Console.WriteLine(StringExtensions.ToFixedLeftWidth("44", 8));
-            Console.WriteLine(StringExtensions.ToFixedRightWidth("44", 8));
-            Console.WriteLine(StringExtensions.ToFixedWidth("44", 8,"P"));
+            FreeSqlFactory freeSqlFactory = new FreeSqlFactory();
 
-         
+            List<Tongji> tongjis= new List<Tongji>();
+            for (int x   = 0; x < 100;x ++)
+            {
+                Tongji t = new Tongji() { 
+                     Add = 1, Pici = x+1, Zongjiner =10000,Min =10
+                };
+                tongjis.Add(t);
+            }
 
-            InverstData inverstData = new InverstData();
-            bool result = false;
-            int i = 0;
-            while (!result) {
-                i++;
-                if (i > 10000)
+            tongjis.ForEach(x => {
+                InverstData inverstData = new InverstData();
+                bool result = false;
+                int i = 0;
+                while (!result)
                 {
-                    break;
+                    i++;
+                    if (i > 10000)
+                    {
+                        break;
+                    }
+                    result = inverstData.start(x);
+                    if (x.Yuer >=x.Zongjiner + 500) {
+                        result = true;
+                    }
                 }
-                result = inverstData.start();
-            } 
+                freeSqlFactory.FreeSql.Insert<Tongji>(x).ExecuteAffrows();
+            });
+
             Console.ReadLine();
         }
+    }
+
+
+    public class Tongji : CacleResult
+    { 
+        public Int32 Pici { get; set; } 
+        public int Min { get; set; }
+        public int Add { get; set; }
+        public int Zongjiner { get; set; } 
     }
 
 
     public class InverstData
     {
         public FreeSqlFactory factory = new FreeSqlFactory();
-        List<DataItem> list = new List<DataItem>();
-
-        ZMSetting setting = new ZMSetting()
-        {
-            Min = 10,
-            Add = 0,
-            toatl = 2000
-        };
-
-        public bool start() 
+        List<DataItem> list = new List<DataItem>(); 
+        public bool start(Tongji tj) 
         {
             var result = false;
             var last = list.OrderByDescending(x => x.roundserial).FirstOrDefault();
@@ -102,53 +84,109 @@ namespace Core.Testings
                 last = new DataItem
                 {
                     wagers_date = DateTime.Now,
-                    payoff = Core.UsuallyCommon.RandomExtensions.RandomBool() ? setting.Min : (0 - setting.Min),
-                    betamount = setting.Min,
+                    payoff = Core.UsuallyCommon.RandomExtensions.RandomBool() ? tj.Min : (0 - tj.Min),
+                    betamount = tj.Min,
                     roundserial = 1
                 };
 
                 list.Add(last);
             }
 
-            factory.FreeSql.Insert<DataItem>(last).ExecuteAffrows();
+
 
             AutoCacle autoCacle = new AutoCacle();
-
-            var message = "";
-            if (last.payoff > 0)
-                message = "win:" + Math.Abs(last.payoff);
-            if (last.payoff < 0)
-                message = "lost:" + Math.Abs(last.payoff);
-            if (last.payoff == 0)
-                message = "和：" + Math.Abs(last.payoff);
-         
-
-            var data = autoCacle.Invest(setting, last);
             var allmoney = list.Sum(x => x.payoff.ToDecimal());
-          
-           
-            if (setting.toatl + allmoney < 0)
-            {
-                Console.WriteLine($"光");
-                result = true;
-            }
             var wincount = list.Where(x => x.payoff > 0).Count();
             var lostcount = list.Where(x => x.payoff < 0).Count();
             var hecount = list.Where(x => x.payoff == 0).Count();
-            Console.WriteLine($"总计数:{list.Count} {message}，下投{Math.Abs(data.betamount)},赢{wincount},输{lostcount},和{hecount},余:{setting.toatl + allmoney}");
-            data.yuer = setting.toatl.ToDecimal() + allmoney;
+            var allinvest = list.Sum(x => Math.Abs(x.payoff)).ToDecimal();
+            var maxinverst = list.Max(x => Math.Abs(x.payoff)).ToDecimal();
+            var totallostcount = lostcount > wincount ? lostcount - wincount : 0;
+
+
+            tj.HtCount = hecount;
+            tj.LostCount = lostcount;
+            tj.WinCount = wincount;
+            tj.TotalCount = list.Count;
+            tj.TotalLostCount = totallostcount;
+            tj.TotalInvest = allinvest;
+            tj.Yuer = tj.Zongjiner + allmoney;
+            tj.MaxInvest = maxinverst;
+            tj.last = last;
+            last.Pici = tj.Pici;
+
+
+            if (last.betamount == 0)
+            {
+
+            }
+            factory.FreeSql.Insert<DataItem>(last).ExecuteAffrows();
+
+       
+            CacleResult cacleResult = new CacleResult() {
+              HtCount = hecount, LostCount = lostcount, WinCount = wincount, TotalCount = list.Count, TotalLostCount = totallostcount,
+              TotalInvest = allinvest, Yuer = tj.Zongjiner + allmoney,  MaxInvest = maxinverst,last = last
+            };
+          
+
+            if (tj.Zongjiner + allmoney < 0)
+            {
+                Console.WriteLine($"光");
+                result = true;
+            } 
+
+            Console.WriteLine(cacleResult.Message()); 
+            var data = autoCacle.Invest(tj, last);
+            data.yuer = tj.Zongjiner.ToDecimal() + allmoney;
             list.Add(data);
+             
 
             return result;
         } 
     }
 
+
+    public class CacleResult
+    { 
+        public int TotalCount { get; set; }
+        public decimal TotalInvest { get; set; }
+        public int WinCount { get; set; }
+        public int LostCount { get; set; }
+        public int HtCount { get; set; }
+
+        public decimal MaxInvest { get; set; } 
+
+        public decimal Yuer {  get; set; }
+
+        public int TotalLostCount { get; set; }
+
+
+        public DataItem last {  get; set; }
+
+        public string Message() { 
+            var response = string.Empty;
+            var totalcountstr = $"总计数:{TotalCount}。";
+            var allinveststr = $"总投注:{TotalInvest}。";
+            var wincontstr = $"赢{WinCount}。输{LostCount}。和{HtCount}。总计输{TotalLostCount}把";
+            var currentstr = $"本次{(last.payoff > 0 ? "赢" : (last.payoff == 0 ? "和" : "输"))}{last.betamount}元";
+            var yustr = $"余: { Yuer}";
+
+            var maxlength = 12;
+
+            response = totalcountstr.ToFixedRightWidth(maxlength)
+             + allinveststr.ToFixedRightWidth(maxlength)
+             + wincontstr.ToFixedRightWidth(20)
+             + currentstr.ToFixedRightWidth(maxlength)
+             + yustr.ToFixedRightWidth(maxlength);
+            return response;
+        }
+    }
      
 
 
     public class AutoCacle
     {
-        public decimal cacle(ZMSetting setting,DataItem data) {
+        public decimal cacle(Tongji tj,DataItem data) {
 
             decimal response = 0;
             InvestStatus status = CacleStatus(data.payoff.ToDecimal());
@@ -156,21 +194,24 @@ namespace Core.Testings
             switch (status)
             {
                 case InvestStatus.Win:
-                    //response = data.payoff - ((data.payoff / 200) + 1) * setting.Add;
-                    response = data.betamount.ToInt32() -  setting.Add;
+                   // response = data.payoff - ((data.payoff.ToInt32() / (20* tj.Add)) + 1) * tj.Add;
+
+                    response = data.betamount -  tj.Add;
                     break;
                 case InvestStatus.He:
+                    response =  data.betamount;
                     break;
                 case InvestStatus.Lost:
-                    //response = 0 - data.payoff + (Math.Abs(data.payoff) / 200 + 1) * setting.Add;
-                    response =  data.betamount.ToInt32() +  setting.Add;
+                    //response = 0 - data.payoff + (Math.Abs(data.payoff).ToInt32() / (20 * tj.Add) + 1) * tj.Add;
+                    response =  data.betamount +  tj.Add;
+
                     break;
                 default:
                     break;
             }
 
-            if(response < setting.Min)
-                response = setting.Min;
+            if(response < tj.Min)
+                response = tj.Min;
 
             return response;
         }
@@ -186,22 +227,39 @@ namespace Core.Testings
             return InvestStatus.Win;
         }
 
-        public DataItem Invest(ZMSetting setting, DataItem data)
+        public DataItem Invest(Tongji tj, DataItem data)
         {
+            var xian = RandomExtensions.RamdoInt32(9) + 1;
+            var zhuang = RandomExtensions.RamdoInt32(9) + 1;
+            int money = (int) Math.Ceiling(cacle(tj, data));
 
-            var zs = Core.UsuallyCommon.RandomExtensions.RandomBoolTwo();
-            var money = cacle(setting, data).ToInt32();
-            var newmoney = zs ? money * 0.95 : money;
-            var rondom = Core.UsuallyCommon.RandomExtensions.RandomBoolTwo();
- 
+            decimal payoff = 0.0M;
+            if (zhuang == xian) {
+                payoff = 0;
+            }
+            if (zhuang > xian)
+            {
+                payoff = money;// (money * 95).ToDecimal() / 100;
+            }
+            if (zhuang < xian)
+            {
+                payoff = 0- money;
+            }
+
+
             DataItem response = new DataItem()
             {
                 wagers_date = DateTime.Now,
-                payoff = rondom ? money : 0-money,
+                payoff = payoff,
                 betamount = money,
                 roundserial = data.roundserial + 1
             };
-      
+
+
+            if (response.betamount == 0)
+            { 
+                
+            }
             return response;
         }
     }
@@ -214,6 +272,7 @@ namespace Core.Testings
     }
     public class DataItem
     {
+        public Int32 Pici { get; set; }
         public decimal yuer { get; set; }
         /// <summary>
         /// 
@@ -258,7 +317,7 @@ namespace Core.Testings
         /// <summary>
         /// 
         /// </summary>
-        public decimal betamount { get; set; }
+        public int betamount { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -266,7 +325,7 @@ namespace Core.Testings
         /// <summary>
         /// 
         /// </summary>
-        public double payoff { get; set; }
+        public decimal payoff { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -311,7 +370,7 @@ namespace Core.Testings
 
     public class ZMSetting
     {
-        public int toatl { get; set; }
+        public int Zongjiner { get; set; }
 
         public int DefaultInverstMoney { get; set; } = 10;
 

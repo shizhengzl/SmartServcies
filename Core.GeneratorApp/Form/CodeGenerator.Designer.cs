@@ -28,25 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listDatabase = new System.Windows.Forms.ListView();
+            this.dataBaseTrees = new Core.GeneratorApp.DataBaseTree();
             this.SuspendLayout();
             // 
-            // listDatabase
+            // dataBaseTrees
             // 
-            this.listDatabase.Dock = System.Windows.Forms.DockStyle.Left;
-            this.listDatabase.HideSelection = false;
-            this.listDatabase.Location = new System.Drawing.Point(0, 0);
-            this.listDatabase.Name = "listDatabase";
-            this.listDatabase.Size = new System.Drawing.Size(299, 557);
-            this.listDatabase.TabIndex = 0;
-            this.listDatabase.UseCompatibleStateImageBehavior = false;
+            this.dataBaseTrees.Companyid = new System.Guid("00000000-0000-0000-0000-000000000000");
+            this.dataBaseTrees.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dataBaseTrees.Location = new System.Drawing.Point(0, 0);
+            this.dataBaseTrees.Name = "dataBaseTrees";
+            this.dataBaseTrees.Size = new System.Drawing.Size(329, 557);
+            this.dataBaseTrees.TabIndex = 0;
             // 
             // CodeGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1116, 557);
-            this.Controls.Add(this.listDatabase);
+            this.Controls.Add(this.dataBaseTrees);
             this.Name = "CodeGenerator";
             this.Text = "CodeGenerator";
             this.ResumeLayout(false);
@@ -55,6 +54,6 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView listDatabase;
+        private DataBaseTree dataBaseTrees;
     }
 }

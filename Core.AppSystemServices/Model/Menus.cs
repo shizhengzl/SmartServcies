@@ -1,4 +1,5 @@
 ﻿using Core.UsuallyCommon;
+using FreeSql.DataAnnotations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,19 +17,30 @@ namespace Core.AppSystemServices
         /// 菜单名称
         /// </summary>
         [Description("菜单名称")]
-        public string Name { get; set; }
+        [Column(StringLength = 200)]
+        public string MenuName { get; set; }
 
         /// <summary>
         /// 菜单名称
         /// </summary>
         [Description("菜单图标")]
-        public string IconUrl { get; set; }
+        [Column(StringLength = 200)]
+        public string MenuIcon { get; set; }
+
 
         /// <summary>
-        /// 表名
+        /// 路劲
         /// </summary>
-        [Description("表名")]
-        public string Url { get; set; }
+        [Description("路劲")]
+        [Column(StringLength = 200)]
+        public string Path { get; set; }
+
+        /// <summary>
+        /// 组件
+        /// </summary>
+        [Description("组件")]
+        [Column(StringLength = 200)]
+        public string Component { get; set; }
 
         /// <summary>
         /// 排序

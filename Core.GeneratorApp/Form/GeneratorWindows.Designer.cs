@@ -33,14 +33,14 @@ namespace Core.GeneratorApp
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GeneratorWindows));
             this.工具栏 = new System.Windows.Forms.ToolStrip();
             this.toolsConnection = new System.Windows.Forms.ToolStripButton();
-            this.pantree = new System.Windows.Forms.Panel();
-            this.treemenu = new System.Windows.Forms.TreeView();
             this.paneltab = new System.Windows.Forms.Panel();
             this.tabControls = new System.Windows.Forms.TabControl();
             this.imagelistall = new System.Windows.Forms.ImageList(this.components);
+            this.pantree = new System.Windows.Forms.Panel();
+            this.treemenu = new System.Windows.Forms.TreeView();
             this.工具栏.SuspendLayout();
-            this.pantree.SuspendLayout();
             this.paneltab.SuspendLayout();
+            this.pantree.SuspendLayout();
             this.SuspendLayout();
             // 
             // 工具栏
@@ -61,25 +61,6 @@ namespace Core.GeneratorApp
             this.toolsConnection.Size = new System.Drawing.Size(76, 22);
             this.toolsConnection.Text = "连接管理";
             this.toolsConnection.Click += new System.EventHandler(this.toolsConnection_Click);
-            // 
-            // pantree
-            // 
-            this.pantree.Controls.Add(this.treemenu);
-            this.pantree.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pantree.Location = new System.Drawing.Point(0, 25);
-            this.pantree.Name = "pantree";
-            this.pantree.Size = new System.Drawing.Size(267, 613);
-            this.pantree.TabIndex = 1;
-            // 
-            // treemenu
-            // 
-            this.treemenu.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treemenu.Font = new System.Drawing.Font("SimSun", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.treemenu.Location = new System.Drawing.Point(0, 0);
-            this.treemenu.Name = "treemenu";
-            this.treemenu.Size = new System.Drawing.Size(267, 613);
-            this.treemenu.TabIndex = 0;
-            this.treemenu.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treemenu_NodeMouseDoubleClick);
             // 
             // paneltab
             // 
@@ -108,6 +89,25 @@ namespace Core.GeneratorApp
             this.imagelistall.Images.SetKeyName(2, "modify.png");
             this.imagelistall.Images.SetKeyName(3, "remove.png");
             // 
+            // pantree
+            // 
+            this.pantree.Controls.Add(this.treemenu);
+            this.pantree.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pantree.Location = new System.Drawing.Point(0, 25);
+            this.pantree.Name = "pantree";
+            this.pantree.Size = new System.Drawing.Size(267, 613);
+            this.pantree.TabIndex = 1;
+            // 
+            // treemenu
+            // 
+            this.treemenu.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treemenu.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.treemenu.Location = new System.Drawing.Point(0, 0);
+            this.treemenu.Name = "treemenu";
+            this.treemenu.Size = new System.Drawing.Size(267, 613);
+            this.treemenu.TabIndex = 0;
+            this.treemenu.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treemenu_NodeMouseDoubleClick);
+            // 
             // GeneratorWindows
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -122,8 +122,8 @@ namespace Core.GeneratorApp
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.工具栏.ResumeLayout(false);
             this.工具栏.PerformLayout();
-            this.pantree.ResumeLayout(false);
             this.paneltab.ResumeLayout(false);
+            this.pantree.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -133,11 +133,11 @@ namespace Core.GeneratorApp
 
         private System.Windows.Forms.ToolStrip 工具栏;
         private System.Windows.Forms.ToolStripButton toolsConnection;
-        private System.Windows.Forms.Panel pantree;
-        private System.Windows.Forms.TreeView treemenu;
         private System.Windows.Forms.Panel paneltab;
         private System.Windows.Forms.TabControl tabControls;
         public System.Windows.Forms.ImageList imagelistall;
+        private System.Windows.Forms.Panel pantree;
+        private System.Windows.Forms.TreeView treemenu;
     }
 }
 

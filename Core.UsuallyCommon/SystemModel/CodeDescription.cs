@@ -20,5 +20,20 @@ namespace Core.UsuallyCommon
         /// </summary>
         [Description("失败")]
         Faile = 500,
+        /// <summary>
+        /// 登录
+        /// </summary>
+        [Description("登录")]
+        Login = 50008,
+        /// <summary>
+        /// 未找到
+        /// </summary>
+        [Description("未找到")]
+        NotFind = 404,
+        /// <summary>
+        /// 未授权
+        /// </summary>
+        [Description("未授权")]
+        NotPermission = 403
     }
 }

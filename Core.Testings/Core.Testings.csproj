@@ -88,10 +88,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core.AppEntityCommon\Core.AppEntitys.csproj">
-      <Project>{191bd6e9-0130-4b90-b297-4c0f247e5253}</Project>
-      <Name>Core.AppEntitys</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Core.DataBaseServices\Core.DataBaseServices.csproj">
       <Project>{3DF5EB1A-30F5-4D4D-89F6-439E709DF12B}</Project>
       <Name>Core.DataBaseServices</Name>

@@ -47,12 +47,12 @@ namespace Core.GeneratorApp
         public void LoadList()
         {
              
-            var issupper = userServices.IsSupperAdmin(GeneratorWindows._currentUser.CurrentUser);
+            var issupper = userServices.IsSupperAdmin(GeneratorWindows._currentUser.User);
             List<T> list =new List<T>();
             if(issupper && _IsSupper == true.ToString().ToUpper())
                 list = factory.FreeSql.Select<T>().Where(x =>1==1).ToList();
             else
-                list = factory.FreeSql.Select<T>().Where(x => x.CompanysId == GeneratorWindows._currentUser.CurrentUser.CompanysId).ToList();
+                list = factory.FreeSql.Select<T>().Where(x => x.CompanysId == GeneratorWindows._currentUser.User.CompanysId).ToList();
         
             listview.DataSource = list;
             listview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;

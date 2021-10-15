@@ -5,23 +5,21 @@ using System.Text;
 namespace Core.AppSystemServices
 {
     /// <summary>
-    /// 登录缓存
+    /// MenuMeta
     /// </summary>
-    public class CurrentUsers
+    public class MenuMeta
     {
         /// <summary>
-        /// 当前用户
+        /// 标题
         /// </summary>
-        public Users CurrentUser {  get; set; }
-        
+        public string title { get; set; }
         /// <summary>
-        /// 所有单位
+        /// 图标
         /// </summary>
-        public List<Companys> UserCompanys { get; set; }
-
+        public string icon { get; set; }
         /// <summary>
-        /// 所有菜单
+        /// 缓存
         /// </summary>
-        public List<Menus> UserMenus { get; set; }
+        public bool noCache { get; set; }
     }
 }

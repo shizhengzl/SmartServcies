@@ -10,6 +10,7 @@ namespace Core.AppSystemServices
     /// <summary>
     /// 用户服务
     /// </summary>
+     [AppServiceAttribute]
     public class UserServices : SystemServices
     { 
         public UserServices()
@@ -17,10 +18,10 @@ namespace Core.AppSystemServices
 
         }
 
-        public Response<CurrentUsers> RegisterCompany(Users user,string companyName)
+        public Response<CurrentSesscion> RegisterCompany(Users user,string companyName)
         {
-            Response<CurrentUsers> response = new Response<CurrentUsers>() { Success = false };
-            CurrentUsers current = new CurrentUsers();
+            Response<CurrentSesscion> response = new Response<CurrentSesscion>() { Success = false };
+            CurrentSesscion current = new CurrentSesscion();
             if (companyName.IsNullOrEmpty())
             {
                 response.Message = "单位名不能为空";
@@ -71,26 +72,26 @@ namespace Core.AppSystemServices
 
 
             // add cache  
-            current.CurrentUser = GetUsers(user);
+            current.User = GetUsers(user);
 
             // 获取菜单
-            if (IsSupperAdmin(current.CurrentUser))
+            if (IsSupperAdmin(current.User))
                 current.UserMenus = GetSupperMenus();
-            else if (current.CurrentUser.IsAdmin)
-                current.UserMenus = GetAdminMenus(current.CurrentUser);
+            else if (current.User.IsAdmin)
+                current.UserMenus = GetAdminMenus(current.User);
             else
-                current.UserMenus = GetUserMenus(current.CurrentUser);
+                current.UserMenus = GetUserMenus(current.User);
 
-            CacheServices.MemoryCacheManager.SetCache<CurrentUsers>(user.UserName, current, null);
+            CacheServices.MemoryCacheManager.SetCache<CurrentSesscion>(user.UserName, current, null);
             response.Data = current;
             response.Success = true;
             return response;
         }
 
-        public Response<CurrentUsers> RegisterUser(Users user)
+        public Response<CurrentSesscion> RegisterUser(Users user)
         {
-            Response<CurrentUsers> response = new Response<CurrentUsers>() { Success = false };
-            CurrentUsers current = new CurrentUsers(); 
+            Response<CurrentSesscion> response = new Response<CurrentSesscion>() { Success = false };
+            CurrentSesscion current = new CurrentSesscion(); 
             if (user.UserName.IsNullOrEmpty())
             {
                 response.Message = "用户名不能为空";
@@ -118,26 +119,26 @@ namespace Core.AppSystemServices
             }
 
             // add cache  
-            current.CurrentUser = GetUsers(user);
+            current.User = GetUsers(user);
 
             // 获取菜单
-            if (IsSupperAdmin(current.CurrentUser))
+            if (IsSupperAdmin(current.User))
                 current.UserMenus = GetSupperMenus();
-            else if (current.CurrentUser.IsAdmin)
-                current.UserMenus = GetAdminMenus(current.CurrentUser);
+            else if (current.User.IsAdmin)
+                current.UserMenus = GetAdminMenus(current.User);
             else
-                current.UserMenus = GetUserMenus(current.CurrentUser);
+                current.UserMenus = GetUserMenus(current.User);
 
-            CacheServices.MemoryCacheManager.SetCache<CurrentUsers>(user.UserName, current, null);
+            CacheServices.MemoryCacheManager.SetCache<CurrentSesscion>(user.UserName, current, null);
             response.Data = current;
             response.Success = true;
             return response;
         }
 
-        public Response<CurrentUsers> Login(Users user)
+        public Response<CurrentSesscion> Login(Users user)
         {
-            Response<CurrentUsers> response = new Response<CurrentUsers>() { Success = false }; 
-            CurrentUsers current = new CurrentUsers();
+            Response<CurrentSesscion> response = new Response<CurrentSesscion>() { Success = false };
+            CurrentSesscion current = new CurrentSesscion();
 
             if (user.UserName.IsNullOrEmpty())
             {
@@ -162,17 +163,19 @@ namespace Core.AppSystemServices
                 return response;
             } 
             // add cache  
-            current.CurrentUser = GetUsers(user);
+            current.User = GetUsers(user);
 
             // 获取菜单
-            if(IsSupperAdmin(current.CurrentUser))
+            if(IsSupperAdmin(current.User))
                 current.UserMenus = GetSupperMenus();
-            else if(current.CurrentUser.IsAdmin)
-                current.UserMenus = GetAdminMenus(current.CurrentUser);
+            else if(current.User.IsAdmin)
+                current.UserMenus = GetAdminMenus(current.User);
             else
-                current.UserMenus = GetUserMenus(current.CurrentUser);
+                current.UserMenus = GetUserMenus(current.User);
 
-            CacheServices.MemoryCacheManager.SetCache<CurrentUsers>(user.UserName, current,null);
+            current.Roles = GetUserRoles(current.User);
+
+            CacheServices.MemoryCacheManager.SetCache<CurrentSesscion>(user.UserName, current,null);
             response.Data = current;
             response.Success = true;
             return response;
@@ -313,5 +316,19 @@ namespace Core.AppSystemServices
         {
             return GetEntitys<Users>().Any(x => x.UserName == user.UserName || x.Phone == user.UserName || x.Email == user.UserName);
         }
+
+
+
+        /// <summary>
+        /// 获取用户
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public List<Roles> GetUserRoles(Users user)
+        {
+            var roleids = GetEntitys<RoleUsers>().Where(x => x.CompanysId == user.CompanysId && x.UsersId == user.Id).ToList().Select(p => p.RolesId);
+            return GetEntitys<Roles>().Where(x => roleids.Contains(x.Id)).ToList();
+        }
+
     }
 }

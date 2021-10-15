@@ -4,5 +4,21 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.AppSystemServices\Core.AppSystemServices.csproj" />
+    <ProjectReference Include="..\Core.CacheServices\Core.CacheServices.csproj" />
+    <ProjectReference Include="..\Core.UsuallyCommon\Core.UsuallyCommon.csproj" />
+  </ItemGroup>
+
 
 </Project>

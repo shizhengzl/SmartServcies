@@ -22,7 +22,7 @@ namespace Core.GeneratorApp
     public partial class GeneratorWindows : Form
     {
         public Form self { get; set; }
-        public static CurrentUsers _currentUser { get; set;  }
+        public static CurrentSesscion _currentUser { get; set;  }
 
         public bool colsed { get; set; }
 
@@ -64,7 +64,7 @@ namespace Core.GeneratorApp
             var menus = allmenus.Where(x => x.MenusId == Guid.Empty).ToList();
             menus.ForEach(x => {
                 TreeNode root = new TreeNode();
-                root.Text = x.Name; 
+                root.Text = x.MenuName; 
                 root.Tag = x;
                 treemenu.Nodes.Add(root);
 
@@ -76,7 +76,7 @@ namespace Core.GeneratorApp
             var search = allmenus.Where(x => x.MenusId == menus.Id).ToList();
             search.ForEach(x => {
                 TreeNode child = new TreeNode();
-                child.Text = x.Name;
+                child.Text = x.MenuName;
                 child.Tag = x;
                 node.Nodes.Add(child);
 
@@ -89,7 +89,7 @@ namespace Core.GeneratorApp
         {
             TreeNode trNode = treemenu.SelectedNode;
             Menus menus = (Menus)trNode.Tag;
-            if (menus.Url.IsNullOrEmpty() || menus.Url.ToStringExtension().GetClassType().IsNull())
+            if (menus.Component.IsNullOrEmpty() || menus.Component.ToStringExtension().GetClassType().IsNull())
                 return;
              
 
@@ -97,15 +97,15 @@ namespace Core.GeneratorApp
             {
 
 
-                Type classType = Type.GetType("Core.GeneratorApp." + menus.Url); 
+                Type classType = Type.GetType("Core.GeneratorApp." + menus.Component); 
                 var instance = Activator.CreateInstance(classType);
 
                 Form form =(Form)instance; 
                 form.TopLevel = false;     //设置为非顶级控件
 
                 TabPage tabgrant = new TabPage();
-                tabgrant.Text = menus.Name;
-                tabgrant.Name = menus.Url.ToStringExtension();
+                tabgrant.Text = menus.MenuName;
+                tabgrant.Name = menus.Component.ToStringExtension();
                 tabgrant.Controls.Add(form);
                 form.Dock = DockStyle.Fill;
                     //让窗体form显示出来 
@@ -113,9 +113,9 @@ namespace Core.GeneratorApp
                 form.WindowState = FormWindowState.Maximized;
                 
 
-                if (!tabControls.TabPages.ContainsKey(menus.Url.ToStringExtension()))
+                if (!tabControls.TabPages.ContainsKey(menus.Component.ToStringExtension()))
                     tabControls.TabPages.Add(tabgrant);
-                tabControls.SelectTab(menus.Url.ToStringExtension());
+                tabControls.SelectTab(menus.Component.ToStringExtension());
 
                 form.Show();
             }
@@ -125,12 +125,12 @@ namespace Core.GeneratorApp
                 SnippetRecord snippetRecord = new SnippetRecord();
                 ConnectionStringManage connectionStringManage= new ConnectionStringManage();    
                 Type classType = Type.GetType("Core.GeneratorApp.BaseList`1");
-                Type constructedType = classType.MakeGenericType(menus.Url.ToStringExtension().GetClassType());
+                Type constructedType = classType.MakeGenericType(menus.Component.ToStringExtension().GetClassType());
                 var instance = Activator.CreateInstance(constructedType, new object[] {menus.IsSupper.ToBoolean().ToString().ToUpper() });
                 var from = ((Panel)instance); 
                 from.Dock = DockStyle.Fill;
                 TabPage tabpage = new TabPage();
-                var name = menus.Url.ToStringExtension().GetClassType().Name;
+                var name = menus.Component.ToStringExtension().GetClassType().Name;
                 tabpage.Text = name;
                 tabpage.Name = name;
 
