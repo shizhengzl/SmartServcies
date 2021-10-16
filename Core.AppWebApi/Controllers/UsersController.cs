@@ -29,6 +29,16 @@ namespace Core.AppWebApi.Controllers
             _mapper = mapper;
         }
 
+
+        [HttpPost("Logout")]
+        [Authorize]
+        public Response<string> Logout()
+        {
+            Response<string> response = new Response<string>();
+            MemoryCacheManager.Remove(this.Token);
+            return response;
+        }
+
         [HttpPost("Login")]
         [AllowAnonymous]
         public Response<string> Login([FromBody] DtoUser user)

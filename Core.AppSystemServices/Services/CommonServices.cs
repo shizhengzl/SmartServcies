@@ -9,6 +9,6 @@ namespace Core.AppSystemServices.Services
     /// </summary>
     public class CommonServices
     {
-
+        
     }
 }

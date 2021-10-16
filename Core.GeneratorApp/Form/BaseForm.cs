@@ -23,8 +23,7 @@ namespace Core.GeneratorApp
         /// <summary>
         /// 默认工具栏
         /// </summary>
-        public ToolStrip toolStrip = new ToolStrip();
-        public FreeSqlFactory factory = new FreeSqlFactory();
+        public ToolStrip toolStrip = new ToolStrip(); 
 
         public Boolean IsEdit = false;
         public T t { get; set; }
@@ -108,7 +107,7 @@ namespace Core.GeneratorApp
                     panel.Controls.Add(label);
                     panel.Controls.Add(textBox);
                     Type type = (x.Name.Replace("sId", string.Empty) + "s").GetClassType();
-                    var list = factory.FreeSql.Select<object>().AsType(type).ToList();
+                    var list = FreeSqlFactory.FreeSql.Select<object>().AsType(type).ToList();
 
                     dynamic newdefault = System.Activator.CreateInstance(type);
                     newdefault.Id = Guid.Empty;
@@ -239,7 +238,7 @@ namespace Core.GeneratorApp
                         panel.Controls.Add(label);
                         panel.Controls.Add(textBox);
                         Type type = (x.Name.Replace("sId", string.Empty) + "s").GetClassType();
-                        var list = factory.FreeSql.Select<object>().AsType(type).ToList();
+                        var list = FreeSqlFactory.FreeSql.Select<object>().AsType(type).ToList();
 
                         dynamic newdefault = System.Activator.CreateInstance(type);
                         newdefault.Id = Guid.Empty;
@@ -352,11 +351,11 @@ namespace Core.GeneratorApp
                 {
                     t.SetPropertyValue("PassWord", t.GetPropertyValue("PassWord").ToString().Tomd5());
                 }
-                factory.FreeSql.Insert<T>(t).ExecuteAffrows();
+                FreeSqlFactory.FreeSql.Insert<T>(t).ExecuteAffrows();
             } 
             else
-            { 
-                factory.FreeSql.Update<T>().SetSource(t).ExecuteAffrows();
+            {
+                FreeSqlFactory.FreeSql.Update<T>().SetSource(t).ExecuteAffrows();
             }
                
 

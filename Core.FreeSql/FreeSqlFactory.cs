@@ -14,10 +14,8 @@ namespace Core.FreeSqlServices
         /// </summary>
         public FreeSqlFactory()
         {
-            FreeSql = new FreeSqlBuilder()
-             .UseConnectionString(DefaultDataType, DefaultBaseConnection)
-             .UseAutoSyncStructure(true)
-             .Build();
+           
+          
         }
 
         /// <summary>
@@ -49,12 +47,24 @@ namespace Core.FreeSqlServices
              .Build();
         }
 
+        public static IFreeSql _FreeSql { get; set; }
+
         /// <summary>
         /// 实力
         /// </summary>
-        public IFreeSql FreeSql { get; set; }
-        
-
+        public static IFreeSql FreeSql 
+        { 
+            get {
+                if (_FreeSql.IsNull())
+                {
+                    _FreeSql = new FreeSqlBuilder()
+                   .UseConnectionString(DefaultDataType, DefaultBaseConnection)
+                   .UseAutoSyncStructure(true)
+                   .Build();
+                }
+                return _FreeSql;
+            } 
+        }
 
         /// <summary>
         /// 数据库连接字符串
@@ -63,7 +73,7 @@ namespace Core.FreeSqlServices
         {
             get
             {
-                var connectionstring = "Data Source=DESKTOP-4B71JOP;Initial Catalog=Core_Base;Integrated Security=SSPI;";
+                var connectionstring = "Data Source=.;Initial Catalog=Core_Base;Integrated Security=SSPI;Pooling=true;Min Pool Size=100;Max Pool Size=20;";
                 var dc = System.Configuration.ConfigurationManager.AppSettings["DefaultBaseConnection"].ToStringExtension();
                 if (!string.IsNullOrEmpty(dc))
                 {

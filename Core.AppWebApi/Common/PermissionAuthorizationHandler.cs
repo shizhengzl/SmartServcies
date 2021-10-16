@@ -32,8 +32,7 @@ namespace Core.AppWebApi
             { 
                 context.Fail(); 
                 var response = _httpContextAccessor.HttpContext.Response;
-                response.StatusCode = 403;
-                 
+                response.StatusCode = 403; 
             }
             else
             {

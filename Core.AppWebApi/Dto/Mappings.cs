@@ -12,6 +12,9 @@ namespace Core.AppWebApi
             CreateMap<Users, DtoUser>();
             CreateMap<List<DtoUser>, List<Users>>();
             CreateMap<List<Users>, List<DtoUser>>();
+
+            CreateMap<DtoMenus, Menus>();
+            CreateMap<Menus, DtoMenus>();
         }
     }
 }

@@ -24,6 +24,27 @@ namespace Core.UsuallyCommon
             return propertys.Select(x => x.Name).ToList<string>();
         }
 
+
+        /// <summary>
+        /// 获取类属性字段和描述
+        /// </summary>
+        /// <param name="obj"></param> 
+        /// <returns>string</returns>
+        public static List<PropertyExtensions> GetPropertyExtensions<T>()
+        {
+            List<PropertyExtensions> response = new List<PropertyExtensions>();
+            typeof(T).GetProperties().ToList().ForEach(x => { 
+                response.Add(new PropertyExtensions()
+                {
+                    PropertyName = x.Name,
+                    PropertyDescription = x.GetPropertyDescription()
+                });
+            });
+
+            return response;
+        }
+
+
         /// <summary>
         /// 设置属性值
         /// </summary>

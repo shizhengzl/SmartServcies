@@ -7,8 +7,7 @@ namespace Core.FreeSqlServices
 {
     [AppServiceAttribute]
     public class SystemServices 
-    {
-        public FreeSqlFactory factory = new FreeSqlFactory();
+    { 
 
         public SystemServices()
         {
@@ -27,7 +26,7 @@ namespace Core.FreeSqlServices
         public FreeSql.ISelect<T> GetEntitys<T>() where T : class
         {
             ResponseList<T> response = new ResponseList<T>();
-            return factory.FreeSql.Select<T>();
+            return FreeSqlFactory.FreeSql.Select<T>();
         }
 
 
@@ -42,7 +41,7 @@ namespace Core.FreeSqlServices
         public Boolean Remove<T>(T t) where T : class
         {
             ResponseList<T> response = new ResponseList<T>();
-            return factory.FreeSql.Delete<T>(t).ExecuteAffrows() > 1;
+            return FreeSqlFactory.FreeSql.Delete<T>(t).ExecuteAffrows() > 1;
         }
 
 
@@ -58,7 +57,7 @@ namespace Core.FreeSqlServices
         {
             ResponseList<T> response = new ResponseList<T>();
             SetCreateModel<T>(t);
-            return factory.FreeSql.Insert<T>(t).ExecuteIdentity() > 0;
+            return FreeSqlFactory.FreeSql.Insert<T>(t).ExecuteIdentity() > 0;
         }
 
 
@@ -78,7 +77,7 @@ namespace Core.FreeSqlServices
                 SetCreateModel<T>(item);
             }
 
-            factory.FreeSql.Insert<T>(t).ExecuteAffrows();
+            FreeSqlFactory.FreeSql.Insert<T>(t).ExecuteAffrows();
 
             return t;
         }
@@ -95,7 +94,7 @@ namespace Core.FreeSqlServices
         {
             ResponseList<T> response = new ResponseList<T>();
             SetModifyModel<T>(t);
-            return factory.FreeSql.Update<T>().SetSource(t).ExecuteAffrows() > 1;
+            return FreeSqlFactory.FreeSql.Update<T>().SetSource(t).ExecuteAffrows() > 1;
         }
 
         /// <summary>
@@ -113,7 +112,7 @@ namespace Core.FreeSqlServices
             {
                 SetModifyModel<T>(item);
             }
-            return factory.FreeSql.Update<T>().SetSource(t).ExecuteAffrows() > 1;
+            return FreeSqlFactory.FreeSql.Update<T>().SetSource(t).ExecuteAffrows() > 1;
         }
 
         /// <summary>
