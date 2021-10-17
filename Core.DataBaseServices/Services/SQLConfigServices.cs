@@ -18,7 +18,6 @@ namespace Core.DataBaseServices
 
         public SQLConfigServices(ConnectionStringManage connectionStringManage)
         {
-            _freesql = new FreeSqlFactory().FreeSql;
             _connectionManage = connectionStringManage;
         }
 

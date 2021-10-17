@@ -91,8 +91,8 @@ namespace Core.CefChrome
                 {
                     root.data.ForEach(x =>
                     {
-                        if (!factory.FreeSql.Select<DataItem>().Any(p => p.roundserial == x.roundserial))
-                            factory.FreeSql.Insert<DataItem>(x).ExecuteAffrowsAsync();
+                        if (!FreeSqlFactory.FreeSql.Select<DataItem>().Any(p => p.roundserial == x.roundserial))
+                            FreeSqlFactory.FreeSql.Insert<DataItem>(x).ExecuteAffrowsAsync();
                     });
                 }
             }
@@ -224,8 +224,8 @@ namespace Core.CefChrome
                 if (dataItem.detail_status) {
 
 
-                    if (!factory.FreeSql.Select<DataItem>().Any(x => x.roundserial == dataItem.roundserial))
-                        factory.FreeSql.Insert<DataItem>(dataItem).ExecuteAffrowsAsync();
+                    if (!FreeSqlFactory.FreeSql.Select<DataItem>().Any(x => x.roundserial == dataItem.roundserial))
+                        FreeSqlFactory.FreeSql.Insert<DataItem>(dataItem).ExecuteAffrowsAsync();
                 }
             }
 
@@ -400,7 +400,7 @@ namespace Core.CefChrome
 
         private DataItem GetMoni(ZMSetting settings)
         {
-            var dataItem = factory.FreeSql.Select<DataItem>().OrderByDescending(x => x.roundserial).ToOne();
+            var dataItem = FreeSqlFactory.FreeSql.Select<DataItem>().OrderByDescending(x => x.roundserial).ToOne();
             var win = true;
             switch(zMSetting.wRandom)
             {

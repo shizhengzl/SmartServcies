@@ -8,8 +8,6 @@ namespace Core.DataBaseServices
     public class InitDatabase
     {
 
-        public FreeSqlFactory factory = new FreeSqlFactory();
-
         public InitDatabase()
         {
             InitConfig();
@@ -19,7 +17,7 @@ namespace Core.DataBaseServices
         public void InitConfig()
         {
             // 初始化数据库设置
-            if (!factory.FreeSql.Select<SQLConfig>().Any())
+            if (!FreeSqlFactory.FreeSql.Select<SQLConfig>().Any())
             {
                 SQLConfig configSqlserver = new SQLConfig()
                 {
@@ -91,8 +89,8 @@ namespace Core.DataBaseServices
                                 WHERE    TABLE_NAME='{2}' and table_schema = '{1}';
                                  "
                 };
-                factory.FreeSql.Insert<SQLConfig>(configSqlserver).ExecuteAffrows();
-                factory.FreeSql.Insert<SQLConfig>(configMySql).ExecuteAffrows();
+                FreeSqlFactory.FreeSql.Insert<SQLConfig>(configSqlserver).ExecuteAffrows();
+                FreeSqlFactory.FreeSql.Insert<SQLConfig>(configMySql).ExecuteAffrows();
             }
         }
     }

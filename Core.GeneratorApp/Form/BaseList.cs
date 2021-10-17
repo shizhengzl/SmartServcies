@@ -50,9 +50,9 @@ namespace Core.GeneratorApp
             var issupper = userServices.IsSupperAdmin(GeneratorWindows._currentUser.User);
             List<T> list =new List<T>();
             if(issupper && _IsSupper == true.ToString().ToUpper())
-                list = factory.FreeSql.Select<T>().Where(x =>1==1).ToList();
+                list = FreeSqlFactory.FreeSql.Select<T>().Where(x =>1==1).ToList();
             else
-                list = factory.FreeSql.Select<T>().Where(x => x.CompanysId == GeneratorWindows._currentUser.User.CompanysId).ToList();
+                list = FreeSqlFactory.FreeSql.Select<T>().Where(x => x.CompanysId == GeneratorWindows._currentUser.User.CompanysId).ToList();
         
             listview.DataSource = list;
             listview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -68,7 +68,7 @@ namespace Core.GeneratorApp
             foreach (DataGridViewRow item in listview.SelectedRows)
             {
                 var key = ((T)sources[item.Index]).GetPropertyValue("Id");
-                t = factory.FreeSql.Select<T>(key).First();
+                t = FreeSqlFactory.FreeSql.Select<T>(key).First();
             }
 
             BaseForm<T> baseForm = new BaseForm<T>(t);
@@ -207,7 +207,7 @@ namespace Core.GeneratorApp
             foreach (DataGridViewRow item in listview.SelectedRows)
             {
                 var key = ((T)sources[item.Index]).GetPropertyValue("Id");
-                t = factory.FreeSql.Select<T>(key).First();
+                t = FreeSqlFactory.FreeSql.Select<T>(key).First();
             }
 
             BaseForm<T> baseForm = new BaseForm<T>(t);
@@ -224,7 +224,7 @@ namespace Core.GeneratorApp
             foreach (DataGridViewRow item in listview.SelectedRows)
             {
                 var key = sources[item.Index].Id;
-                var response = factory.FreeSql.Delete<T>(key).ExecuteAffrows();
+                var response = FreeSqlFactory.FreeSql.Delete<T>(key).ExecuteAffrows();
                 this.LoadList();
             }
 
