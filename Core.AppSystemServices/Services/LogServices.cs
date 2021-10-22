@@ -17,16 +17,16 @@ namespace Core.AppSystemServices
         /// <param name="description"></param>
         public void AddExexptionLogs(Exception ex,string method, string description)
         {
-            //ExceptionLogs logs = new ExceptionLogs()
-            //{
-            //    CreateTime = DateTime.Now,
-            //    Message = ex.Message,
-            //    StackTrace = ex.StackTrace,
-            //    Description = description,
-            //    Method = method
+            ExceptionLogs logs = new ExceptionLogs()
+            {
+                CreateTime = DateTime.Now,
+                Message = ex.Message,
+                StackTrace = ex.StackTrace,
+                Description = description,
+                Method = method
 
-            //};
-            //Create<ExceptionLogs>(logs);
+            };
+            Create<ExceptionLogs>(logs);
         }
     }
 }

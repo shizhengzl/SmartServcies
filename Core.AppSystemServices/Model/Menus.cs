@@ -66,10 +66,6 @@ namespace Core.AppSystemServices
         [Description("超级管理员菜单")]
         public Boolean IsSupper { get; set; }
 
-        /// <summary>
-        /// 自动生成
-        /// </summary>
-        [Description("自动生成")]
-        public Boolean IsAuto { get; set; } = true;
+     
     }
 }
