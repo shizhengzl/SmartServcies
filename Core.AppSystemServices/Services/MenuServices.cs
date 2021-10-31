@@ -16,6 +16,5 @@ namespace Core.AppSystemServices
             return GetEntitys<Menus>().ToList();
         }
 
-
     }
 }

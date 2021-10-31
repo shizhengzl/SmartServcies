@@ -9,7 +9,12 @@ namespace Core.AppSystemServices
 {
     public class InitDataBase
     {
-         
+        
+        public InitDataBase()
+        {
+            Init();
+        }
+
         public Guid defaultSelfCompany = DefaultCommonEnum.defaulfSelfCompany.GetDescription().ToGuid();
 
 
@@ -51,7 +56,7 @@ namespace Core.AppSystemServices
             Menus menus = new Menus() { Id = defaultsuppermenuid,IsSupper=true
                 , MenuName = "超级系统管理"
                 , Component = "Layout"
-                , Path = "/table"
+                , Path = "table"
                 , MenuIcon = "404"
                 , MenusId = Guid.Empty };
             if (!FreeSqlFactory.FreeSql.Select<Menus>().Any(x => x.MenuName == "超级系统管理"))
@@ -62,9 +67,9 @@ namespace Core.AppSystemServices
             Menus menucompanys = new Menus() { Id = Guid.NewGuid(), IsSupper = true
                 , MenuName = "超级菜单管理"
                 , Sort = 1
-                , Path = "/menu"
+                , Path = "menus"
                 , MenuIcon = "404"
-                , Component = $"/menu/index"// +  typeof(Companys).Name.ToLower()
+                , Component = $"/menus/index"// +  typeof(Companys).Name.ToLower()
                 , MenusId = defaultsuppermenuid };
             if (!FreeSqlFactory.FreeSql.Select<Menus>().Any(x => x.MenuName == "超级菜单管理"))
             {
@@ -72,16 +77,30 @@ namespace Core.AppSystemServices
             }
 
             Menus menucompanys2 = new Menus() { Id = Guid.NewGuid(), IsSupper = true
-                , MenuName = "AAAAA"
+                , MenuName = "列表页面"
                 , Sort = 1
-                , Path = "/tree"
+                , Path = "grid"
                 , MenuIcon = "404"
-                , Component = $"/tree/index"// +  typeof(Companys).Name.ToLower()
+                , Component = $"/menus/grid"// +  typeof(Companys).Name.ToLower()
                 , MenusId = defaultsuppermenuid };
-            if (!FreeSqlFactory.FreeSql.Select<Menus>().Any(x => x.MenuName == "AAAAA"))
+            if (!FreeSqlFactory.FreeSql.Select<Menus>().Any(x => x.MenuName == "组件页面"))
             {
                 FreeSqlFactory.FreeSql.Insert<Menus>(menucompanys2).ExecuteAffrows();
             }
+
+
+               Menus menucompanys3 = new Menus() { Id = Guid.NewGuid(), IsSupper = true
+                , MenuName = "编辑页面"
+                , Sort = 1
+                , Path = "editor"
+                , MenuIcon = "404"
+                , Component = $"/menus/editor"// +  typeof(Companys).Name.ToLower()
+                , MenusId = defaultsuppermenuid };
+            if (!FreeSqlFactory.FreeSql.Select<Menus>().Any(x => x.MenuName == "编辑页面"))
+            {
+                FreeSqlFactory.FreeSql.Insert<Menus>(menucompanys3).ExecuteAffrows();
+            }
+
 
             //Menus menuusers = new Menus() { Id = Guid.NewGuid(), IsSupper = true, MenuName = "超级用户管理", Sort = 2, Component = typeof(Users).Name, MenusId = defaultsuppermenuid };
             //if (!factory.FreeSql.Select<Menus>().Any(x => x.MenuName == "超级用户管理"))

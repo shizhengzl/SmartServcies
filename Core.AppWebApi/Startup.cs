@@ -14,8 +14,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-
+using System.Threading.Tasks; 
 namespace Core.AppWebApi
 {
     public class Startup
@@ -50,12 +49,12 @@ namespace Core.AppWebApi
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "System Api", Version = "v1" });
-            });
-
+            }); 
             services.AddHttpContextAccessor();
 
-            InitDataBase initDataBase= new InitDataBase();
-            initDataBase.Init();
+            AppSystemServices.InitDataBase initappsystem= new AppSystemServices.InitDataBase();
+            Core.DataBaseServices.InitDatabase initdatabase = new DataBaseServices.InitDatabase();
+ 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

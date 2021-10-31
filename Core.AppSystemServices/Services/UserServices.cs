@@ -183,8 +183,7 @@ namespace Core.AppSystemServices
 
         public bool IsSupperAdmin(Users user)
         {
-            var result = false;
-            result = user.UserName == "admin";
+            var result = user.UserName == "admin";
             return result;
         }
 

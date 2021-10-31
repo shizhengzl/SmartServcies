@@ -233,5 +233,99 @@ namespace Core.UsuallyCommon
 
             return result;
         }
+
+        /// <summary>
+        /// 数据库中与C#中的数据类型对照
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string SqlTypeToCSharpType(this string type)
+        {
+            type = type.ToStringExtension().Trim().ToLower();
+            string reval = string.Empty;
+            switch (type.ToLower())
+            {
+                case "int":
+                    reval = "Int32";
+                    break;
+                case "text":
+                    reval = "String";
+                    break;
+                case "bigint":
+                    reval = "Int64";
+                    break;
+                case "binary":
+                    reval = "Byte[]";
+                    break;
+                case "bit":
+                    reval = "Boolean";
+                    break;
+                case "char":
+                    reval = "String";
+                    break;
+                case "datetime":
+                    reval = "DateTime";
+                    break;
+                case "decimal":
+                    reval = "Decimal";
+                    break;
+                case "float":
+                    reval = "Double";
+                    break;
+                case "image":
+                    reval = "Byte[]";
+                    break;
+                case "money":
+                    reval = "Decimal";
+                    break;
+                case "nchar":
+                    reval = "String";
+                    break;
+                case "ntext":
+                    reval = "String";
+                    break;
+                case "numeric":
+                    reval = "Decimal";
+                    break;
+                case "nvarchar":
+                    reval = "String";
+                    break;
+                case "real":
+                    reval = "Single";
+                    break;
+                case "smalldatetime":
+                    reval = "DateTime";
+                    break;
+                case "smallint":
+                    reval = "Int16";
+                    break;
+                case "smallmoney":
+                    reval = "Decimal";
+                    break;
+                case "timestamp":
+                    reval = "DateTime";
+                    break;
+                case "tinyint":
+                    reval = "Byte";
+                    break;
+                case "uniqueidentifier":
+                    reval = "Guid";
+                    break;
+                case "varbinary":
+                    reval = "Byte[]";
+                    break;
+                case "varchar":
+                    reval = "String";
+                    break;
+                case "Variant":
+                    reval = "Object";
+                    break;
+                default:
+                    reval = "String";
+                    break;
+            }
+            return reval;
+        }
+
     }
 }

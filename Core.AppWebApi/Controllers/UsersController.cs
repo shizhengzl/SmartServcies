@@ -116,7 +116,7 @@ namespace Core.AppWebApi.Controllers
             return new MenuTree()
             {
                 Id = menu.Id,
-                path = menu.Path,
+                path = "/"+ menu.Path,
                 component = menu.Component,
                 name = menu.MenuName,
                 meta = new MenuMeta() { icon = menu.MenuIcon, title = menu.MenuName, noCache = true },

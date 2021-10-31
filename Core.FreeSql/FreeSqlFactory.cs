@@ -47,7 +47,7 @@ namespace Core.FreeSqlServices
              .Build();
         }
 
-        public static IFreeSql _FreeSql { get; set; }
+        private static IFreeSql PrivateFreeSql { get; set; }
 
         /// <summary>
         /// 实力
@@ -55,14 +55,14 @@ namespace Core.FreeSqlServices
         public static IFreeSql FreeSql 
         { 
             get {
-                if (_FreeSql.IsNull())
+                if (PrivateFreeSql.IsNull())
                 {
-                    _FreeSql = new FreeSqlBuilder()
+                    PrivateFreeSql = new FreeSqlBuilder()
                    .UseConnectionString(DefaultDataType, DefaultBaseConnection)
                    .UseAutoSyncStructure(true)
                    .Build();
                 }
-                return _FreeSql;
+                return PrivateFreeSql;
             } 
         }
 

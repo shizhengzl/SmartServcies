@@ -11,6 +11,8 @@ using Core.CacheServices;
 using AutoMapper;
 using System.Linq;
 using System.Collections.Generic;
+using Core.DataBaseServices;
+using Core.AppSystemServices.Services;
 
 namespace Core.AppWebApi.Controllers
 {
@@ -22,15 +24,15 @@ namespace Core.AppWebApi.Controllers
         /// <summary>
         /// 注入接口
         /// </summary>
-        public readonly IMapper _mapper;
-        public MenuServices _menuServices { get; set; }
-        public MenusController(MenuServices menuServices, IMapper mapper)
+        public readonly IMapper mapper;
+        public MenuServices menuServices { get; set; }
+        public CommonServices commonServices {  get; set; }
+        public MenusController(MenuServices _menuServices, IMapper _mapper, CommonServices _commonServices)
         {
-            _menuServices = menuServices;
-            _mapper = mapper;
+            menuServices = _menuServices;
+            mapper = _mapper;
+            commonServices = _commonServices;
         }
-
-
 
         /// <summary>
         /// 获取用户信息
@@ -42,9 +44,9 @@ namespace Core.AppWebApi.Controllers
         {
             Response<List<DtoMenus>> response = new Response<List<DtoMenus>>();
 
-            var menus = _menuServices.GetSupperMenus();  
+            var menus = menuServices.GetSupperMenus();  
             var firstmenus = menus.Where(x=>x.MenusId == Guid.Empty).ToList(); 
-            response.Data = _mapper.Map<List<DtoMenus>>(firstmenus);
+            response.Data = mapper.Map<List<DtoMenus>>(firstmenus);
             response.Data.ForEach(x => {
                 GetChildren(x,menus);
             });
@@ -55,37 +57,13 @@ namespace Core.AppWebApi.Controllers
         private void GetChildren(DtoMenus dtoMenus,List<Menus> menus)
         {
             var children = menus.Where(x => x.MenusId == dtoMenus.Id).ToList();
-            dtoMenus.children = _mapper.Map<List<DtoMenus>>(children);  
+            dtoMenus.children = mapper.Map<List<DtoMenus>>(children);  
             dtoMenus.children.ForEach(x => { 
                 GetChildren(x, menus);
             }); 
         }
 
 
-        /// <summary>
-        /// 获取用户信息
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("GetListHeader")]
-        [Authorize]
-        public Response<List<HeaderExtensions>> GetListHeader()
-        {
-            Response<List<HeaderExtensions>> response = new Response<List<HeaderExtensions>>();
-
-            List<HeaderExtensions> list = new List<HeaderExtensions>();
-            ObjectExtensions.GetPropertyExtensions<Menus>().ForEach(x =>
-            {
-                list.Add(new HeaderExtensions()
-                {
-                    ColumnDescription = x.PropertyDescription,
-                    ColumnName = x.PropertyName.ToStringExtension().ToFirstCharToLower(),
-                    IsShow = true,
-                    Width = 200
-                });
-
-            });
-            response.Data = list;
-            return response;
-        }
+     
     }
 }

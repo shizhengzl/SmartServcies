@@ -8,17 +8,17 @@ using System.Text;
 namespace Core.DataBaseServices
 {
     /// <summary>
-    /// 配置服务类
+    /// 其他数据库配置服务类
     /// </summary>
     public class SQLConfigServices
     {
-        public static IFreeSql _freesql { get; set; }
+        public static IFreeSql PrivateFreeSql { get; set; }
 
-        public ConnectionStringManage _connectionManage { get; set; }
+        public ConnectionStringManage PrivateConnectionManage { get; set; }
 
         public SQLConfigServices(ConnectionStringManage connectionStringManage)
         {
-            _connectionManage = connectionStringManage;
+            PrivateConnectionManage = connectionStringManage;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Core.DataBaseServices
         /// <returns></returns>
         public string GetDataBases()
         {
-            return _freesql.Select<SQLConfig>().Where(x => x.Type == _connectionManage.DataBaseType).First().GetDataBaseSQL.ToStringExtension();
+            return PrivateFreeSql.Select<SQLConfig>().Where(x => x.Type == PrivateConnectionManage.DataBaseType).First().GetDataBaseSQL.ToStringExtension();
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Core.DataBaseServices
         /// <returns></returns>
         public string GetTables()
         {
-            return _freesql.Select<SQLConfig>().Where(x => x.Type == _connectionManage.DataBaseType).First().GetTableSQL.ToStringExtension();
+            return PrivateFreeSql.Select<SQLConfig>().Where(x => x.Type == PrivateConnectionManage.DataBaseType).First().GetTableSQL.ToStringExtension();
         }
 
         /// <summary>
@@ -58,8 +58,8 @@ namespace Core.DataBaseServices
         /// <returns></returns>
         public string GetColumns()
         {
-            return _freesql.Select<SQLConfig>().Where(x => x.Type == _connectionManage.DataBaseType).First().GetColumnSQL.ToStringExtension();
-        }
+            return PrivateFreeSql.Select<SQLConfig>().Where(x => x.Type == PrivateConnectionManage.DataBaseType).First().GetColumnSQL.ToStringExtension();
+        } 
 
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Core.DataBaseServices
         /// <returns></returns>
         public string AddExtendedproperty()
         {
-            return _freesql.Select<SQLConfig>().Where(x => x.Type == _connectionManage.DataBaseType).First().AddExtendedproperty.ToStringExtension();
+            return PrivateFreeSql.Select<SQLConfig>().Where(x => x.Type == PrivateConnectionManage.DataBaseType).First().AddExtendedproperty.ToStringExtension();
         }
 
 
@@ -80,7 +80,7 @@ namespace Core.DataBaseServices
         /// <returns></returns>
         public string ModifyExtendedproperty()
         {
-            return _freesql.Select<SQLConfig>().Where(x => x.Type == _connectionManage.DataBaseType).First().ModifyExtendedproperty.ToStringExtension();
+            return PrivateFreeSql.Select<SQLConfig>().Where(x => x.Type == PrivateConnectionManage.DataBaseType).First().ModifyExtendedproperty.ToStringExtension();
         }
 
 
@@ -92,7 +92,7 @@ namespace Core.DataBaseServices
         /// <returns></returns>
         public string AddTableExtendedproperty()
         {
-            return _freesql.Select<SQLConfig>().Where(x => x.Type == _connectionManage.DataBaseType).First().AddTableExtendedproperty.ToStringExtension();
+            return PrivateFreeSql.Select<SQLConfig>().Where(x => x.Type == PrivateConnectionManage.DataBaseType).First().AddTableExtendedproperty.ToStringExtension();
         }
 
 
@@ -103,7 +103,7 @@ namespace Core.DataBaseServices
         /// <returns></returns>
         public string ModifyTableExtendedproperty()
         {
-            return _freesql.Select<SQLConfig>().Where(x => x.Type == _connectionManage.DataBaseType).First().ModifyTableExtendedproperty.ToStringExtension();
+            return PrivateFreeSql.Select<SQLConfig>().Where(x => x.Type == PrivateConnectionManage.DataBaseType).First().ModifyTableExtendedproperty.ToStringExtension();
         }
     }
 }

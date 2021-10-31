@@ -24,6 +24,18 @@ namespace Core.UsuallyCommon
             return propertys.Select(x => x.Name).ToList<string>();
         }
 
+        /// <summary>
+        /// 获取对象属性名称
+        /// </summary>
+        /// <param name="objects"></param>
+        /// <returns></returns>
+        public static List<String> GetPropertyList(this Type objects)
+        {
+            PropertyInfo[] propertys = objects.GetProperties();
+
+            return propertys.Select(x => x.Name).ToList<string>();
+        }
+
 
         /// <summary>
         /// 获取类属性字段和描述

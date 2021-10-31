@@ -20,8 +20,7 @@ namespace Core.GeneratorApp
         UserServices userservices = new UserServices();
         public Login()
         {
-            InitDataBase initDataBase = new InitDataBase();
-            initDataBase.Init();
+            InitDataBase initDataBase = new InitDataBase(); 
             InitializeComponent();
         }
 

@@ -1,4 +1,6 @@
 ﻿using Core.UsuallyCommon;
+using FreeSql.Internal.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,6 +16,44 @@ namespace Core.FreeSqlServices
 
         }
 
+        /// <summary>
+        /// 查询返回json
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public  string GetEntitys(BaseRequest<string> request)
+        {
+            var type = request.TableName.GetClassType();
+            DynamicFilterInfo dyfilter = JsonConvert.DeserializeObject<DynamicFilterInfo>(request.Model); 
+            var sql = FreeSqlFactory.FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).OrderByPropertyName(request.Sort)
+                .Page(request.PageIndex, request.PageSize).ToSql();
+
+            var list = FreeSqlFactory.FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).OrderByPropertyName(request.Sort)
+                .Page(request.PageIndex,request.PageSize).ToList();
+            return JsonConvert.SerializeObject(list);
+        }
+
+
+        /// <summary>
+        /// 修改动态实体
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public string ModifyEntitys(ModifyRequest request)
+        {
+            var type = request.TableName.GetClassType();
+
+         
+            dynamic requestmodel = JsonConvert.DeserializeObject(Convert.ToString(request.Model),type);
+            var Id = requestmodel.Id;
+            //var sql = FreeSqlFactory.FreeSql.Update<object>().AsType(type).SetDto(requestmodel).WhereDynamic(new { Id = Id }).ToSql();
+
+            var sql = FreeSqlFactory.FreeSql.Update<object>().AsType(type).SetDto(requestmodel).WhereDynamic(new { Id = Id }).ExecuteAffrows();
+
+            return JsonConvert.SerializeObject(requestmodel);
+        }
+       
+
 
         /// <summary>
         /// 查询分页
@@ -25,7 +65,6 @@ namespace Core.FreeSqlServices
         /// <returns></returns>
         public FreeSql.ISelect<T> GetEntitys<T>() where T : class
         {
-            ResponseList<T> response = new ResponseList<T>();
             return FreeSqlFactory.FreeSql.Select<T>();
         }
 
@@ -40,7 +79,6 @@ namespace Core.FreeSqlServices
         /// <returns></returns>
         public Boolean Remove<T>(T t) where T : class
         {
-            ResponseList<T> response = new ResponseList<T>();
             return FreeSqlFactory.FreeSql.Delete<T>(t).ExecuteAffrows() > 1;
         }
 
@@ -55,7 +93,6 @@ namespace Core.FreeSqlServices
         /// <returns></returns>
         public Boolean Create<T>(T t) where T : class
         {
-            ResponseList<T> response = new ResponseList<T>();
             SetCreateModel<T>(t);
             return FreeSqlFactory.FreeSql.Insert<T>(t).ExecuteIdentity() > 0;
         }
@@ -71,7 +108,26 @@ namespace Core.FreeSqlServices
         /// <returns></returns>
         public T[] Create<T>(T[] t) where T : class
         {
-            ResponseList<T> response = new ResponseList<T>();
+            foreach (var item in t)
+            {
+                SetCreateModel<T>(item);
+            }
+
+            FreeSqlFactory.FreeSql.Insert<T>(t).ExecuteAffrows();
+
+            return t;
+        }
+
+        /// <summary>
+        /// 新增
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="baseRequest"></param>
+        /// <param name="where"></param>
+        /// <param name="orderby"></param>
+        /// <returns></returns>
+        public List<T> Create<T>(List<T> t) where T : class
+        {
             foreach (var item in t)
             {
                 SetCreateModel<T>(item);
@@ -92,8 +148,7 @@ namespace Core.FreeSqlServices
         /// <returns></returns>
         public Boolean Modify<T>(T t) where T : class
         {
-            ResponseList<T> response = new ResponseList<T>();
-            SetModifyModel<T>(t);
+            SetModifyModel<T>(t); 
             return FreeSqlFactory.FreeSql.Update<T>().SetSource(t).ExecuteAffrows() > 1;
         }
 
@@ -107,7 +162,6 @@ namespace Core.FreeSqlServices
         /// <returns></returns>
         public Boolean Modify<T>(T[] t) where T : class
         {
-            ResponseList<T> response = new ResponseList<T>();
             foreach (var item in t)
             {
                 SetModifyModel<T>(item);

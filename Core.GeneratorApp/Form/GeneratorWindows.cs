@@ -93,53 +93,53 @@ namespace Core.GeneratorApp
                 return;
              
 
-            if (!menus.IsAuto.ToBoolean())
-            {
+            //if (!menus.IsAuto.ToBoolean())
+            //{
 
 
-                Type classType = Type.GetType("Core.GeneratorApp." + menus.Component); 
-                var instance = Activator.CreateInstance(classType);
+            //    Type classType = Type.GetType("Core.GeneratorApp." + menus.Component); 
+            //    var instance = Activator.CreateInstance(classType);
 
-                Form form =(Form)instance; 
-                form.TopLevel = false;     //设置为非顶级控件
+            //    Form form =(Form)instance; 
+            //    form.TopLevel = false;     //设置为非顶级控件
 
-                TabPage tabgrant = new TabPage();
-                tabgrant.Text = menus.MenuName;
-                tabgrant.Name = menus.Component.ToStringExtension();
-                tabgrant.Controls.Add(form);
-                form.Dock = DockStyle.Fill;
-                    //让窗体form显示出来 
-                form.FormBorderStyle = FormBorderStyle.None;  //外边框干掉
-                form.WindowState = FormWindowState.Maximized;
+            //    TabPage tabgrant = new TabPage();
+            //    tabgrant.Text = menus.MenuName;
+            //    tabgrant.Name = menus.Component.ToStringExtension();
+            //    tabgrant.Controls.Add(form);
+            //    form.Dock = DockStyle.Fill;
+            //        //让窗体form显示出来 
+            //    form.FormBorderStyle = FormBorderStyle.None;  //外边框干掉
+            //    form.WindowState = FormWindowState.Maximized;
                 
 
-                if (!tabControls.TabPages.ContainsKey(menus.Component.ToStringExtension()))
-                    tabControls.TabPages.Add(tabgrant);
-                tabControls.SelectTab(menus.Component.ToStringExtension());
+            //    if (!tabControls.TabPages.ContainsKey(menus.Component.ToStringExtension()))
+            //        tabControls.TabPages.Add(tabgrant);
+            //    tabControls.SelectTab(menus.Component.ToStringExtension());
 
-                form.Show();
-            }
-            else
-            {
-                // 初始化dll
-                SnippetRecord snippetRecord = new SnippetRecord();
-                ConnectionStringManage connectionStringManage= new ConnectionStringManage();    
-                Type classType = Type.GetType("Core.GeneratorApp.BaseList`1");
-                Type constructedType = classType.MakeGenericType(menus.Component.ToStringExtension().GetClassType());
-                var instance = Activator.CreateInstance(constructedType, new object[] {menus.IsSupper.ToBoolean().ToString().ToUpper() });
-                var from = ((Panel)instance); 
-                from.Dock = DockStyle.Fill;
-                TabPage tabpage = new TabPage();
-                var name = menus.Component.ToStringExtension().GetClassType().Name;
-                tabpage.Text = name;
-                tabpage.Name = name;
+            //    form.Show();
+            //}
+            //else
+            //{
+            //    // 初始化dll
+            //    SnippetRecord snippetRecord = new SnippetRecord();
+            //    ConnectionStringManage connectionStringManage= new ConnectionStringManage();    
+            //    Type classType = Type.GetType("Core.GeneratorApp.BaseList`1");
+            //    Type constructedType = classType.MakeGenericType(menus.Component.ToStringExtension().GetClassType());
+            //    var instance = Activator.CreateInstance(constructedType, new object[] {menus.IsSupper.ToBoolean().ToString().ToUpper() });
+            //    var from = ((Panel)instance); 
+            //    from.Dock = DockStyle.Fill;
+            //    TabPage tabpage = new TabPage();
+            //    var name = menus.Component.ToStringExtension().GetClassType().Name;
+            //    tabpage.Text = name;
+            //    tabpage.Name = name;
 
-                tabpage.Controls.Add(from);
-                from.Tag = this.imagelistall;
-                if (!tabControls.TabPages.ContainsKey(name))
-                    tabControls.TabPages.Add(tabpage);
-                tabControls.SelectTab(name);
-            }
+            //    tabpage.Controls.Add(from);
+            //    from.Tag = this.imagelistall;
+            //    if (!tabControls.TabPages.ContainsKey(name))
+            //        tabControls.TabPages.Add(tabpage);
+            //    tabControls.SelectTab(name);
+            //}
         }
     }
 }

@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Core.AppSystemServices\Core.AppSystemServices.csproj" />
     <ProjectReference Include="..\Core.CacheServices\Core.CacheServices.csproj" />
+    <ProjectReference Include="..\Core.DataBaseServices\Core.DataBaseServices.csproj" />
     <ProjectReference Include="..\Core.UsuallyCommon\Core.UsuallyCommon.csproj" />
   </ItemGroup>
 

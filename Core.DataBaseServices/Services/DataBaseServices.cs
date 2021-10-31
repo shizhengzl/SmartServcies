@@ -9,13 +9,13 @@ namespace Core.DataBaseServices
     public class DataBaseServices : SystemServices
     {
          
-        public IFreeSql _freesql { get; set; }
+        public IFreeSql PrivateFreeSql { get; set; }
 
         public ConnectionStringManage _connectionManage { get; set; }
 
         public DataBaseServices(ConnectionStringManage connectionStringManage)
         {
-            _freesql = GetFreeSql(connectionStringManage);
+            PrivateFreeSql = GetFreeSql(connectionStringManage);
             _connectionManage = connectionStringManage;
         }
          
@@ -28,7 +28,7 @@ namespace Core.DataBaseServices
         { 
             SQLConfigServices sqlconfigservices = new SQLConfigServices(_connectionManage);
             var databasesql = sqlconfigservices.GetDataBases();
-            return _freesql.Ado.ExecuteDataTable(databasesql).ToList<DataBase>();
+            return PrivateFreeSql.Ado.ExecuteDataTable(databasesql).ToList<DataBase>();
         }
 
 
@@ -39,10 +39,10 @@ namespace Core.DataBaseServices
         public List<Table> GetTable(string DataBaseName)
         {
             _connectionManage.DefaultDataBase = DataBaseName;
-            _freesql = GetFreeSql(_connectionManage);
+            PrivateFreeSql = GetFreeSql(_connectionManage);
             SQLConfigServices sqlconfigservices = new SQLConfigServices(_connectionManage);
             var tablesql = sqlconfigservices.GetTables();
-            return _freesql.Ado.ExecuteDataTable(tablesql).ToList<Table>();
+            return PrivateFreeSql.Ado.ExecuteDataTable(tablesql).ToList<Table>();
         }
 
 
@@ -55,8 +55,8 @@ namespace Core.DataBaseServices
             _connectionManage.DefaultDataBase = DataBaseName;
             SQLConfigServices sqlconfigservices = new SQLConfigServices(_connectionManage);
             var columnsql = sqlconfigservices.GetColumns();
-            _freesql = GetFreeSql(_connectionManage);
-            return _freesql.Ado.ExecuteDataTable(columnsql).ToList<Column>();
+            PrivateFreeSql = GetFreeSql(_connectionManage);
+            return PrivateFreeSql.Ado.ExecuteDataTable(columnsql).ToList<Column>();
         }
 
 
