@@ -21,16 +21,16 @@ namespace Core.FreeSqlServices
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public  string GetEntitys(BaseRequest<string> request)
+        public List<object> GetEntitys(BaseRequest<string> request)
         {
             var type = request.TableName.GetClassType();
-            DynamicFilterInfo dyfilter = JsonConvert.DeserializeObject<DynamicFilterInfo>(request.Model); 
-            var sql = FreeSqlFactory.FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).OrderByPropertyName(request.Sort)
-                .Page(request.PageIndex, request.PageSize).ToSql();
-
+            DynamicFilterInfo dyfilter = JsonConvert.DeserializeObject<DynamicFilterInfo>(request.Model);
+            //var sql = FreeSqlFactory.FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).OrderByPropertyName(request.Sort)
+            //    .Page(request.PageIndex, request.PageSize).ToSql();
+            request.TotalCount = FreeSqlFactory.FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).Count();
             var list = FreeSqlFactory.FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).OrderByPropertyName(request.Sort)
                 .Page(request.PageIndex,request.PageSize).ToList();
-            return JsonConvert.SerializeObject(list);
+            return list;
         }
 
 

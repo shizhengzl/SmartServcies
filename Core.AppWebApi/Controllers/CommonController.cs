@@ -88,11 +88,13 @@ namespace Core.AppWebApi.Controllers
             {
                 var columns = GetSQLConfigServices.GetColumn(request.TableName);
                 List<ShowColumns> showColumns = new List<ShowColumns>();
+
+                var sort = 1;
                 columns.ForEach(x =>
                 {
                     ShowColumns showcolumn = new ShowColumns()
                     {
-                        ColumnName = x.ColumnName,
+                        ColumnName = x.ColumnName.ToFirstCharToLower(),
                         ColumnDescription = x.ColumnDescription,
                         TableName = x.TableName,
                         DataBaseName = x.DataBaseName,
@@ -101,7 +103,7 @@ namespace Core.AppWebApi.Controllers
                         CompanysId = session.User.CompanysId,
                         CsharpType = x.SQLType.SqlTypeToCSharpType(),
                         Postion = ShowPostion.Center,
-
+                        Sort = sort
                         //SQLType = x.SQLType,
                         //DefaultValue = x.DefaultValue,
                         //IsPrimarykey = x.IsPrimarykey,
@@ -111,6 +113,7 @@ namespace Core.AppWebApi.Controllers
                         //MaxLength = x.MaxLength
 
                     };
+                    sort++;
                     showColumns.Add(showcolumn);
                 });
                 commonServices.SaveShowColumns(showColumns);
@@ -127,10 +130,11 @@ namespace Core.AppWebApi.Controllers
         /// <returns></returns>
         [HttpPost("GetList")]
         [Authorize]
-        public Response<string> GetList([FromBody] BaseRequest<string> request)
+        public ResponseList<object> GetList([FromBody] BaseRequest<string> request)
         {
-            Response<string> response = new Response<string>();
+            ResponseList<object> response = new ResponseList<object>();
             response.Data = commonServices.GetList(request);
+            response.TotalCount = request.TotalCount;
             return response;
         }
 

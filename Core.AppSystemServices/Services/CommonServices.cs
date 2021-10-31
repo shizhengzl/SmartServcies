@@ -42,7 +42,7 @@ namespace Core.AppSystemServices.Services
         /// <returns></returns>
         public List<ShowColumns> GetShowColumns(string TableName)
         {
-            return GetEntitys<ShowColumns>().Where(x => x.TableName == TableName && x.IsShow).ToList();
+            return GetEntitys<ShowColumns>().Where(x => x.TableName == TableName && x.IsShow).OrderBy(x=>x.Sort).ToList();
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Core.AppSystemServices.Services
         /// </summary> 
         /// <param name="request"></param> 
         /// <returns></returns>
-        public string GetList(BaseRequest<string> request) 
+        public List<object> GetList(BaseRequest<string> request) 
         {
             return GetEntitys(request); 
         }

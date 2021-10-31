@@ -29,7 +29,7 @@ namespace Core.UsuallyCommon
         /// <summary>
         /// 总数
         /// </summary>
-        public Int64 Total { get; set; } = 0;
+        public Int64 TotalCount { get; set; } = 0;
 
         /// <summary>
         /// 成功编码
