@@ -38,6 +38,7 @@ namespace Core.AppSystemServices
 
         public void Init()
         {
+            InitBaseData();
             InitMenus();
             InitCompanys();
             InitUsers();
@@ -79,9 +80,9 @@ namespace Core.AppSystemServices
             Menus menucompanys2 = new Menus() { Id = Guid.NewGuid(), IsSupper = true
                 , MenuName = "列表页面"
                 , Sort = 1
-                , Path = "grid"
+                , Path = "list"
                 , MenuIcon = "404"
-                , Component = $"/menus/grid"// +  typeof(Companys).Name.ToLower()
+                , Component = $"/menus/list"// +  typeof(Companys).Name.ToLower()
                 , MenusId = defaultsuppermenuid };
             if (!FreeSqlFactory.FreeSql.Select<Menus>().Any(x => x.MenuName == "组件页面"))
             {
@@ -325,5 +326,97 @@ namespace Core.AppSystemServices
         }
         #endregion
 
+        #region 初始化基础数据
+        public void InitBaseData() {
+            Guid basesexid = Guid.NewGuid();
+            BaseData baseDatasex = new BaseData()
+            {
+                Id = basesexid,
+                Code = "Sex",
+                Name = "性别",
+                Description = "性别基础数据"
+            };
+
+            BaseDataDeatil baseDataDeatilB = new BaseDataDeatil()
+            {
+                Code = "Body",
+                Name = "男",
+                Description = "先生",
+                BaseDataId = basesexid
+            };
+
+            BaseDataDeatil baseDataDeatilG = new BaseDataDeatil()
+            {
+                Code = "Girl",
+                Name = "女",
+                Description = "女士",
+                BaseDataId = basesexid
+            };
+            if (!FreeSqlFactory.FreeSql.Select<BaseData>().Any(x => x.Code == "Sex"))
+            {
+                FreeSqlFactory.FreeSql.Insert<BaseData>(baseDatasex).ExecuteAffrows();
+            }
+            if (!FreeSqlFactory.FreeSql.Select<BaseDataDeatil>().Any(x => x.Code == "Body"))
+            {
+                FreeSqlFactory.FreeSql.Insert<BaseDataDeatil>(baseDataDeatilB).ExecuteAffrows();
+            }
+            if (!FreeSqlFactory.FreeSql.Select<BaseDataDeatil>().Any(x => x.Code == "Girl"))
+            {
+                FreeSqlFactory.FreeSql.Insert<BaseDataDeatil>(baseDataDeatilG).ExecuteAffrows();
+            }
+
+
+            Guid basealignid = Guid.NewGuid();
+            BaseData baseDataalign = new BaseData()
+            {
+                Id = basealignid,
+                Code = "Align",
+                Name = "显示位置（左中右）",
+                Description = "显示位置（左中右）"
+            };
+
+            BaseDataDeatil baseDataDeatilleft = new BaseDataDeatil()
+            {
+                Code = "Left",
+                Name = "居左",
+                Description = "居左",
+                BaseDataId = basealignid
+            };
+
+            BaseDataDeatil baseDataDeatilCenter = new BaseDataDeatil()
+            {
+                Code = "Center",
+                Name = "居中",
+                Description = "居中",
+                BaseDataId = basealignid
+            };
+
+            BaseDataDeatil baseDataDeatilRight = new BaseDataDeatil()
+            {
+                Code = "Right",
+                Name = "居右",
+                Description = "居右",
+                BaseDataId = basealignid
+            };
+            if (!FreeSqlFactory.FreeSql.Select<BaseData>().Any(x => x.Code == "Align"))
+            {
+                FreeSqlFactory.FreeSql.Insert<BaseData>(baseDataalign).ExecuteAffrows();
+            }
+            if (!FreeSqlFactory.FreeSql.Select<BaseDataDeatil>().Any(x => x.Code == "Left"))
+            {
+                FreeSqlFactory.FreeSql.Insert<BaseDataDeatil>(baseDataDeatilleft).ExecuteAffrows();
+            }
+            if (!FreeSqlFactory.FreeSql.Select<BaseDataDeatil>().Any(x => x.Code == "Center"))
+            {
+                FreeSqlFactory.FreeSql.Insert<BaseDataDeatil>(baseDataDeatilCenter).ExecuteAffrows();
+            }
+            if (!FreeSqlFactory.FreeSql.Select<BaseDataDeatil>().Any(x => x.Code == "Right"))
+            {
+                FreeSqlFactory.FreeSql.Insert<BaseDataDeatil>(baseDataDeatilRight).ExecuteAffrows();
+            }
+        }
+       
+
+        #endregion
     }
 }

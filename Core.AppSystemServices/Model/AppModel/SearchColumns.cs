@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Core.AppSystemServices
 {
-    public class ModifyColumns
+    /// <summary>
+    /// 查询列
+    /// </summary>
+    public class SearchColumns
     {
     }
 }

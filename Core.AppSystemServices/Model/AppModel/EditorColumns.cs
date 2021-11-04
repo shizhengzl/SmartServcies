@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Core.AppSystemServices
 {
-    public class ModifyColumns
+    public class EditorColumns
     {
     }
 }
