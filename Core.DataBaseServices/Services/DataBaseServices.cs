@@ -3,32 +3,28 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Core.UsuallyCommon;
+using FreeSql;
+using System.Linq;
 
 namespace Core.DataBaseServices
 {
     public class DataBaseServices : SystemServices
     {
-         
-        public IFreeSql PrivateFreeSql { get; set; }
-
-        public ConnectionStringManage _connectionManage { get; set; }
-
-        public DataBaseServices(ConnectionStringManage connectionStringManage)
+        public DataBaseServices() : base(DataBaseFactory.Core_DataBase.FreeSql)
         {
-            PrivateFreeSql = GetFreeSql(connectionStringManage);
-            _connectionManage = connectionStringManage;
+
         }
-         
+
+        SQLConfigServices sqlconfigservices = new SQLConfigServices();
         /// <summary>
         /// 获取连接下所有数据库
         /// </summary>
         /// <param name="search"></param>
         /// <returns></returns>
-        public List<DataBase> GetDataBase()
+        public List<DataBase> GetDataBase(IFreeSql freesql, DataType dataType)
         { 
-            SQLConfigServices sqlconfigservices = new SQLConfigServices(_connectionManage);
-            var databasesql = sqlconfigservices.GetDataBases();
-            return PrivateFreeSql.Ado.ExecuteDataTable(databasesql).ToList<DataBase>();
+            var databasesql = sqlconfigservices.GetDataBases(dataType);
+            return freesql.Ado.ExecuteDataTable(databasesql).ToList<DataBase>();
         }
 
 
@@ -36,13 +32,10 @@ namespace Core.DataBaseServices
         /// 获取连接下所有表
         /// </summary>
         /// <returns></returns>
-        public List<Table> GetTable(string DataBaseName)
-        {
-            _connectionManage.DefaultDataBase = DataBaseName;
-            PrivateFreeSql = GetFreeSql(_connectionManage);
-            SQLConfigServices sqlconfigservices = new SQLConfigServices(_connectionManage);
-            var tablesql = sqlconfigservices.GetTables();
-            return PrivateFreeSql.Ado.ExecuteDataTable(tablesql).ToList<Table>();
+        public List<Table> GetTable(IFreeSql freesql, DataType dataType)
+        { 
+            var tablesql = sqlconfigservices.GetTables(dataType);
+            return freesql.Ado.ExecuteDataTable(tablesql).ToList<Table>();
         }
 
 
@@ -50,31 +43,14 @@ namespace Core.DataBaseServices
         /// 获取连接下所有列
         /// </summary>
         /// <returns></returns>
-        public List<Column> GetColumn(string DataBaseName)
-        {
-            _connectionManage.DefaultDataBase = DataBaseName;
-            SQLConfigServices sqlconfigservices = new SQLConfigServices(_connectionManage);
-            var columnsql = sqlconfigservices.GetColumns();
-            PrivateFreeSql = GetFreeSql(_connectionManage);
-            return PrivateFreeSql.Ado.ExecuteDataTable(columnsql).ToList<Column>();
+        public List<Column> GetColumn(IFreeSql freesql, DataType dataType,String tableName = "")
+        {  
+            var columnsql = sqlconfigservices.GetColumns(dataType);
+            var response = freesql.Ado.ExecuteDataTable(columnsql).ToList<Column>();
+            if (!tableName.IsNullOrEmpty())
+                response = response.Where(x => x.TableName.ToUpper().Equals(tableName.ToUpper())).ToList();
+            return response;
         }
 
-
-
-        /// <summary>
-        /// 获取连接持
-        /// </summary>
-        /// <param name="search"></param>
-        /// <returns></returns>
-        public IFreeSql GetFreeSql(ConnectionStringManage search)
-        {
-            return FreeSqlFactory.GetFreeSql(search.DataBaseType, search.GetConnectionString());
-        }
-
-
-        public void InitCompanySqlConfig() 
-        {
-            
-        }
     }
 }

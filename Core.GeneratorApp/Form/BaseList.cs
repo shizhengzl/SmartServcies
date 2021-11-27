@@ -23,9 +23,7 @@ namespace Core.GeneratorApp
         private Panel panellist;
         private StatusStrip statusmessage;
         private DataGridView listview;
-        private ToolStrip toollist; 
-        public FreeSqlFactory factory = new FreeSqlFactory();
-
+        private ToolStrip toollist;  
         public Panel self { get; set; }
 
         UserServices userServices = new UserServices();
@@ -50,9 +48,9 @@ namespace Core.GeneratorApp
             var issupper = userServices.IsSupperAdmin(GeneratorWindows._currentUser.User);
             List<T> list =new List<T>();
             if(issupper && _IsSupper == true.ToString().ToUpper())
-                list = FreeSqlFactory.FreeSql.Select<T>().Where(x =>1==1).ToList();
+                list = DataBaseFactory.Core_Application.FreeSql.Select<T>().Where(x =>1==1).ToList();
             else
-                list = FreeSqlFactory.FreeSql.Select<T>().Where(x => x.CompanysId == GeneratorWindows._currentUser.User.CompanysId).ToList();
+                list = DataBaseFactory.Core_Application.FreeSql.Select<T>().Where(x => x.CompanysId == GeneratorWindows._currentUser.User.CompanysId).ToList();
         
             listview.DataSource = list;
             listview.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -68,7 +66,7 @@ namespace Core.GeneratorApp
             foreach (DataGridViewRow item in listview.SelectedRows)
             {
                 var key = ((T)sources[item.Index]).GetPropertyValue("Id");
-                t = FreeSqlFactory.FreeSql.Select<T>(key).First();
+                t = DataBaseFactory.Core_Application.FreeSql.Select<T>(key).First();
             }
 
             BaseForm<T> baseForm = new BaseForm<T>(t);
@@ -207,7 +205,7 @@ namespace Core.GeneratorApp
             foreach (DataGridViewRow item in listview.SelectedRows)
             {
                 var key = ((T)sources[item.Index]).GetPropertyValue("Id");
-                t = FreeSqlFactory.FreeSql.Select<T>(key).First();
+                t = DataBaseFactory.Core_Application.FreeSql.Select<T>(key).First();
             }
 
             BaseForm<T> baseForm = new BaseForm<T>(t);
@@ -224,7 +222,7 @@ namespace Core.GeneratorApp
             foreach (DataGridViewRow item in listview.SelectedRows)
             {
                 var key = sources[item.Index].Id;
-                var response = FreeSqlFactory.FreeSql.Delete<T>(key).ExecuteAffrows();
+                var response = DataBaseFactory.Core_Application.FreeSql.Delete<T>(key).ExecuteAffrows();
                 this.LoadList();
             }
 

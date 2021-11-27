@@ -18,7 +18,7 @@ namespace Core.AppWebApi
         }
 
         private readonly IHttpContextAccessor _httpContextAccessor;
-         
+
 
         public override Task HandleAsync(AuthorizationHandlerContext context)
         {
@@ -29,10 +29,14 @@ namespace Core.AppWebApi
             //var routContext = (context.Resource as Microsoft.AspNetCore.Routing.RouteEndpoint); 
             var user = MemoryCacheManager.GetCache<CurrentSesscion>(token);
             if (user == null)
-            { 
-                context.Fail(); 
-                var response = _httpContextAccessor.HttpContext.Response;
-                response.StatusCode = 403; 
+            {
+                context.Fail();
+                //return Task.FromResult(new JsonResult(new
+                //{
+                //    Success = false,
+                //    Message = "Login",
+                //    Code = CodeDescription.Login
+                //})); 
             }
             else
             {
@@ -41,7 +45,7 @@ namespace Core.AppWebApi
                     context.Succeed(requemet);
                 }
             }
-          
+
             return Task.CompletedTask;
         }
 

@@ -12,6 +12,46 @@ namespace Core.UsuallyCommon
     /// </summary>
     public static class ObjectExtensions
     {
+
+        /// <summary>
+        /// 判断动态类型属性值
+        /// </summary>
+        /// <param name="objects"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        public static string GetDynamicProperty(this object objects, string propertyName)
+        {
+            string response = string.Empty;
+            foreach (PropertyInfo item in objects.GetType().GetProperties())
+            {
+                if (item.Name == propertyName)
+                {
+                    response = (string)item.GetValue(objects, null); 
+                    break;
+                }
+            }
+            return response;
+        }
+        /// <summary>
+        /// 判断动态类型是否包含属性
+        /// </summary>
+        /// <param name="objects"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        public static Boolean HasDynamicProperty(this object objects,string propertyName)
+        {
+            bool response = false;
+            foreach (PropertyInfo item in objects.GetType().GetProperties())
+            {
+                if (item.Name == propertyName)
+                {
+                    response = true;
+                    break;
+                }
+            }
+            return response;
+        }
+
         /// <summary>
         /// 获取对象属性名称
         /// </summary>

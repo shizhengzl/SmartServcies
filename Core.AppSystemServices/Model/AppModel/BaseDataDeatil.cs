@@ -21,6 +21,12 @@ namespace Core.AppSystemServices
         public Guid BaseDataId { get; set; }
 
         /// <summary>
+        /// 父级
+        /// </summary>
+        [Description("父级")]
+        public Guid ParentId { get; set; }
+
+        /// <summary>
         /// 编码
         /// </summary>
         [Description("编码")]

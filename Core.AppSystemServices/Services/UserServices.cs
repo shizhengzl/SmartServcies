@@ -13,7 +13,7 @@ namespace Core.AppSystemServices
      [AppServiceAttribute]
     public class UserServices : SystemServices
     { 
-        public UserServices()
+        public UserServices():base(DataBaseFactory.Core_Application.FreeSql)
         {
 
         }

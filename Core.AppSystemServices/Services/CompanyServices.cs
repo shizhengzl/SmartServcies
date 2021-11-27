@@ -11,6 +11,12 @@ namespace Core.AppSystemServices
     /// </summary>
     public class CompanyServices : SystemServices
     {
+
+        public CompanyServices() : base(DataBaseFactory.Core_Application.FreeSql)
+        {
+
+        }
+
         /// <summary>
         /// 获取单位
         /// </summary>

@@ -1,23 +1,28 @@
 ﻿using Core.FreeSqlServices;
+using Core.UsuallyCommon;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Core.DataBaseServices
 {
-    public class InitDatabase
-    {
-
-        public InitDatabase()
+    public class InitDatabase :SystemServices
+    { 
+        public InitDatabase() : base(DataBaseFactory.Core_DataBase.FreeSql)
         {
+            ClearTable();
             InitConfig();
         }
 
+        public void ClearTable()
+        {
+            DataBaseFactory.Core_DataBase.FreeSql.Ado.ExecuteNonQuery(CommonSQL.ClearTableSql);
+        }
 
         public void InitConfig()
         {
             // 初始化数据库设置
-            if (!FreeSqlFactory.FreeSql.Select<SQLConfig>().Any())
+            if (!GetEntitys<SQLConfig>().Any())
             {
                 SQLConfig configSqlserver = new SQLConfig()
                 {
@@ -89,8 +94,8 @@ namespace Core.DataBaseServices
                                 WHERE    TABLE_NAME='{2}' and table_schema = '{1}';
                                  "
                 };
-                FreeSqlFactory.FreeSql.Insert<SQLConfig>(configSqlserver).ExecuteAffrows();
-                FreeSqlFactory.FreeSql.Insert<SQLConfig>(configMySql).ExecuteAffrows();
+                Create<SQLConfig>(configSqlserver);
+                Create<SQLConfig>(configMySql);
             }
         }
     }

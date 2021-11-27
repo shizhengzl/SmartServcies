@@ -11,8 +11,14 @@ namespace Core.AppSystemServices.Services
     /// 公用服务
     /// </summary>
     [AppServiceAttribute]
-    public class CommonServices : SystemServices
+    public class CommonServices: SystemServices
     {
+        public CommonServices() : base(DataBaseFactory.Core_Application.FreeSql)
+        {
+
+        }
+
+
         /// <summary>
         /// 是否存在配置
         /// </summary>
@@ -61,9 +67,9 @@ namespace Core.AppSystemServices.Services
         /// </summary> 
         /// <param name="request"></param> 
         /// <returns></returns>
-        public string Modify(dynamic request)
+        public string Save(dynamic request)
         {
-            return ModifyEntitys(request);
+            return SaveEntitys(request);
         }
     }
 }

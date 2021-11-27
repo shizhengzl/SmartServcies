@@ -10,35 +10,21 @@ namespace Core.DataBaseServices
     /// <summary>
     /// 其他数据库配置服务类
     /// </summary>
-    public class SQLConfigServices
+    public class SQLConfigServices : SystemServices
     {
-        public static IFreeSql PrivateFreeSql { get; set; }
 
-        public ConnectionStringManage PrivateConnectionManage { get; set; }
-
-        public SQLConfigServices(ConnectionStringManage connectionStringManage)
-        {
-            PrivateConnectionManage = connectionStringManage;
+        public SQLConfigServices() : base(DataBaseFactory.Core_DataBase.FreeSql)
+        { 
+        
         }
-
-        /// <summary>
-        /// 获取连接持
-        /// </summary>
-        /// <param name="search"></param>
-        /// <returns></returns>
-        public IFreeSql GetFreeSql(ConnectionStringManage search)
-        {
-            return FreeSqlFactory.GetFreeSql(search.DataBaseType, search.GetConnectionString());
-        }
-
         /// <summary>
         /// 获取所有数据库
         /// </summary>
         /// <param name="dataType"></param>
         /// <returns></returns>
-        public string GetDataBases()
+        public string GetDataBases(DataType dataType)
         {
-            return PrivateFreeSql.Select<SQLConfig>().Where(x => x.Type == PrivateConnectionManage.DataBaseType).First().GetDataBaseSQL.ToStringExtension();
+            return GetEntitys<SQLConfig>().Where(x => x.Type == dataType).First().GetDataBaseSQL.ToStringExtension();
         }
 
         /// <summary>
@@ -46,9 +32,9 @@ namespace Core.DataBaseServices
         /// </summary>
         /// <param name="dataType"></param>
         /// <returns></returns>
-        public string GetTables()
+        public string GetTables(DataType dataType)
         {
-            return PrivateFreeSql.Select<SQLConfig>().Where(x => x.Type == PrivateConnectionManage.DataBaseType).First().GetTableSQL.ToStringExtension();
+            return GetEntitys<SQLConfig>().Where(x => x.Type == dataType).First().GetTableSQL.ToStringExtension();
         }
 
         /// <summary>
@@ -56,9 +42,9 @@ namespace Core.DataBaseServices
         /// </summary>
         /// <param name="dataType"></param>
         /// <returns></returns>
-        public string GetColumns()
+        public string GetColumns(DataType dataType)
         {
-            return PrivateFreeSql.Select<SQLConfig>().Where(x => x.Type == PrivateConnectionManage.DataBaseType).First().GetColumnSQL.ToStringExtension();
+            return GetEntitys<SQLConfig>().Where(x => x.Type == dataType).First().GetColumnSQL.ToStringExtension();
         } 
 
 
@@ -67,9 +53,9 @@ namespace Core.DataBaseServices
         /// </summary>
         /// <param name="dataType"></param>
         /// <returns></returns>
-        public string AddExtendedproperty()
+        public string AddExtendedproperty(DataType dataType)
         {
-            return PrivateFreeSql.Select<SQLConfig>().Where(x => x.Type == PrivateConnectionManage.DataBaseType).First().AddExtendedproperty.ToStringExtension();
+            return GetEntitys<SQLConfig>().Where(x => x.Type == dataType).First().AddExtendedproperty.ToStringExtension();
         }
 
 
@@ -78,9 +64,9 @@ namespace Core.DataBaseServices
         /// </summary>
         /// <param name="dataType"></param>
         /// <returns></returns>
-        public string ModifyExtendedproperty()
+        public string ModifyExtendedproperty(DataType dataType)
         {
-            return PrivateFreeSql.Select<SQLConfig>().Where(x => x.Type == PrivateConnectionManage.DataBaseType).First().ModifyExtendedproperty.ToStringExtension();
+            return GetEntitys<SQLConfig>().Where(x => x.Type == dataType).First().ModifyExtendedproperty.ToStringExtension();
         }
 
 
@@ -90,9 +76,9 @@ namespace Core.DataBaseServices
         /// </summary>
         /// <param name="dataType"></param>
         /// <returns></returns>
-        public string AddTableExtendedproperty()
+        public string AddTableExtendedproperty(DataType dataType)
         {
-            return PrivateFreeSql.Select<SQLConfig>().Where(x => x.Type == PrivateConnectionManage.DataBaseType).First().AddTableExtendedproperty.ToStringExtension();
+            return GetEntitys<SQLConfig>().Where(x => x.Type == dataType).First().AddTableExtendedproperty.ToStringExtension();
         }
 
 
@@ -101,9 +87,9 @@ namespace Core.DataBaseServices
         /// </summary>
         /// <param name="dataType"></param>
         /// <returns></returns>
-        public string ModifyTableExtendedproperty()
+        public string ModifyTableExtendedproperty(DataType dataType)
         {
-            return PrivateFreeSql.Select<SQLConfig>().Where(x => x.Type == PrivateConnectionManage.DataBaseType).First().ModifyTableExtendedproperty.ToStringExtension();
+            return GetEntitys<SQLConfig>().Where(x => x.Type == dataType).First().ModifyTableExtendedproperty.ToStringExtension();
         }
     }
 }

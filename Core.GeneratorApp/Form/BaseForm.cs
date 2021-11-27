@@ -25,6 +25,8 @@ namespace Core.GeneratorApp
         /// </summary>
         public ToolStrip toolStrip = new ToolStrip(); 
 
+        FreeSqlFactory factory = new FreeSqlFactory();
+
         public Boolean IsEdit = false;
         public T t { get; set; }
         public BaseForm()
@@ -107,7 +109,7 @@ namespace Core.GeneratorApp
                     panel.Controls.Add(label);
                     panel.Controls.Add(textBox);
                     Type type = (x.Name.Replace("sId", string.Empty) + "s").GetClassType();
-                    var list = FreeSqlFactory.FreeSql.Select<object>().AsType(type).ToList();
+                    var list = factory.FreeSql.Select<object>().AsType(type).ToList();
 
                     dynamic newdefault = System.Activator.CreateInstance(type);
                     newdefault.Id = Guid.Empty;
@@ -238,7 +240,7 @@ namespace Core.GeneratorApp
                         panel.Controls.Add(label);
                         panel.Controls.Add(textBox);
                         Type type = (x.Name.Replace("sId", string.Empty) + "s").GetClassType();
-                        var list = FreeSqlFactory.FreeSql.Select<object>().AsType(type).ToList();
+                        var list = factory.FreeSql.Select<object>().AsType(type).ToList();
 
                         dynamic newdefault = System.Activator.CreateInstance(type);
                         newdefault.Id = Guid.Empty;
@@ -351,11 +353,11 @@ namespace Core.GeneratorApp
                 {
                     t.SetPropertyValue("PassWord", t.GetPropertyValue("PassWord").ToString().Tomd5());
                 }
-                FreeSqlFactory.FreeSql.Insert<T>(t).ExecuteAffrows();
+                factory.FreeSql.Insert<T>(t).ExecuteAffrows();
             } 
             else
             {
-                FreeSqlFactory.FreeSql.Update<T>().SetSource(t).ExecuteAffrows();
+                factory.FreeSql.Update<T>().SetSource(t).ExecuteAffrows();
             }
                
 

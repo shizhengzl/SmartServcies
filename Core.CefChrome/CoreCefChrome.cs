@@ -25,7 +25,7 @@ namespace Core.CefChrome
     { 
         public ChromiumWebBrowser chromiumWebBrowser;
         List<CefSharp.Cookie> cookies = new List<CefSharp.Cookie>();
-        public FreeSqlFactory factory = new FreeSqlFactory();
+ 
         public ZMSetting zMSetting { get; set; }
         public CoreCefChrome()
         {
@@ -91,8 +91,8 @@ namespace Core.CefChrome
                 {
                     root.data.ForEach(x =>
                     {
-                        if (!FreeSqlFactory.FreeSql.Select<DataItem>().Any(p => p.roundserial == x.roundserial))
-                            FreeSqlFactory.FreeSql.Insert<DataItem>(x).ExecuteAffrowsAsync();
+                        if (!DataBaseFactory.Core_Application.FreeSql.Select<DataItem>().Any(p => p.roundserial == x.roundserial))
+                            DataBaseFactory.Core_Application.FreeSql.Insert<DataItem>(x).ExecuteAffrowsAsync();
                     });
                 }
             }
@@ -224,8 +224,8 @@ namespace Core.CefChrome
                 if (dataItem.detail_status) {
 
 
-                    if (!FreeSqlFactory.FreeSql.Select<DataItem>().Any(x => x.roundserial == dataItem.roundserial))
-                        FreeSqlFactory.FreeSql.Insert<DataItem>(dataItem).ExecuteAffrowsAsync();
+                    if (!DataBaseFactory.Core_Application.FreeSql.Select<DataItem>().Any(x => x.roundserial == dataItem.roundserial))
+                        DataBaseFactory.Core_Application.FreeSql.Insert<DataItem>(dataItem).ExecuteAffrowsAsync();
                 }
             }
 
@@ -400,7 +400,7 @@ namespace Core.CefChrome
 
         private DataItem GetMoni(ZMSetting settings)
         {
-            var dataItem = FreeSqlFactory.FreeSql.Select<DataItem>().OrderByDescending(x => x.roundserial).ToOne();
+            var dataItem = DataBaseFactory.Core_Application.FreeSql.Select<DataItem>().OrderByDescending(x => x.roundserial).ToOne();
             var win = true;
             switch(zMSetting.wRandom)
             {

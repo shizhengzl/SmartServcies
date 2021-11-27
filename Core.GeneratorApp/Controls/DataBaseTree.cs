@@ -1,4 +1,5 @@
 ﻿using Core.DataBaseServices;
+using Core.FreeSqlServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace Core.GeneratorApp
             this.Controls.Clear();
          
             treeView = new TreeView(); treeView.Dock = DockStyle.Fill;
-            var m = new ConnectionStringManage() { CompanysId = Companyid };
+            var m = new ConnectionString() { CompanysId = Companyid };
             ConnectionStringManageServices connection = new ConnectionStringManageServices();
 
             connection.GetConnections(m).ForEach(c =>
@@ -39,8 +40,10 @@ namespace Core.GeneratorApp
                 };
                 treeView.Nodes.Add(root); 
 
-                var dataBaseServices = new Core.DataBaseServices.DataBaseServices(c);
-                dataBaseServices.GetDataBase().ForEach(x =>
+                var dataBaseServices = new Core.DataBaseServices.DataBaseServices();
+
+                FreeSqlFactory factory = new FreeSqlFactory(m.GetConnectionString());
+                dataBaseServices.GetDataBase(factory.FreeSql, factory.DefaultDataType).ForEach(x =>
                 {
                     TreeNode databasenode = new TreeNode()
                     {
@@ -50,8 +53,8 @@ namespace Core.GeneratorApp
                     root.Nodes.Add(databasenode);
 
 
-                    var tables = dataBaseServices.GetTable(x.DataBaseName);
-                    var columns = dataBaseServices.GetColumn(x.DataBaseName);
+                    var tables = dataBaseServices.GetTable(factory.FreeSql, factory.DefaultDataType);
+                    var columns = dataBaseServices.GetColumn(factory.FreeSql, factory.DefaultDataType);
                     tables.ForEach(p =>
                     {
 

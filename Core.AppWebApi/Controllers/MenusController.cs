@@ -35,7 +35,26 @@ namespace Core.AppWebApi.Controllers
         }
 
         /// <summary>
-        /// 获取用户信息
+        /// 获取超级管理员信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("GetParentMenus")]
+        [Authorize]
+        public Response<List<DtoMenus>> GetParentMenus()
+        {
+            Response<List<DtoMenus>> response = new Response<List<DtoMenus>>();
+
+            var menus = menuServices.GetParentMenus();
+            var firstmenus = menus.Where(x => x.MenusId == Guid.Empty).ToList();
+            response.Data = mapper.Map<List<DtoMenus>>(firstmenus);
+            response.Data.ForEach(x => {
+                GetChildren(x, menus);
+            });
+            return response;
+        }
+
+        /// <summary>
+        /// 获取超级管理员信息
         /// </summary>
         /// <returns></returns>
         [HttpPost("GetSupperMenus")]

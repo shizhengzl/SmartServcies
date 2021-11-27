@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using Core.DataBaseServices;
 using Core.AppSystemServices.Services;
 using FreeSql.Internal.Model;
+using Core.FreeSqlServices;
 
 namespace Core.AppWebApi.Controllers
 {
@@ -26,6 +27,8 @@ namespace Core.AppWebApi.Controllers
         /// </summary>
         public readonly IMapper mapper;
         public CommonServices commonServices { get; set; }
+
+        DataBaseServices.DataBaseServices dbservices = new Core.DataBaseServices.DataBaseServices();
         public CommonController(MenuServices _menuServices, IMapper _mapper, CommonServices _commonServices)
         {
             mapper = _mapper;
@@ -41,13 +44,11 @@ namespace Core.AppWebApi.Controllers
         public Response<List<ShowColumns>> GetListHeader([FromBody] BaseRequest<ShowColumns> request)
         {
             Response<List<ShowColumns>> response = new Response<List<ShowColumns>>();
-
             var hiddencolumns = typeof(BaseCompany).GetPropertyList();
-
             var hascolumns = commonServices.CheckShowColumns(request.TableName);
             if (!hascolumns)
             {
-                var columns = GetSQLConfigServices.GetColumn(request.TableName);
+                var columns = dbservices.GetColumn(DataBaseFactory.Core_Application.FreeSql, DataBaseFactory.Core_Application.DefaultDataType, request.TableName);
                 List<ShowColumns> showColumns = new List<ShowColumns>();
                 columns.ForEach(x =>
                 {
@@ -63,12 +64,9 @@ namespace Core.AppWebApi.Controllers
                     };
                     showColumns.Add(showcolumn);
                 });
-
                 commonServices.SaveShowColumns(showColumns);
             }
             response.Data = commonServices.GetShowColumns(request.TableName);
-
-
             return response;
         }
 
@@ -86,7 +84,7 @@ namespace Core.AppWebApi.Controllers
             var hascolumns = commonServices.CheckShowColumns(request.TableName);
             if (!hascolumns)
             {
-                var columns = GetSQLConfigServices.GetColumn(request.TableName);
+                var columns = dbservices.GetColumn(DataBaseFactory.Core_Application.FreeSql, DataBaseFactory.Core_Application.DefaultDataType, request.TableName);
                 List<ShowColumns> showColumns = new List<ShowColumns>();
 
                 var sort = 1;
@@ -98,19 +96,12 @@ namespace Core.AppWebApi.Controllers
                         ColumnDescription = x.ColumnDescription,
                         TableName = x.TableName,
                         DataBaseName = x.DataBaseName,
-                        ColumnWidth = 150.ToStringExtension(),
+                        ColumnWidth = 120.ToStringExtension(),
                         IsShow = !hiddencolumns.Any(p => p.ToUpper() == x.ColumnName.ToUpper()),
                         CompanysId = session.User.CompanysId,
                         CsharpType = x.SQLType.SqlTypeToCSharpType(),
-                        Postion = ShowPostion.Center,
+                        Postion = "center",
                         Sort = sort
-                        //SQLType = x.SQLType,
-                        //DefaultValue = x.DefaultValue,
-                        //IsPrimarykey = x.IsPrimarykey,
-                        //IsRequire = x.IsRequire,
-                        //Scale = x.Scale,
-                        //IsIdentity = x.IsIdentity,
-                        //MaxLength = x.MaxLength
 
                     };
                     sort++;
@@ -138,15 +129,47 @@ namespace Core.AppWebApi.Controllers
             return response;
         }
 
-
-
-        [HttpPost("Modify")]
-        public Response<dynamic> Modify([FromBody] ModifyRequest request)
+        [HttpPost("Remove")]
+        public Response<dynamic> Remove([FromBody] ModifyRequest request)
         {
-            Response<dynamic> response = new Response<dynamic>(); 
-            response.Data = commonServices.ModifyEntitys(request);
+            Response<dynamic> response = new Response<dynamic>();
+            response.Data = commonServices.RemoveEntity(request);
+            return response;
+        }
+
+        [HttpPost("Save")]
+        public Response<dynamic> Save([FromBody] ModifyRequest request)
+        {
+            Response<dynamic> response = new Response<dynamic>();
+            dynamic model = request.Model;
+            if (request.Model.GetDynamicProperty("Id").IsNull())
+            {
+                model.createUserId = this.session.User.Id;
+                model.createTime = DateTime.UtcNow;
+                model.companysId = this.session.User.CompanysId;
+            }
+            else 
+            { 
+                model.modifyUserId = this.session.User.Id;
+                model.modifyTime = DateTime.UtcNow; 
+            }
+            response.Data = commonServices.SaveEntitys(request);
             return response; 
         }
 
+        [HttpPost("GetTables")]
+        public ResponseList<EnumClass> GetTables()
+        {
+            ResponseList<EnumClass> response = new ResponseList<EnumClass>();
+            List<EnumClass> list = new List<EnumClass>();
+            Core.DataBaseServices.DataBaseServices dataBaseServices = new DataBaseServices.DataBaseServices();
+            var table = dataBaseServices.GetTable(DataBaseFactory.Core_Application.FreeSql, DataBaseFactory.Core_Application.DefaultDataType);
+            table.ForEach(x => {
+                list.Add(new EnumClass() { Name = x.TableName, Description = x.TableDescription}) ;
+            });
+            response.Data = list;
+            return response;
+
+        }
     }
 }

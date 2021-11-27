@@ -5,18 +5,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace Core.DataBaseServices
+namespace Core.FreeSqlServices
 {
     /// <summary>
     /// 连接字符串管理
     /// </summary>
-    public class ConnectionStringManage:BaseCompany
+    public class ConnectionString:BaseCompany
     {
         /// <summary>
         /// 数据库类型
         /// </summary>
         [Description("数据库类型")]
-        public DataType DataBaseType { get; set; }
+        public DataType DataType { get; set; }
 
         /// <summary>
         /// windows认证
@@ -55,19 +55,19 @@ namespace Core.DataBaseServices
         public String GetConnectionString() {
             string response = string.Empty;
             var database = string.Format("database={0};", DefaultDataBase);
-            if (IsWindows && DataBaseType == DataType.SqlServer) {
+            if (IsWindows && DataType == DataType.SqlServer) {
             
                 response = string.Format("server={0};{1}Integrated Security=True;" ,Address,DefaultDataBase.IsNullOrEmpty() ? string.Empty: database);
             }
-            if (!IsWindows && DataBaseType == DataType.SqlServer)
+            if (!IsWindows && DataType == DataType.SqlServer)
             {
                 response = string.Format("server={0};{1}uid={2},pwd={3};", Address,   DefaultDataBase.IsNullOrEmpty() ? string.Empty : database,UserIds,Password);
             }
-            if (IsWindows && DataBaseType == DataType.MySql)
+            if (IsWindows && DataType == DataType.MySql)
             {
 
             }
-            if (!IsWindows && DataBaseType == DataType.MySql) { 
+            if (!IsWindows && DataType == DataType.MySql) { 
             
             }
             return response;

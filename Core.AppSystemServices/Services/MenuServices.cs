@@ -11,10 +11,19 @@ namespace Core.AppSystemServices
     [AppServiceAttribute]
     public class MenuServices : SystemServices
     {
+
+        public MenuServices() : base(DataBaseFactory.Core_Application.FreeSql)
+        { 
+        
+        }
+
         public List<Menus> GetSupperMenus()
         {
             return GetEntitys<Menus>().ToList();
         }
-
+        public List<Menus> GetParentMenus()
+        {
+            return GetEntitys<Menus>().Where(x=>x.Component == "Layout").ToList();
+        }
     }
 }

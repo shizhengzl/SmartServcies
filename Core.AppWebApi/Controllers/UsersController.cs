@@ -55,7 +55,7 @@ namespace Core.AppWebApi.Controllers
             var getuser = responsesessions.Data.User; 
             var claims = new[] {
                 new Claim(JwtRegisteredClaimNames.Nbf, $"{new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds()}") ,
-                new Claim (JwtRegisteredClaimNames.Exp,$"{new DateTimeOffset(DateTime.Now.AddMinutes(30)).ToUnixTimeSeconds()}"),
+                new Claim (JwtRegisteredClaimNames.Exp,$"{new DateTimeOffset(DateTime.Now.AddDays(30)).ToUnixTimeSeconds()}"),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.NameIdentifier, getuser.Id.ToStringExtension())
             };
@@ -106,6 +106,7 @@ namespace Core.AppWebApi.Controllers
                 , name = users.NikeName
                 , data = Token
                 , router = router
+                , company = users.CompanysId
                 , avatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif" });
         }
 

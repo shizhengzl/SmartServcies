@@ -3,6 +3,7 @@ using FreeSql.Internal.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace Core.FreeSqlServices
@@ -10,11 +11,17 @@ namespace Core.FreeSqlServices
     [AppServiceAttribute]
     public class SystemServices 
     { 
-
         public SystemServices()
-        {
-
+        { 
         }
+
+        public SystemServices(IFreeSql FreeSql)
+        {
+            _FreeSql = FreeSql;
+        }
+
+        public IFreeSql _FreeSql {  get; set; }
+
 
         /// <summary>
         /// 查询返回json
@@ -25,10 +32,12 @@ namespace Core.FreeSqlServices
         {
             var type = request.TableName.GetClassType();
             DynamicFilterInfo dyfilter = JsonConvert.DeserializeObject<DynamicFilterInfo>(request.Model);
-            //var sql = FreeSqlFactory.FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).OrderByPropertyName(request.Sort)
-            //    .Page(request.PageIndex, request.PageSize).ToSql();
-            request.TotalCount = FreeSqlFactory.FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).Count();
-            var list = FreeSqlFactory.FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).OrderByPropertyName(request.Sort)
+
+            var sql = _FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).OrderByPropertyName(request.Sort)
+                .Page(request.PageIndex, request.PageSize).ToSql();
+
+            request.TotalCount = _FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).Count();
+            var list = _FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).OrderByPropertyName(request.Sort,request.Asc)
                 .Page(request.PageIndex,request.PageSize).ToList();
             return list;
         }
@@ -39,20 +48,33 @@ namespace Core.FreeSqlServices
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public string ModifyEntitys(ModifyRequest request)
+        public string SaveEntitys(ModifyRequest request)
         {
-            var type = request.TableName.GetClassType();
-
-         
-            dynamic requestmodel = JsonConvert.DeserializeObject(Convert.ToString(request.Model),type);
-            var Id = requestmodel.Id;
+            var type = request.TableName.GetClassType(); 
+            dynamic requestmodel = JsonConvert.DeserializeObject(Convert.ToString(request.Model),type); 
+        
+            if (!requestmodel.GetDynamicProperty("Id").IsNull())
+                _FreeSql.Update<object>().AsType(type).SetDto(requestmodel).WhereDynamic(new { Id = requestmodel.Id }).ExecuteAffrows();
+            else
+                _FreeSql.Insert<object>().AsType(type).AppendData(requestmodel).ExecuteAffrows();
             //var sql = FreeSqlFactory.FreeSql.Update<object>().AsType(type).SetDto(requestmodel).WhereDynamic(new { Id = Id }).ToSql();
-
-            var sql = FreeSqlFactory.FreeSql.Update<object>().AsType(type).SetDto(requestmodel).WhereDynamic(new { Id = Id }).ExecuteAffrows();
-
             return JsonConvert.SerializeObject(requestmodel);
         }
-       
+
+        /// <summary>
+        /// 修改动态实体
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public string RemoveEntity(ModifyRequest request)
+        {
+            var type = request.TableName.GetClassType();  
+            dynamic requestmodel = JsonConvert.DeserializeObject(Convert.ToString(request.Model), type); 
+            _FreeSql.Delete<object>().AsType(type).WhereDynamic(new { Id = requestmodel.Id }).ExecuteAffrows();
+            return JsonConvert.SerializeObject(requestmodel);
+        }
+
+
 
 
         /// <summary>
@@ -65,7 +87,7 @@ namespace Core.FreeSqlServices
         /// <returns></returns>
         public FreeSql.ISelect<T> GetEntitys<T>() where T : class
         {
-            return FreeSqlFactory.FreeSql.Select<T>();
+            return _FreeSql.Select<T>();
         }
 
 
@@ -79,7 +101,7 @@ namespace Core.FreeSqlServices
         /// <returns></returns>
         public Boolean Remove<T>(T t) where T : class
         {
-            return FreeSqlFactory.FreeSql.Delete<T>(t).ExecuteAffrows() > 1;
+            return _FreeSql.Delete<T>(t).ExecuteAffrows() > 1;
         }
 
 
@@ -94,7 +116,7 @@ namespace Core.FreeSqlServices
         public Boolean Create<T>(T t) where T : class
         {
             SetCreateModel<T>(t);
-            return FreeSqlFactory.FreeSql.Insert<T>(t).ExecuteIdentity() > 0;
+            return _FreeSql.Insert<T>(t).ExecuteIdentity() > 0;
         }
 
 
@@ -113,7 +135,7 @@ namespace Core.FreeSqlServices
                 SetCreateModel<T>(item);
             }
 
-            FreeSqlFactory.FreeSql.Insert<T>(t).ExecuteAffrows();
+            _FreeSql.Insert<T>(t).ExecuteAffrows();
 
             return t;
         }
@@ -133,7 +155,7 @@ namespace Core.FreeSqlServices
                 SetCreateModel<T>(item);
             }
 
-            FreeSqlFactory.FreeSql.Insert<T>(t).ExecuteAffrows();
+            _FreeSql.Insert<T>(t).ExecuteAffrows();
 
             return t;
         }
@@ -149,7 +171,7 @@ namespace Core.FreeSqlServices
         public Boolean Modify<T>(T t) where T : class
         {
             SetModifyModel<T>(t); 
-            return FreeSqlFactory.FreeSql.Update<T>().SetSource(t).ExecuteAffrows() > 1;
+            return _FreeSql.Update<T>().SetSource(t).ExecuteAffrows() > 1;
         }
 
         /// <summary>
@@ -166,7 +188,7 @@ namespace Core.FreeSqlServices
             {
                 SetModifyModel<T>(item);
             }
-            return FreeSqlFactory.FreeSql.Update<T>().SetSource(t).ExecuteAffrows() > 1;
+            return _FreeSql.Update<T>().SetSource(t).ExecuteAffrows() > 1;
         }
 
         /// <summary>

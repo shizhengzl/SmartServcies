@@ -1,6 +1,8 @@
 using AutoMapper;
 using Core.AppSystemServices;
 using Core.AppWebApi.Filters;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
@@ -38,6 +41,7 @@ namespace Core.AppWebApi
             AutomaticInjection.AddAppServices(services);
 
             services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+             
 
 
             //添加全局异常处理机制
@@ -53,8 +57,32 @@ namespace Core.AppWebApi
             services.AddHttpContextAccessor();
 
             AppSystemServices.InitDataBase initappsystem= new AppSystemServices.InitDataBase();
+            
             Core.DataBaseServices.InitDatabase initdatabase = new DataBaseServices.InitDatabase();
- 
+            // 开启Bearer认证
+            services.AddAuthentication(o => {
+                o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = nameof(ApiResponseHandler);
+                o.DefaultForbidScheme = nameof(ApiResponseHandler);
+            })
+             // 添加JwtBearer服务
+             .AddJwtBearer(o =>
+             {
+                // o.TokenValidationParameters = "Authorization";
+                 o.Events = new JwtBearerEvents
+                 {
+                     OnAuthenticationFailed = context =>
+                     {
+              // 如果过期，则把<是否过期>添加到，返回头信息中
+              if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                         {
+                             context.Response.Headers.Add("Token-Expired", "true");
+                         }
+                         return Task.CompletedTask;
+                     }
+                 };
+             })
+             .AddScheme<AuthenticationSchemeOptions, ApiResponseHandler>(nameof(ApiResponseHandler), o => { });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

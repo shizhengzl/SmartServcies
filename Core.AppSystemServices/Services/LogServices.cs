@@ -10,6 +10,12 @@ namespace Core.AppSystemServices
     /// </summary>
     public class LogServices : SystemServices
     {
+
+        public LogServices() : base(DataBaseFactory.Core_Log.FreeSql)
+        { 
+        
+        }
+
         /// <summary>
         /// 记录异常日志
         /// </summary>

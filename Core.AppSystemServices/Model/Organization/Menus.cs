@@ -66,6 +66,20 @@ namespace Core.AppSystemServices
         [Description("超级管理员菜单")]
         public Boolean IsSupper { get; set; }
 
-     
+        /// <summary>
+        /// 数据源
+        /// </summary>
+        [Description("数据源")] 
+        [Column(StringLength = 200)]
+        public String TargetSource {  get; set; }
+
+
+        /// <summary>
+        /// 数据源值
+        /// </summary>
+        [Description("数据源值")]
+        [Column(StringLength = -1)]
+        public string SourceValue { get; set; }
+
     }
 }

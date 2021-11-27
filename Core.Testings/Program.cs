@@ -13,13 +13,17 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Core.Testings
 {
+
+ 
     public enum Testenum { 
         A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q 
     }
     class Program
     {
+        public static FreeSqlFactory factory = new FreeSqlFactory();
         static void Main()
-        {
+        { 
+             
 
             //var ds = OfficeServices.ExeclServices.GetDataTable(@"C:\Users\shizheng\Desktop\报表\房建进度款标准报表\3.3.xls");
             //var ds1 = OfficeServices.ExeclServices.GetDataTable(@"C:\Users\shizheng\Desktop\报表\房建进度款标准报表\3.进度款支付分项汇总表.xls");
@@ -31,7 +35,7 @@ namespace Core.Testings
             for (int x   = 0; x < 100;x ++)
             {
                 Tongji t = new Tongji() { 
-                     Add = 1, Pici = x+1, Zongjiner =10000,Min =10
+                     Add = 1, Pici = x+1, Zongjiner =5000,Min =10
                 };
                 tongjis.Add(t);
             }
@@ -48,11 +52,11 @@ namespace Core.Testings
                         break;
                     }
                     result = inverstData.start(x);
-                    if (x.Yuer >=x.Zongjiner + 500) {
+                    if (x.Yuer >=x.Zongjiner + 2000) {
                         result = true;
                     }
                 }
-                FreeSqlFactory.FreeSql.Insert<Tongji>(x).ExecuteAffrows();
+                factory.FreeSql.Insert<Tongji>(x).ExecuteAffrows();
             });
 
             Console.ReadLine();
@@ -84,8 +88,10 @@ namespace Core.Testings
                     wagers_date = DateTime.Now,
                     payoff = Core.UsuallyCommon.RandomExtensions.RandomBool() ? tj.Min : (0 - tj.Min),
                     betamount = tj.Min,
-                    roundserial = 1
+                    roundserial = 1,
+                   
                 };
+                last.yuer = tj.Zongjiner + last.payoff;
 
                 list.Add(last);
             }
@@ -112,15 +118,7 @@ namespace Core.Testings
             tj.MaxInvest = maxinverst;
             tj.last = last;
             last.Pici = tj.Pici;
-
-
-            if (last.betamount == 0)
-            {
-
-            }
-            FreeSqlFactory.FreeSql.Insert<DataItem>(last).ExecuteAffrows();
-
-       
+             
             CacleResult cacleResult = new CacleResult() {
               HtCount = hecount, LostCount = lostcount, WinCount = wincount, TotalCount = list.Count, TotalLostCount = totallostcount,
               TotalInvest = allinvest, Yuer = tj.Zongjiner + allmoney,  MaxInvest = maxinverst,last = last
@@ -131,11 +129,19 @@ namespace Core.Testings
             {
                 Console.WriteLine($"光");
                 result = true;
+                return result;
             } 
 
             Console.WriteLine(cacleResult.Message()); 
             var data = autoCacle.Invest(tj, last);
-            data.yuer = tj.Zongjiner.ToDecimal() + allmoney;
+            if (last.yuer < Math.Abs(data.payoff)) {
+
+                Console.WriteLine($"光l");
+                result = true;
+                return result;
+            }
+            factory.FreeSql.Insert<DataItem>(last).ExecuteAffrows();
+            data.yuer = tj.Zongjiner.ToDecimal() + allmoney + data.payoff;
             list.Add(data);
              
 
@@ -191,18 +197,14 @@ namespace Core.Testings
 
             switch (status)
             {
-                case InvestStatus.Win:
-                   // response = data.payoff - ((data.payoff.ToInt32() / (20* tj.Add)) + 1) * tj.Add;
-
+                case InvestStatus.Win: 
                     response = data.betamount -  tj.Add;
                     break;
                 case InvestStatus.He:
                     response =  data.betamount;
                     break;
-                case InvestStatus.Lost:
-                    //response = 0 - data.payoff + (Math.Abs(data.payoff).ToInt32() / (20 * tj.Add) + 1) * tj.Add;
+                case InvestStatus.Lost: 
                     response =  data.betamount +  tj.Add;
-
                     break;
                 default:
                     break;
@@ -210,7 +212,34 @@ namespace Core.Testings
 
             if(response < tj.Min)
                 response = tj.Min;
+            if (response == 30)
+            {
+                response = 45;
+            }
+            if (response == 35)
+            {
+                response = 10;
+            }
 
+
+            if (response == 46)
+            {
+                response = 158;
+            }
+            if (response == 157)
+            {
+                response = 10;
+            }
+
+
+            if (response == 46)
+            {
+                response = 158;
+            }
+            if (response == 157)
+            {
+                response = 10;
+            }
             return response;
         }
 
@@ -242,8 +271,7 @@ namespace Core.Testings
             if (zhuang < xian)
             {
                 payoff = 0- money;
-            }
-
+            } 
 
             DataItem response = new DataItem()
             {
@@ -252,12 +280,7 @@ namespace Core.Testings
                 betamount = money,
                 roundserial = data.roundserial + 1
             };
-
-
-            if (response.betamount == 0)
-            { 
-                
-            }
+             
             return response;
         }
     }

@@ -7,6 +7,10 @@ using System.Text;
 
 namespace Core.AppSystemServices
 {
+    /// <summary>
+    /// 列表显示列
+    /// </summary>
+    [Description("列表显示列")]
     public class ShowColumns : BaseCompany
     {
         /// <summary>
@@ -48,7 +52,7 @@ namespace Core.AppSystemServices
         /// 显示位置
         /// </summary>
         [Description("显示位置")] 
-        public ShowPostion Postion { get; set; }
+        public String Postion { get; set; }
 
         /// <summary>
         /// 是否显示
@@ -67,46 +71,6 @@ namespace Core.AppSystemServices
         /// </summary>
         [Description("类型")]
         public string CsharpType { get; set; }
-
-
-
-        ///// <summary>
-        ///// 是否自增
-        ///// </summary>
-        //[Description("是否自增")]
-        //public bool IsIdentity { get; set; }
-        ///// <summary>
-        ///// 是否主键
-        ///// </summary>
-        //[Description("是否主键")]
-        //public bool IsPrimarykey { get; set; }
-        ///// <summary>
-        ///// 最大长度
-        ///// </summary>
-        //[Description("最大长度")]
-        //public Int64? MaxLength { get; set; }
-        ///// <summary>
-        ///// 是否必填
-        ///// </summary>
-        //[Description("是否必填")]
-        //public bool IsRequire { get; set; }
-        ///// <summary>
-        ///// 精度
-        ///// </summary>
-        //[Description("精度")]
-        //public byte Scale { get; set; }
-        ///// <summary>
-        ///// 默认值
-        ///// </summary>
-        //[Description("默认值")]
-        //public string DefaultValue { get; set; }
-        ///// <summary>
-        ///// 数据库类型
-        ///// </summary>
-        //[Description("数据库类型")]
-        //public string SQLType { get; set; }
-
-
 
     }
 }
