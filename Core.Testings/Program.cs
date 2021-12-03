@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Security.Policy;
@@ -22,8 +23,11 @@ namespace Core.Testings
     {
         public static FreeSqlFactory factory = new FreeSqlFactory();
         static void Main()
-        { 
-             
+        {
+            var rt = typeof(SexEnum).GetClassOrEnumDescription();
+
+            Console.ReadLine();
+            return;
 
             //var ds = OfficeServices.ExeclServices.GetDataTable(@"C:\Users\shizheng\Desktop\报表\房建进度款标准报表\3.3.xls");
             //var ds1 = OfficeServices.ExeclServices.GetDataTable(@"C:\Users\shizheng\Desktop\报表\房建进度款标准报表\3.进度款支付分项汇总表.xls");

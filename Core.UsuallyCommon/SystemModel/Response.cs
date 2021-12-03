@@ -35,5 +35,16 @@ namespace Core.UsuallyCommon
         /// 成功编码
         /// </summary>
         public CodeDescription Code { get; set; } = CodeDescription.Success;
+
+
+        /// <summary>
+        /// 其他对象
+        /// </summary>
+        public object Other { get; set; }
+
+        /// <summary>
+        /// 表单验证规则
+        /// </summary>
+        public object Rules { get; set; }
     }
 }

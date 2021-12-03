@@ -4,8 +4,8 @@ using FreeSql.Internal.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
-
-namespace Core.AppSystemServices.Services
+using System.Linq;
+namespace Core.AppSystemServices
 {
     /// <summary>
     /// 公用服务
@@ -16,6 +16,21 @@ namespace Core.AppSystemServices.Services
         public CommonServices() : base(DataBaseFactory.Core_Application.FreeSql)
         {
 
+        }
+
+        /// <summary>
+        /// 获取基础数据
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="companyId"></param>
+        /// <returns></returns>
+        public List<BaseDataDetail> GetBaseDataDeatil(string name,Guid companyId)
+        {
+            List<BaseDataDetail> response = new List<BaseDataDetail>();
+            var parentId = GetEntitys<BaseData>().Where(x => x.Name == name && x.CompanysId == companyId).ToList().FirstOrDefault();
+            if(parentId != null)
+                response = GetEntitys<BaseDataDetail>().Where(x => x.BaseDataId == parentId.Id).ToList();
+            return response;
         }
 
 

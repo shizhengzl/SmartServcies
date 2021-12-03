@@ -8,6 +8,7 @@ namespace Core.AppSystemServices
     /// <summary>
     /// 日志
     /// </summary>
+    [AppServiceAttribute]
     public class LogServices : SystemServices
     {
 

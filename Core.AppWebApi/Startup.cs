@@ -102,7 +102,7 @@ namespace Core.AppWebApi
 
             app.UseCors("cors");
             app.UseHttpsRedirection();
-
+            app.UseRequestResponseLogging();
             app.UseRouting();
 
             app.UseAuthorization();

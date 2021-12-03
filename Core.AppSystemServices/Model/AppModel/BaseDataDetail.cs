@@ -11,7 +11,7 @@ namespace Core.AppSystemServices
     /// 基础数据明细
     /// </summary>
     [Description("基础数据明细")]
-    public class BaseDataDeatil: BaseCompany
+    public class BaseDataDetail: BaseCompany
     {
 
         /// <summary>

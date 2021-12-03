@@ -6,8 +6,8 @@ using System.Text;
 
 namespace Core.DataBaseServices
 {
-    public class InitDatabase :SystemServices
-    { 
+    public class InitDatabase : SystemServices
+    {
         public InitDatabase() : base(DataBaseFactory.Core_DataBase.FreeSql)
         {
             ClearTable();
@@ -61,7 +61,7 @@ namespace Core.DataBaseServices
     left join sys.extended_properties ep
     on ep.major_id=obj.id
     and ep.minor_id=col.column_id
-    and ep.name='MS_Description'
+    and ep.name='MS_Description' where obj.xtype = 'U'
     order BY obj.name,col.column_id  ",
                     AddExtendedproperty = @"EXECUTE sp_addextendedproperty N'MS_Description', '{2}', N'user', N'dbo', N'table', N'{0}', N'column', N'{1}'"
                    ,
@@ -96,6 +96,7 @@ namespace Core.DataBaseServices
                 };
                 Create<SQLConfig>(configSqlserver);
                 Create<SQLConfig>(configMySql);
+                 
             }
         }
     }

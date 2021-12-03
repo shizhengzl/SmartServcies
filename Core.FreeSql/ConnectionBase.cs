@@ -71,9 +71,9 @@ namespace Core.FreeSqlServices
         {
             get
             {
-                if (_Core_Application == null)
+                if (_Core_Log == null)
                 {
-                    _Core_Application = new ConnectionString()
+                    _Core_Log = new ConnectionString()
                     {
                         Address = ".",
                         DataType = FreeSql.DataType.SqlServer,
@@ -81,7 +81,7 @@ namespace Core.FreeSqlServices
                         IsWindows = true
                     };
                 }
-                return _Core_Application;
+                return _Core_Log;
             }
         }
 

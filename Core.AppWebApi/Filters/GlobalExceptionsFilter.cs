@@ -11,8 +11,11 @@ namespace Core.AppWebApi.Filters
     /// </summary>
     public class GlobalExceptionsFilter : IExceptionFilter
     {
-
-        LogServices _logServices = new LogServices();
+        public GlobalExceptionsFilter(LogServices logServices)
+        {
+            _logServices = logServices;
+        }
+        LogServices _logServices  {get;set;}
 
         public void OnException(ExceptionContext context)
         {
@@ -24,7 +27,7 @@ namespace Core.AppWebApi.Filters
             // 监控了ip方便定位到底是那台服务器出故障了
             string ip = context.HttpContext.Connection.RemoteIpAddress.ToString();
 
-            _logServices.AddExexptionLogs(ex, context.ActionDescriptor.DisplayName,string.Empty);
+            //_logServices.AddExexptionLogs(ex, context.ActionDescriptor.DisplayName,string.Empty);
 
             //_logger.LogError($"系统编号：{sysId},主机IP:{ip},堆栈信息：{ex.StackTrace},异常描述：{ex.Message}");
 

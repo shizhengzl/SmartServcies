@@ -72,5 +72,67 @@ namespace Core.AppSystemServices
         [Description("类型")]
         public string CsharpType { get; set; }
 
+
+        /// <summary>
+        /// 数据来源
+        /// </summary>
+        [Description("数据来源")]
+        [Column(StringLength = 50)]
+        public String TargetSource { get; set; }
+
+        /// <summary>
+        /// 数据源值
+        /// </summary>
+        [Description("数据源值")]
+        [Column(StringLength = 50)]
+        public String SourceValue { get; set; }
+
+        /// <summary>
+        /// 必填
+        /// </summary>
+        [Description("必填")]
+        public bool IsRequired { get; set; }
+
+
+        /// <summary>
+        /// 只读
+        /// </summary>
+        [Description("只读")]
+        public bool IsReadyOnly { get; set; }
+
+
+        /// <summary>
+        /// 编辑显示
+        /// </summary>
+        [Description("编辑显示")]
+        public bool IsEditShow { get; set; }
+
+        /// <summary>
+        /// 最大长度
+        /// </summary>
+        [Description("最大长度")]
+        public Int32 MaxLength { get; set; }
+
+
+        /// <summary>
+        /// 验证方式
+        /// </summary>
+        [Description("验证方式")]
+        [Column(StringLength = 50)]
+        public String ValidType { get; set; }
+
+        /// <summary>
+        /// 模糊查询
+        /// </summary>
+        [Description("模糊查询")] 
+        public Boolean IsLike { get; set; }
+
+        /// <summary>
+        /// 格式化和编辑
+        /// </summary>
+        [Description("格式化和编辑")]
+        [Column(StringLength = -1)]
+        public string Json { get; set; }
+
     }
 }

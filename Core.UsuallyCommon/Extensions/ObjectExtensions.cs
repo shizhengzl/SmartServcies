@@ -26,7 +26,7 @@ namespace Core.UsuallyCommon
             {
                 if (item.Name == propertyName)
                 {
-                    response = (string)item.GetValue(objects, null); 
+                    response = item.GetValue(objects, null).ToStringExtension(); 
                     break;
                 }
             }
@@ -143,6 +143,24 @@ namespace Core.UsuallyCommon
         public static string GetPropertyValue(this object obj, string name)
         {
             return obj.GetType().GetProperty(name).GetValue(obj, null).ToStringExtension();
+        }
+
+        /// <summary>
+        /// 获取属性特性
+        /// </summary>
+        /// <param name="obj"></param> 
+        /// <returns>string</returns>
+        public static string GetClassOrEnumDescription(this Type obj)
+        {
+            var response = obj.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            if (response != null)
+            {
+                foreach (DescriptionAttribute att in response)
+                {
+                    return att.Description;
+                }
+            }
+            return string.Empty;
         }
 
         /// <summary>

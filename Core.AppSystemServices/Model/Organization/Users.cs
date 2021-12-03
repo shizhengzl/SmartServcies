@@ -17,7 +17,7 @@ namespace Core.AppSystemServices
         /// 用户名称
         /// </summary>
         [Description("用户名称")]
-        [Column(StringLength = 50)]
+        [Column(StringLength = 50,IsNullable =false)]
         public String UserName { get; set; }
         /// <summary>
         /// 用户昵称
@@ -29,7 +29,7 @@ namespace Core.AppSystemServices
         /// 手机号码
         /// </summary>
         [Description("手机号码")]
-        [Column(StringLength = 50)]
+        [Column(StringLength = 50,IsNullable =false)]
         public String Phone { get; set; }
         /// <summary>
         /// 密码
@@ -41,7 +41,7 @@ namespace Core.AppSystemServices
         /// 用户邮箱
         /// </summary>
         [Description("用户邮箱")]
-        [Column(StringLength = 50)]
+        [Column(StringLength = 50,IsNullable =false)]
         public String Email { get; set; }
          
         /// <summary>
@@ -49,5 +49,11 @@ namespace Core.AppSystemServices
         /// </summary>
         [Description("管理员")]
         public bool IsAdmin { get; set; }
+
+        /// <summary>
+        /// 性别
+        /// </summary>
+        [Description("性别")]
+        public bool Sex { get; set; }
     }
 }

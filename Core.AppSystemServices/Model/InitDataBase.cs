@@ -9,8 +9,8 @@ using Core.DataBaseServices;
 namespace Core.AppSystemServices
 {
     public class InitDataBase
-    { 
-        public InitDataBase() 
+    {
+        public InitDataBase()
         {
             ClearTable();
             Init();
@@ -18,7 +18,7 @@ namespace Core.AppSystemServices
 
         public void ClearTable()
         {
-          
+
             DataBaseFactory.Core_Application.FreeSql.Ado.ExecuteNonQuery(CommonSQL.ClearTableSql);
         }
 
@@ -50,10 +50,12 @@ namespace Core.AppSystemServices
             InitCompanys();
             InitUsers();
 
-            InitRole(defaultSelfCompany,defaultSelfUser,defaultSelfRole);
-            InitRole(defaultCompanyguid, defaultCompanyUser,defaultCompanyRole);
-            InitOrganization(defaultSelfCompany, defaultSelfUser,defaultSelfOrganization,defaultSelfCompanyName);
-            InitOrganization(defaultCompanyguid, defaultCompanyUser, defaultOrganization,defaultCompanyName);
+            InitConnection();
+
+            InitRole(defaultSelfCompany, defaultSelfUser, defaultSelfRole);
+            InitRole(defaultCompanyguid, defaultCompanyUser, defaultCompanyRole);
+            InitOrganization(defaultSelfCompany, defaultSelfUser, defaultSelfOrganization, defaultSelfCompanyName);
+            InitOrganization(defaultCompanyguid, defaultCompanyUser, defaultOrganization, defaultCompanyName);
             InitCompanyMenuAndUser(defaultSelfCompany, defaultSelfUser);
             InitCompanyMenuAndUser(defaultCompanyguid, defaultCompanyUser);
         }
@@ -61,66 +63,86 @@ namespace Core.AppSystemServices
         public void InitMenus()
         {
 
-            Menus menus = new Menus() { Id = defaultsuppermenuid,IsSupper=true
-                , MenuName = "超级系统管理"
-                , Component = "Layout"
-                , Path = "system"
-                , MenuIcon = "404"
-                , MenusId = Guid.Empty };
+            Menus menus = new Menus()
+            {
+                Id = defaultsuppermenuid,
+                IsSupper = true,
+                MenuName = "超级系统管理",
+                Component = "Layout" ,
+                Path = "system",
+                MenuIcon = "404",
+                MenusId = Guid.Empty
+            };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "超级系统管理"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menus).ExecuteAffrows();
             }
 
-            Menus menucompanys = new Menus() { Id = Guid.NewGuid(), IsSupper = true
-                , MenuName = "超级菜单管理"
-                , Sort = 1
-                , Path = "menus"
-                , MenuIcon = "404"
-                , Component = $"/menus/index"// +  typeof(Companys).Name.ToLower()
-                , MenusId = defaultsuppermenuid };
+            Menus menucompanys = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true ,
+                MenuName = "超级菜单管理" ,
+                Sort = 1 ,
+                Path = "menus" ,
+                MenuIcon = "404" ,
+                Component = $"/menus/index" ,
+                MenusId = defaultsuppermenuid
+            };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "超级菜单管理"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys).ExecuteAffrows();
             }
 
-            Menus menucompanys2 = new Menus() { Id = Guid.NewGuid(), IsSupper = true
-                , MenuName = "列表页面"
-                , Sort = 1
-                , Path = "list"
-                , MenuIcon = "404"
-                , Component = $"/menus/list"// +  typeof(Companys).Name.ToLower()
-                , MenusId = defaultsuppermenuid };
+            Menus menucompanys2 = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true ,
+                MenuName = "列表页面",
+                Sort = 1,
+                Path = "list" ,
+                MenuIcon = "404",
+                Component = $"/menus/list",
+                MenusId = defaultsuppermenuid
+            };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "列表页面"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys2).ExecuteAffrows();
             }
 
 
-               Menus menucompanys3 = new Menus() { Id = Guid.NewGuid(), IsSupper = true
-                , MenuName = "用户管理"
-                , Sort = 1
-                , Path = "users"
-                , TargetSource = "Table"
-                , SourceValue = "Users"
-                , MenuIcon = "404"
-                , Component = $"/application/users"// +  typeof(Companys).Name.ToLower()
-                , MenusId = defaultsuppermenuid };
+            Menus menucompanys3 = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true  ,
+                MenuName = "用户管理"  ,
+                Sort = 1  ,
+                Path = "users"  ,
+                TargetSource = "Table"  ,
+                SourceValue = "Users"  ,
+                MenuIcon = "404"  ,
+                Component = $"/application/users"  ,
+                MenusId = defaultsuppermenuid
+            };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "编辑页面"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys3).ExecuteAffrows();
             }
 
 
-                Menus menucompanys4 = new Menus() { Id = Guid.NewGuid(), IsSupper = true
-                , MenuName = "基础数据"
-                , Sort = 1
-                , Path = "basedata"
-                , TargetSource = ""
-                , SourceValue = ""
-                , MenuIcon = "404"
-                , Component = $"/application/basedata"// +  typeof(Companys).Name.ToLower()
-                , MenusId = defaultsuppermenuid };
+            Menus menucompanys4 = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true,
+                MenuName = "基础数据",
+                Sort = 1,
+                Path = "basedata",
+                TargetSource = "" ,
+                SourceValue = "",
+                MenuIcon = "404",
+                Component = $"/application/basedata",
+                MenusId = defaultsuppermenuid
+            };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "基础数据"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys4).ExecuteAffrows();
@@ -225,6 +247,61 @@ namespace Core.AppSystemServices
             //{
             //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(connectionstring).ExecuteAffrows();
             //}
+
+
+
+            var sorttool = Guid.NewGuid();
+            Menus sorttoolmenus = new Menus()
+            {
+                Id = sorttool,
+                IsSupper = true,
+                MenuName = "研发工具",
+                Component = "Layout",
+                Path = "soft",
+                MenuIcon = "404",
+                MenusId = Guid.Empty
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "研发工具"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(sorttoolmenus).ExecuteAffrows();
+            }
+
+
+            Menus connectionmenus = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true,
+                MenuName = "连接管理",
+                Sort = 1,
+                Path = "connection",
+                TargetSource = "Table",
+                SourceValue = "ConnectionString",
+                MenuIcon = "404",
+                Component = $"/soft/connection",
+                MenusId = sorttool
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "连接管理"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(connectionmenus).ExecuteAffrows();
+            }
+
+            Menus filedmenus = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true,
+                MenuName = "数据库字段",
+                Sort = 1,
+                Path = "datafileld",
+                TargetSource = "",
+                SourceValue = "",
+                MenuIcon = "404",
+                Component = $"/soft/datafileld",
+                MenusId = sorttool
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "数据库字段"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(filedmenus).ExecuteAffrows();
+            }
         }
         #endregion
 
@@ -284,31 +361,32 @@ namespace Core.AppSystemServices
         #endregion
 
         #region 初始化角色
-        public void InitRole(Guid companyid,Guid userid,Guid? defaultroleid = null)
+        public void InitRole(Guid companyid, Guid userid, Guid? defaultroleid = null)
         {
             var id = defaultroleid.HasValue ? defaultroleid.Value : defaultSelfRole;
             //初始化角色
-            Roles roleself = new Roles() { Id = id , Name = DefaultCommonEnum.defaultRole.GetDescription(), CompanysId = companyid };
+            Roles roleself = new Roles() { Id = id, Name = DefaultCommonEnum.defaultRole.GetDescription(), CompanysId = companyid };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Roles>().Any(x => x.Id == id && x.CompanysId == companyid))
-                DataBaseFactory.Core_Application.FreeSql.Insert<Roles>(roleself).ExecuteAffrows(); 
+                DataBaseFactory.Core_Application.FreeSql.Insert<Roles>(roleself).ExecuteAffrows();
 
             //初始化角色用户
-            RoleUsers roleselfUsers = new RoleUsers() { CompanysId = companyid, RolesId = id,UsersId = userid };
+            RoleUsers roleselfUsers = new RoleUsers() { CompanysId = companyid, RolesId = id, UsersId = userid };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<RoleUsers>().Any(x => x.RolesId == id && x.UsersId == userid))
                 DataBaseFactory.Core_Application.FreeSql.Insert<RoleUsers>(roleselfUsers).ExecuteAffrows();
 
             // 初始化角色菜单
-            DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Where(x => !!x.IsDefault).ToList().ForEach(p => {
-                RoleMenus roleselfMenus = new RoleMenus() {CompanysId = companyid, RolesId = id, MenusId = p.Id };
+            DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Where(x => !!x.IsDefault).ToList().ForEach(p =>
+            {
+                RoleMenus roleselfMenus = new RoleMenus() { CompanysId = companyid, RolesId = id, MenusId = p.Id };
                 if (!DataBaseFactory.Core_Application.FreeSql.Select<RoleMenus>().Any(x => x.RolesId == id && x.MenusId == p.Id))
                     DataBaseFactory.Core_Application.FreeSql.Insert<RoleMenus>(roleselfMenus).ExecuteAffrows();
-            }); 
-          
-        } 
+            });
+
+        }
         #endregion
 
         #region 初始化组织机构
-        public void InitOrganization(Guid companyid,Guid userid,Guid? defaultorganizationid = null,string OrganizationName="")
+        public void InitOrganization(Guid companyid, Guid userid, Guid? defaultorganizationid = null, string OrganizationName = "")
         {
             var id = defaultorganizationid.HasValue ? defaultorganizationid.Value : defaultSelfOrganization;
             //初始化组织机构
@@ -318,14 +396,15 @@ namespace Core.AppSystemServices
 
 
             //初始化组织机构用户
-            OrganizationUsers organizationSelfUsers = new OrganizationUsers() {CompanysId = companyid, OrganizationsId = defaultOrganization, UsersId = userid };
+            OrganizationUsers organizationSelfUsers = new OrganizationUsers() { CompanysId = companyid, OrganizationsId = defaultOrganization, UsersId = userid };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<OrganizationUsers>().Any(x => x.OrganizationsId == defaultOrganization && x.UsersId == userid))
                 DataBaseFactory.Core_Application.FreeSql.Insert<OrganizationUsers>(organizationSelfUsers).ExecuteAffrows();
 
 
             // 初始化组织机构菜单
-            DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Where(x => !!x.IsDefault).ToList().ForEach(p => {
-                OrganizationMenus organizationselfMenus = new OrganizationMenus() {CompanysId = companyid,  OraganizationsId = id, MenusId = p.Id };
+            DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Where(x => !!x.IsDefault).ToList().ForEach(p =>
+            {
+                OrganizationMenus organizationselfMenus = new OrganizationMenus() { CompanysId = companyid, OraganizationsId = id, MenusId = p.Id };
                 if (!DataBaseFactory.Core_Application.FreeSql.Select<OrganizationMenus>().Any(x => x.OraganizationsId == id && x.MenusId == p.Id))
                     DataBaseFactory.Core_Application.FreeSql.Insert<OrganizationMenus>(organizationselfMenus).ExecuteAffrows();
             });
@@ -342,7 +421,8 @@ namespace Core.AppSystemServices
                 DataBaseFactory.Core_Application.FreeSql.Insert<CompanyUsers>(companyselfUsers).ExecuteAffrows();
 
             // 初始单位菜单
-            DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Where(x => !!x.IsDefault).ToList().ForEach(p => {
+            DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Where(x => !!x.IsDefault).ToList().ForEach(p =>
+            {
                 CompanyMenus companyselfMenus = new CompanyMenus() { CompanysId = companyid, MenusId = p.Id };
                 if (!DataBaseFactory.Core_Application.FreeSql.Select<CompanyMenus>().Any(x => x.CompanysId == companyid && x.MenusId == p.Id))
                     DataBaseFactory.Core_Application.FreeSql.Insert<CompanyMenus>(companyselfMenus).ExecuteAffrows();
@@ -351,107 +431,66 @@ namespace Core.AppSystemServices
         #endregion
 
         #region 初始化基础数据
-        public void InitBaseData() {
-            Guid basesexid = Guid.NewGuid();
-            BaseData baseDatasex = new BaseData()
-            {
-                Id = basesexid,
-                Code = "Sex",
-                Name = "性别",
-                Description = "性别基础数据"
-            };
+        public void InitBaseData()
+        {
 
-            BaseDataDeatil baseDataDeatilB = new BaseDataDeatil()
-            {
-                Code = "Body",
-                Name = "男",
-                Description = "先生",
-                BaseDataId = basesexid
-                 ,
-                CompanysId = defaultSelfCompany
-            };
+            InitEnum(typeof(SexEnum), true);
+            InitEnum(typeof(BooleanEnum), true);
+            InitEnum(typeof(ColumnDataAlignEnum));
+            InitEnum(typeof(ValidTypeEnum));
 
-            BaseDataDeatil baseDataDeatilG = new BaseDataDeatil()
-            {
-                Code = "Girl",
-                Name = "女",
-                Description = "女士",
-                BaseDataId = basesexid
-                 ,
-                CompanysId = defaultSelfCompany
-            };
-            if (!DataBaseFactory.Core_Application.FreeSql.Select<BaseData>().Any(x => x.Code == "Sex"))
-            {
-                DataBaseFactory.Core_Application.FreeSql.Insert<BaseData>(baseDatasex).ExecuteAffrows();
-            }
-            if (!DataBaseFactory.Core_Application.FreeSql.Select<BaseDataDeatil>().Any(x => x.Code == "Body"))
-            {
-                DataBaseFactory.Core_Application.FreeSql.Insert<BaseDataDeatil>(baseDataDeatilB).ExecuteAffrows();
-            }
-            if (!DataBaseFactory.Core_Application.FreeSql.Select<BaseDataDeatil>().Any(x => x.Code == "Girl"))
-            {
-                DataBaseFactory.Core_Application.FreeSql.Insert<BaseDataDeatil>(baseDataDeatilG).ExecuteAffrows();
-            }
+        }
 
 
-            Guid basealignid = Guid.NewGuid();
-            BaseData baseDataalign = new BaseData()
+        public void InitEnum(Type enumtype, bool getValue = false)
+        {
+            Guid baseid = Guid.NewGuid();
+            var name = enumtype.Name.Replace("Enum", String.Empty);
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<BaseData>().Any(x => x.Code == name))
             {
-                Id = basealignid,
-                Code = "Align",
-                Name = "显示位置（左中右）",
-                Description = "显示位置（左中右）"
-               ,CompanysId = defaultSelfCompany
-            };
-
-            BaseDataDeatil baseDataDeatilleft = new BaseDataDeatil()
-            {
-                Code = "Left",
-                Name = "居左",
-                Description = "居左",
-                BaseDataId = basealignid
-                 ,
-                CompanysId = defaultSelfCompany
-            };
-
-            BaseDataDeatil baseDataDeatilCenter = new BaseDataDeatil()
-            {
-                Code = "Center",
-                Name = "居中",
-                Description = "居中",
-                BaseDataId = basealignid
-                 ,
-                CompanysId = defaultSelfCompany
-            };
-
-            BaseDataDeatil baseDataDeatilRight = new BaseDataDeatil()
-            {
-                Code = "Right",
-                Name = "居右",
-                Description = "居右",
-                BaseDataId = basealignid
-                 ,
-                CompanysId = defaultSelfCompany
-            };
-            if (!DataBaseFactory.Core_Application.FreeSql.Select<BaseData>().Any(x => x.Code == "Align"))
-            {
-                DataBaseFactory.Core_Application.FreeSql.Insert<BaseData>(baseDataalign).ExecuteAffrows();
-            }
-            if (!DataBaseFactory.Core_Application.FreeSql.Select<BaseDataDeatil>().Any(x => x.Code == "Left"))
-            {
-                DataBaseFactory.Core_Application.FreeSql.Insert<BaseDataDeatil>(baseDataDeatilleft).ExecuteAffrows();
-            }
-            if (!DataBaseFactory.Core_Application.FreeSql.Select<BaseDataDeatil>().Any(x => x.Code == "Center"))
-            {
-                DataBaseFactory.Core_Application.FreeSql.Insert<BaseDataDeatil>(baseDataDeatilCenter).ExecuteAffrows();
-            }
-            if (!DataBaseFactory.Core_Application.FreeSql.Select<BaseDataDeatil>().Any(x => x.Code == "Right"))
-            {
-                DataBaseFactory.Core_Application.FreeSql.Insert<BaseDataDeatil>(baseDataDeatilRight).ExecuteAffrows();
+                BaseData basedata = new BaseData()
+                {
+                    Id = baseid,
+                    Code = enumtype.Name.Replace("Enum", String.Empty),
+                    Name = enumtype.GetClassOrEnumDescription(),
+                    Description = enumtype.GetClassOrEnumDescription(),
+                    CompanysId = defaultSelfCompany
+                };
+                DataBaseFactory.Core_Application.FreeSql.Insert<BaseData>(basedata).ExecuteAffrows();
+                enumtype.GetListEnumClass().ForEach(x =>
+                {
+                    BaseDataDetail basedatatetail = new BaseDataDetail()
+                    {
+                        Code = (getValue ? (x.Keys).ToString() : x.Name.ToStringExtension()),
+                        Name = x.Description.ToStringExtension(),
+                        Description = x.Description.ToStringExtension(),
+                        BaseDataId = baseid,
+                        CompanysId = defaultSelfCompany
+                    };
+                    DataBaseFactory.Core_Application.FreeSql.Insert<BaseDataDetail>(basedatatetail).ExecuteAffrows();
+                });
             }
         }
-       
 
+
+        #endregion
+
+        #region 初始化连接字符串
+        public void InitConnection()
+        {
+
+            ConnectionString connectionString = new ConnectionString()
+            {
+                Address = "192.168.0.100",
+                DataType = FreeSql.DataType.SqlServer,
+                IsWindows = false,
+                UserIds = "u_temp",
+                Password = "3GfnOA#hbz%aRWR7njM&",
+                CompanysId = DefaultCommonEnum.defaulfSelfCompany.GetDescription().ToGuid()
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<ConnectionString>().Any(x => x.Address == "192.168.0.100"))
+                DataBaseFactory.Core_Application.FreeSql.Insert<ConnectionString>(connectionString).ExecuteAffrows();
+        }
         #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Core.UsuallyCommon;
 using FreeSql.Internal.Model;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -9,10 +10,10 @@ using System.Text;
 namespace Core.FreeSqlServices
 {
     [AppServiceAttribute]
-    public class SystemServices 
-    { 
+    public class SystemServices
+    {
         public SystemServices()
-        { 
+        {
         }
 
         public SystemServices(IFreeSql FreeSql)
@@ -20,7 +21,7 @@ namespace Core.FreeSqlServices
             _FreeSql = FreeSql;
         }
 
-        public IFreeSql _FreeSql {  get; set; }
+        public IFreeSql _FreeSql { get; set; }
 
 
         /// <summary>
@@ -35,10 +36,11 @@ namespace Core.FreeSqlServices
 
             var sql = _FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).OrderByPropertyName(request.Sort)
                 .Page(request.PageIndex, request.PageSize).ToSql();
-
+            Console.WriteLine(sql);
             request.TotalCount = _FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).Count();
-            var list = _FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).OrderByPropertyName(request.Sort,request.Asc)
-                .Page(request.PageIndex,request.PageSize).ToList();
+            var list = _FreeSql.Select<object>().AsType(type).WhereDynamicFilter(dyfilter).OrderByPropertyName(request.Sort, request.Asc)
+                .Page(request.PageIndex, request.PageSize).ToList();
+         
             return list;
         }
 
@@ -50,13 +52,27 @@ namespace Core.FreeSqlServices
         /// <returns></returns>
         public string SaveEntitys(ModifyRequest request)
         {
-            var type = request.TableName.GetClassType(); 
-            dynamic requestmodel = JsonConvert.DeserializeObject(Convert.ToString(request.Model),type); 
-        
-            if (!requestmodel.GetDynamicProperty("Id").IsNull())
+            var type = request.TableName.GetClassType();
+
+            var strmodel = Convert.ToString(request.Model);
+            // 移除密码 
+            //JObject jObject = JObject.Parse(Convert.ToString(request.Model));
+            //if (jObject.Property("PassWord") != null)
+            //{
+            //    jObject.Remove("PassWord");
+            //    strmodel = jObject.ToString();
+            //}
+            dynamic requestmodel = JsonConvert.DeserializeObject(strmodel, type);
+
+
+            if (requestmodel.Id != Guid.Empty)
+            {
                 _FreeSql.Update<object>().AsType(type).SetDto(requestmodel).WhereDynamic(new { Id = requestmodel.Id }).ExecuteAffrows();
+            }
             else
+            {
                 _FreeSql.Insert<object>().AsType(type).AppendData(requestmodel).ExecuteAffrows();
+            }
             //var sql = FreeSqlFactory.FreeSql.Update<object>().AsType(type).SetDto(requestmodel).WhereDynamic(new { Id = Id }).ToSql();
             return JsonConvert.SerializeObject(requestmodel);
         }
@@ -68,8 +84,8 @@ namespace Core.FreeSqlServices
         /// <returns></returns>
         public string RemoveEntity(ModifyRequest request)
         {
-            var type = request.TableName.GetClassType();  
-            dynamic requestmodel = JsonConvert.DeserializeObject(Convert.ToString(request.Model), type); 
+            var type = request.TableName.GetClassType();
+            dynamic requestmodel = JsonConvert.DeserializeObject(Convert.ToString(request.Model), type);
             _FreeSql.Delete<object>().AsType(type).WhereDynamic(new { Id = requestmodel.Id }).ExecuteAffrows();
             return JsonConvert.SerializeObject(requestmodel);
         }
@@ -170,7 +186,7 @@ namespace Core.FreeSqlServices
         /// <returns></returns>
         public Boolean Modify<T>(T t) where T : class
         {
-            SetModifyModel<T>(t); 
+            SetModifyModel<T>(t);
             return _FreeSql.Update<T>().SetSource(t).ExecuteAffrows() > 1;
         }
 
