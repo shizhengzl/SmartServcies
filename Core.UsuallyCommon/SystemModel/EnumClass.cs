@@ -25,5 +25,6 @@ namespace Core.UsuallyCommon
         /// 枚举描述
         /// </summary>
         public string Description { get; set; }
+         
     }
 }

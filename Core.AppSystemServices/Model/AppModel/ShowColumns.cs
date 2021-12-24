@@ -12,7 +12,14 @@ namespace Core.AppSystemServices
     /// </summary>
     [Description("列表显示列")]
     public class ShowColumns : BaseCompany
-    {
+    { 
+        /// <summary>
+        /// 菜单
+        /// </summary>
+        [Description("菜单")] 
+        public Guid? MenusId { get; set; }
+
+
         /// <summary>
         /// 数据库名称
         /// </summary>
@@ -86,6 +93,21 @@ namespace Core.AppSystemServices
         [Description("数据源值")]
         [Column(StringLength = 50)]
         public String SourceValue { get; set; }
+
+
+        /// <summary>
+        /// 绑定键
+        /// </summary>
+        [Description("绑定键")]
+        [Column(StringLength = 200)]
+        public String BindKey { get; set; }
+
+        /// <summary>
+        /// 绑定值
+        /// </summary>
+        [Description("绑定值")]
+        [Column(StringLength = 200)]
+        public String BindValue { get; set; }
 
         /// <summary>
         /// 必填

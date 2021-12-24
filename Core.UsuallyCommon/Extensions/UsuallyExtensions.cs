@@ -32,7 +32,7 @@ namespace Core.UsuallyCommon
             int assemblyArrayLength = assemblyArray.Length;
             for (int i = 0; i < assemblyArrayLength; ++i)
             {
-                type = assemblyArray[i].GetType(typeName);
+                type = assemblyArray[i].GetType(typeName,false,true);
                 if (type != null)
                 {
                     return type;
@@ -45,7 +45,7 @@ namespace Core.UsuallyCommon
                 int typeArrayLength = typeArray.Length;
                 for (int j = 0; j < typeArrayLength; ++j)
                 {
-                    if (typeArray[j].Name.Equals(typeName))
+                    if (typeArray[j].Name.ToUpper().Equals(typeName.ToUpper()))
                     {
                         return typeArray[j];
                     }

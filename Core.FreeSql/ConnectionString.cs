@@ -61,7 +61,7 @@ namespace Core.FreeSqlServices
             }
             if (!IsWindows && DataType == DataType.SqlServer)
             {
-                response = string.Format("server={0};{1}uid={2},pwd={3};", Address,   DefaultDataBase.IsNullOrEmpty() ? string.Empty : database,UserIds,Password);
+                response = string.Format("server={0};{1}uid={2};pwd={3};", Address,   DefaultDataBase.IsNullOrEmpty() ? string.Empty : database,UserIds,Password);
             }
             if (IsWindows && DataType == DataType.MySql)
             {

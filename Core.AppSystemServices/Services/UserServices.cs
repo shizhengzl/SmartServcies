@@ -296,6 +296,30 @@ namespace Core.AppSystemServices
           && x.PassWord == user.PassWord).ToList().FirstOrDefault();
         }
 
+
+
+        /// <summary>
+        /// 获取用户
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public Users GetUsers(Guid id)
+        {
+            return GetEntitys<Users>().Where(x => x.Id == id).ToList().FirstOrDefault();
+        }
+
+
+        /// <summary>
+        /// 获取用户
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public bool ResetPassword(Users user)
+        {
+            return Modify<Users>(user);
+        }
+
+
         /// <summary>
         /// 验证密码
         /// </summary>

@@ -43,6 +43,7 @@ namespace Core.AppWebApi
             _logInfo.Method = request.Method;
             _logInfo.ExcuteStartTime = DateTime.Now;
             _logInfo.UserName = sesscion == null ? "" : sesscion.User.UserName;
+            _logInfo.CompanysId = sesscion == null ? Guid.Empty : sesscion.User.CompanysId;
             _logInfo.IPAddress = request.HttpContext.Connection.RemoteIpAddress.ToString();
             _logInfo.Port = request.HttpContext.Connection.RemotePort;
 

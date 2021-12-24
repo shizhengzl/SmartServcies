@@ -67,13 +67,14 @@ namespace Core.AppSystemServices
             {
                 Id = defaultsuppermenuid,
                 IsSupper = true,
-                MenuName = "超级系统管理",
+                MenuName = "系统管理",
                 Component = "Layout" ,
                 Path = "system",
                 MenuIcon = "404",
-                MenusId = Guid.Empty
+                MenusId = Guid.Empty,
+                CompanysId = defaultCompanyguid
             };
-            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "超级系统管理"))
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "系统管理"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menus).ExecuteAffrows();
             }
@@ -82,14 +83,15 @@ namespace Core.AppSystemServices
             {
                 Id = Guid.NewGuid(),
                 IsSupper = true ,
-                MenuName = "超级菜单管理" ,
+                MenuName = "菜单管理" ,
                 Sort = 1 ,
                 Path = "menus" ,
                 MenuIcon = "404" ,
                 Component = $"/menus/index" ,
-                MenusId = defaultsuppermenuid
+                MenusId = defaultsuppermenuid,
+                CompanysId = defaultCompanyguid
             };
-            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "超级菜单管理"))
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "菜单管理"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys).ExecuteAffrows();
             }
@@ -98,16 +100,39 @@ namespace Core.AppSystemServices
             {
                 Id = Guid.NewGuid(),
                 IsSupper = true ,
-                MenuName = "列表页面",
+                MenuName = "角色用户",
                 Sort = 1,
-                Path = "list" ,
+                Path = "roleusers" ,
                 MenuIcon = "404",
-                Component = $"/menus/list",
-                MenusId = defaultsuppermenuid
+                Component = $"/snippet/gridgrid",
+                MenusId = defaultsuppermenuid,
+                CompanysId = defaultCompanyguid,
+                SourceValue = "Roles",
+                TargetSource = "Table",
+                RightSourceValue = "RoleUsers",
+                RightTargetSource = "Table"
             };
-            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "列表页面"))
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "角色用户"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys2).ExecuteAffrows();
+            }
+
+
+            Menus menucompanys8 = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true,
+                MenuName = "机构用户",
+                Sort = 1,
+                Path = "organizationusers",
+                MenuIcon = "404",
+                Component = $"/snippet/treegird",
+                MenusId = defaultsuppermenuid,
+                CompanysId = defaultCompanyguid
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "机构用户"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys8).ExecuteAffrows();
             }
 
 
@@ -122,9 +147,10 @@ namespace Core.AppSystemServices
                 SourceValue = "Users"  ,
                 MenuIcon = "404"  ,
                 Component = $"/application/users"  ,
-                MenusId = defaultsuppermenuid
+                MenusId = defaultsuppermenuid,
+                CompanysId = defaultCompanyguid
             };
-            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "编辑页面"))
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "用户管理"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys3).ExecuteAffrows();
             }
@@ -141,12 +167,73 @@ namespace Core.AppSystemServices
                 SourceValue = "",
                 MenuIcon = "404",
                 Component = $"/application/basedata",
-                MenusId = defaultsuppermenuid
+                MenusId = defaultsuppermenuid,
+                CompanysId = defaultCompanyguid
             };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "基础数据"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys4).ExecuteAffrows();
             }
+
+
+            Menus menucompanys5 = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true,
+                MenuName = "角色管理",
+                Sort = 1,
+                Path = "roles",
+                TargetSource = "Table",
+                SourceValue = "Roles",
+                MenuIcon = "404",
+                Component = $"/snippet/grid",
+                MenusId = defaultsuppermenuid,
+                CompanysId = defaultCompanyguid,
+                ShowCreate = true
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "角色管理"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys5).ExecuteAffrows();
+            }
+
+            Menus menucompanys6 = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true,
+                MenuName = "机构管理",
+                Sort = 1,
+                Path = "organizations",
+                TargetSource = "Table",
+                SourceValue = "Organizations",
+                MenuIcon = "404",
+                Component = $"/snippet/tree",
+                MenusId = defaultsuppermenuid,
+                CompanysId = defaultCompanyguid
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "机构管理"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys6).ExecuteAffrows();
+            }
+
+            Menus menucompanys7 = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true,
+                MenuName = "单位管理",
+                Sort = 1,
+                Path = "companys",
+                TargetSource = "Table",
+                SourceValue = "Companys",
+                MenuIcon = "404",
+                Component = $"/application/common",
+                MenusId = defaultsuppermenuid,
+                CompanysId = defaultCompanyguid
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "单位管理"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys7).ExecuteAffrows();
+            }
+
 
 
             //Menus menuusers = new Menus() { Id = Guid.NewGuid(), IsSupper = true, MenuName = "超级用户管理", Sort = 2, Component = typeof(Users).Name, MenusId = defaultsuppermenuid };
@@ -259,7 +346,8 @@ namespace Core.AppSystemServices
                 Component = "Layout",
                 Path = "soft",
                 MenuIcon = "404",
-                MenusId = Guid.Empty
+                MenusId = Guid.Empty,
+                CompanysId = defaultCompanyguid
             };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "研发工具"))
             {
@@ -278,7 +366,8 @@ namespace Core.AppSystemServices
                 SourceValue = "ConnectionString",
                 MenuIcon = "404",
                 Component = $"/soft/connection",
-                MenusId = sorttool
+                MenusId = sorttool,
+                CompanysId = defaultCompanyguid
             };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "连接管理"))
             {
@@ -296,11 +385,108 @@ namespace Core.AppSystemServices
                 SourceValue = "",
                 MenuIcon = "404",
                 Component = $"/soft/datafileld",
-                MenusId = sorttool
+                MenusId = sorttool,
+                CompanysId = defaultCompanyguid
             };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "数据库字段"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(filedmenus).ExecuteAffrows();
+            }
+
+
+
+            var logmenuid = Guid.NewGuid();
+            Menus logmenulmenus = new Menus()
+            {
+                Id = logmenuid,
+                IsSupper = true,
+                MenuName = "日志管理",
+                Component = "Layout",
+                Path = "log",
+                MenuIcon = "404",
+                MenusId = Guid.Empty,
+                CompanysId = defaultCompanyguid
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "日志管理"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(logmenulmenus).ExecuteAffrows();
+            }
+
+
+            Menus requestlog = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true,
+                MenuName = "请求日志",
+                Sort = 1,
+                Path = "requestreponselog",
+                TargetSource = "Table",
+                SourceValue = "RequestResponseLogs",
+                MenuIcon = "404",
+                Component = $"/log/requestreponselog",
+                MenusId = logmenuid,
+                CompanysId = defaultCompanyguid
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "请求日志"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(requestlog).ExecuteAffrows();
+            }
+
+            Menus execptions = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true,
+                MenuName = "异常日志",
+                Sort = 1,
+                Path = "exceptionlogs",
+                TargetSource = "Table",
+                SourceValue = "ExceptionLogs",
+                MenuIcon = "404",
+                Component = $"/log/exceptionlogs",
+                MenusId = logmenuid,
+                CompanysId = defaultCompanyguid
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "异常日志"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(execptions).ExecuteAffrows();
+            }
+
+            Menus opeartionlog = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true,
+                MenuName = "操作日志",
+                Sort = 1,
+                Path = "opeartionlogs",
+                TargetSource = "Table",
+                SourceValue = "OpeartionLogs",
+                MenuIcon = "404",
+                Component = $"/log/opeartionlogs",
+                MenusId = logmenuid,
+                CompanysId = defaultCompanyguid
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "操作日志"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(opeartionlog).ExecuteAffrows();
+            }
+
+            Menus sqllogmenus = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true,
+                MenuName = "SQL日志",
+                Sort = 1,
+                Path = "sqllogs",
+                TargetSource = "Table",
+                SourceValue = "SQLLogs",
+                MenuIcon = "404",
+                Component = $"/log/sqllogs",
+                MenusId = logmenuid,
+                CompanysId = defaultCompanyguid
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "SQL日志"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(sqllogmenus).ExecuteAffrows();
             }
         }
         #endregion
@@ -390,7 +576,7 @@ namespace Core.AppSystemServices
         {
             var id = defaultorganizationid.HasValue ? defaultorganizationid.Value : defaultSelfOrganization;
             //初始化组织机构
-            Organizations organizationself = new Organizations() { Id = id, Name = OrganizationName, CompanysId = companyid };
+            Organizations organizationself = new Organizations() { Id = id, Name = OrganizationName, CompanysId = companyid, ParentId = Guid.Empty };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Organizations>().Any(x => x.Id == id && x.CompanysId == companyid))
                 DataBaseFactory.Core_Application.FreeSql.Insert<Organizations>(organizationself).ExecuteAffrows();
 

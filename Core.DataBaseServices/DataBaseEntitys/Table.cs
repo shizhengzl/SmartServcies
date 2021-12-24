@@ -24,5 +24,13 @@ namespace Core.DataBaseServices
         [Description("表描述")]
         [Column(StringLength = 1000)]
         public string TableDescription { get; set; }
+
+
+        /// <summary>
+        /// 存在描述
+        /// </summary>
+        [Description("存在描述")] 
+        public Boolean HasDescription { get; set; }
+
     }
 }

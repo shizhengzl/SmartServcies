@@ -29,6 +29,20 @@ namespace Core.AppWebApi.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost("ResetPassword")]
+        [AllowAnonymous]
+        public Response<string> ResetPassword([FromBody] Users user)
+        {
+            Response<string> response = new Response<string>();
+            var searchuser = _userServices.GetUsers(user.Id);
+            if (!user.IsNull())
+            {
+                searchuser.PassWord = user.PassWord;
+                _userServices.ResetPassword(searchuser);
+            }
+            return response;
+        }
+
 
         [HttpPost("Logout")]
         [Authorize]
@@ -65,7 +79,7 @@ namespace Core.AppWebApi.Controllers
                 issuer: PublicConst.Domain,
                 audience: PublicConst.Domain,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddDays(30),
                 signingCredentials: creds);
             response.Success = true;
             response.Data = new JwtSecurityTokenHandler().WriteToken(token);
@@ -91,7 +105,7 @@ namespace Core.AppWebApi.Controllers
 
             List<MenuTree> router = new List<MenuTree>();
             // 组织menus
-            var parent = menus.Where(x => x.MenusId == Guid.Empty).ToList();
+            var parent = menus.Where(x => x.MenusId == Guid.Empty).OrderBy(x=>x.Sort).ToList();
             parent.ForEach(p =>
             {
                 router.Add(GetMenuTree(p, menus));
@@ -120,9 +134,13 @@ namespace Core.AppWebApi.Controllers
                 path = "/"+ menu.Path,
                 component = menu.Component,
                 name = menu.MenuName,
-                meta = new MenuMeta() { icon = menu.MenuIcon, title = menu.MenuName, noCache = true },
+                meta = new MenuMeta() { icon = menu.MenuIcon, title = menu.MenuName, noCache = true, menusettins = menu },
                 children = child,
-                redirect = child.Count == 0 ? null : child.FirstOrDefault().path
+                redirect = child.Count == 0 ? null : child.FirstOrDefault().path,
+                sourcevalue = menu.SourceValue,
+                targetsource = menu.TargetSource,
+                rightsourcevalue = menu.RightSourceValue,
+                righttargetsource = menu.RightTargetSource
             };
         }
 
@@ -130,7 +148,7 @@ namespace Core.AppWebApi.Controllers
         private List<MenuTree> GetChilds(Guid ParentID, List<Menus> menus)
         {
             List<MenuTree> result = new List<MenuTree>();
-            menus.Where(x => x.MenusId == ParentID).ToList().ForEach(p => result.Add(GetMenuTree(p, menus)));
+            menus.Where(x => x.MenusId == ParentID).ToList().OrderBy(p=>p.Sort).ToList().ForEach(p => result.Add(GetMenuTree(p, menus)));
             return result;
         }
     }

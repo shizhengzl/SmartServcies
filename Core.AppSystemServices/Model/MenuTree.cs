@@ -37,5 +37,12 @@ namespace Core.AppSystemServices
         /// 子节点
         /// </summary>
         public List<MenuTree> children { get; set; }
+
+
+        public string targetsource { get; set; }
+        public string sourcevalue { get; set; }
+
+        public string righttargetsource { get; set; }
+        public string rightsourcevalue { get; set; }
     }
 }
