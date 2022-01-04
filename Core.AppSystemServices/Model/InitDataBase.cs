@@ -12,7 +12,7 @@ namespace Core.AppSystemServices
     {
         public InitDataBase()
         {
-            ClearTable();
+            //ClearTable();
             Init();
         }
 
@@ -77,25 +77,9 @@ namespace Core.AppSystemServices
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "系统管理"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menus).ExecuteAffrows();
-            }
+            } 
 
-            Menus menucompanys = new Menus()
-            {
-                Id = Guid.NewGuid(),
-                IsSupper = true ,
-                MenuName = "菜单管理" ,
-                Sort = 1 ,
-                Path = "menus" ,
-                MenuIcon = "404" ,
-                Component = $"/menus/index" ,
-                MenusId = defaultsuppermenuid,
-                CompanysId = defaultCompanyguid
-            };
-            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "菜单管理"))
-            {
-                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys).ExecuteAffrows();
-            }
-
+          
             Menus menucompanys2 = new Menus()
             {
                 Id = Guid.NewGuid(),
@@ -115,9 +99,7 @@ namespace Core.AppSystemServices
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "角色用户"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys2).ExecuteAffrows();
-            }
-
-
+            } 
             Menus menucompanys8 = new Menus()
             {
                 Id = Guid.NewGuid(),
@@ -126,16 +108,18 @@ namespace Core.AppSystemServices
                 Sort = 1,
                 Path = "organizationusers",
                 MenuIcon = "404",
-                Component = $"/snippet/treegird",
+                Component = $"/snippet/treegrid",
                 MenusId = defaultsuppermenuid,
-                CompanysId = defaultCompanyguid
+                CompanysId = defaultCompanyguid,
+                TargetSource = "Table",
+                SourceValue= "Organizations",
+                RightTargetSource = "Table",
+                RightSourceValue = "OrganizationUsers"
             };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "机构用户"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys8).ExecuteAffrows();
-            }
-
-
+            } 
             Menus menucompanys3 = new Menus()
             {
                 Id = Guid.NewGuid(),
@@ -153,9 +137,7 @@ namespace Core.AppSystemServices
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "用户管理"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys3).ExecuteAffrows();
-            }
-
-
+            } 
             Menus menucompanys4 = new Menus()
             {
                 Id = Guid.NewGuid(),
@@ -173,9 +155,7 @@ namespace Core.AppSystemServices
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "基础数据"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys4).ExecuteAffrows();
-            }
-
-
+            } 
             Menus menucompanys5 = new Menus()
             {
                 Id = Guid.NewGuid(),
@@ -194,8 +174,7 @@ namespace Core.AppSystemServices
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "角色管理"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys5).ExecuteAffrows();
-            }
-
+            } 
             Menus menucompanys6 = new Menus()
             {
                 Id = Guid.NewGuid(),
@@ -214,7 +193,23 @@ namespace Core.AppSystemServices
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys6).ExecuteAffrows();
             }
-
+            var permissionid = Guid.Parse("d8e7d9d6-5807-2bb2-312e-24b8c57d42a4");
+            Menus permission = new Menus()
+            {
+                Id = permissionid,
+                IsSupper = true,
+                MenuName = "权限管理",
+                Sort = 1,
+                Path = "permission",
+                MenuIcon = "404",
+                Component = "Layout",
+                MenusId = Guid.Empty,
+                CompanysId = defaultCompanyguid
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "权限管理"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(permission).ExecuteAffrows();
+            }
             Menus menucompanys7 = new Menus()
             {
                 Id = Guid.NewGuid(),
@@ -225,115 +220,48 @@ namespace Core.AppSystemServices
                 TargetSource = "Table",
                 SourceValue = "Companys",
                 MenuIcon = "404",
-                Component = $"/application/common",
-                MenusId = defaultsuppermenuid,
+                Component = $"/application/companys",
+                MenusId = permissionid,
                 CompanysId = defaultCompanyguid
             };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "单位管理"))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys7).ExecuteAffrows();
             }
+            Menus menucompanys = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true,
+                MenuName = "菜单管理",
+                Sort = 1,
+                Path = "menus",
+                MenuIcon = "404",
+                Component = $"/menus/index",
+                MenusId = permissionid,
+                CompanysId = defaultCompanyguid
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "菜单管理"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menucompanys).ExecuteAffrows();
+            }
 
+            Menus menupermission = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true,
+                MenuName = "菜单授权",
+                Sort = 1,
+                Path = "menupermission",
+                MenuIcon = "404",
+                Component = $"/menupermission",
+                MenusId = permissionid,
+                CompanysId = defaultCompanyguid
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "菜单授权"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menupermission).ExecuteAffrows();
+            }
 
-
-            //Menus menuusers = new Menus() { Id = Guid.NewGuid(), IsSupper = true, MenuName = "超级用户管理", Sort = 2, Component = typeof(Users).Name, MenusId = defaultsuppermenuid };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "超级用户管理"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menuusers).ExecuteAffrows();
-            //}
-
-            //Menus menumenus = new Menus() { Id = Guid.NewGuid(), IsSupper = true, MenuName = "超级菜单管理", Sort = 3, Component = typeof(Menus).Name, MenusId = defaultsuppermenuid };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "超级菜单管理"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menumenus).ExecuteAffrows();
-            //}
-
-            //Menus menugrant = new Menus() { Id = Guid.NewGuid(), IsSupper = true, MenuName = "超级授权管理", Sort = 4, Component = "Grant", MenusId = defaultsuppermenuid };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "超级授权管理"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(menugrant).ExecuteAffrows();
-            //}
-
-
-            //Menus companymenus = new Menus() { Id = defaultsystemmenuid,IsDefault = true, MenuName = "系统管理", MenusId = Guid.Empty };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "系统管理"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(companymenus).ExecuteAffrows();
-            //}
-
-            //Menus companymenucompanys = new Menus() { Id = Guid.NewGuid(), IsDefault = true, MenuName = "单位管理", Sort = 1, Component = typeof(Companys).Name, MenusId = defaultsystemmenuid };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "单位管理"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(companymenucompanys).ExecuteAffrows();
-            //}
-
-            //Menus companymenuusers = new Menus() { Id = Guid.NewGuid(), IsDefault = true, MenuName = "用户管理", Sort = 2, Component = typeof(Users).Name, MenusId = defaultsystemmenuid };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "用户管理"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(companymenuusers).ExecuteAffrows();
-            //}
-
-            //Menus companymenumenus = new Menus() { Id = Guid.NewGuid(), IsDefault = true, MenuName = "菜单管理", Sort = 3, Component = typeof(Menus).Name, MenusId = defaultsystemmenuid };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "菜单管理"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(companymenumenus).ExecuteAffrows();
-            //}
-
-            //Menus companygrant = new Menus() { Id = Guid.NewGuid(), IsDefault = true, MenuName = "菜单授权", Sort = 4, Component = "Grant", IsAuto = false, MenusId = defaultsystemmenuid };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "菜单授权"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(companygrant).ExecuteAffrows();
-            //}
-
-
-            //Menus companyrole = new Menus() { Id = Guid.NewGuid(), IsDefault = true, MenuName = "角色管理", Sort = 5, Component = typeof(Roles).Name, MenusId = defaultsystemmenuid };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "角色管理"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(companyrole).ExecuteAffrows();
-            //}
-
-            //Menus companyorganzition = new Menus() { Id = Guid.NewGuid(), IsDefault = true, MenuName = "组织机构管理", Sort = 6, Component = typeof(Organizations).Name, MenusId = defaultsystemmenuid };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "组织机构管理"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(companyorganzition).ExecuteAffrows();
-            //}
-
-
-
-
-
-            //Menus softtoolsmenus = new Menus() { Id = Guid.NewGuid(), IsDefault = true, MenuName = "研发管理", MenusId = Guid.Empty };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "研发管理"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(softtoolsmenus).ExecuteAffrows();
-            //}
-
-            //var father = DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Where(x => x.MenuName == "研发管理").ToList<Menus>().FirstOrDefault();
-
-            //Menus codesnippet = new Menus() { Id = Guid.NewGuid(), IsDefault = true, Component = "CodeSnippet", MenuName = "生成模板", MenusId = father.Id };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "生成模板"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(codesnippet).ExecuteAffrows();
-            //}
-
-            //Menus codegenerator = new Menus() { Id = Guid.NewGuid(), IsDefault = true,IsAuto = false, Component = "CodeGenerator", MenuName = "生成代码", MenusId = father.Id };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "生成代码"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(codegenerator).ExecuteAffrows();
-            //}
-
-
-            //Menus snippet = new Menus() { Id = Guid.NewGuid(), IsDefault = true, Component = "SnippetRecord", MenuName = "代码片段", MenusId = father.Id };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "代码片段"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(snippet).ExecuteAffrows();
-            //}
-
-            //Menus connectionstring = new Menus() { Id = Guid.NewGuid(), IsDefault = true, Component = "ConnectionStringManage", MenuName = "数据库连接管理", MenusId = father.Id };
-            //if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "数据库连接管理"))
-            //{
-            //    DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(connectionstring).ExecuteAffrows();
-            //}
 
 
 
@@ -393,6 +321,26 @@ namespace Core.AppSystemServices
                 DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(filedmenus).ExecuteAffrows();
             }
 
+
+            Menus intellisencemenus = new Menus()
+            {
+                Id = Guid.NewGuid(),
+                IsSupper = true,
+                MenuName = "代码片段",
+                Sort = 1,
+                Path = "intellisence",
+                TargetSource = "Table",
+                SourceValue = "Intellisence",
+                MenuIcon = "404",
+                Component = $"/soft/intellisence",
+                MenusId = sorttool,
+                
+                CompanysId = defaultCompanyguid
+            };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<Menus>().Any(x => x.MenuName == "代码片段"))
+            {
+                DataBaseFactory.Core_Application.FreeSql.Insert<Menus>(intellisencemenus).ExecuteAffrows();
+            } 
 
 
             var logmenuid = Guid.NewGuid();
@@ -494,13 +442,16 @@ namespace Core.AppSystemServices
         #region 初始化单位
         public void InitCompanys()
         {
-            Companys selfcompanys = new Companys() { Id = defaultSelfCompany, CompanyName = defaultSelfCompanyName };
+            Companys selfcompanys = new Companys() { Id = defaultSelfCompany, CompanyName = defaultSelfCompanyName
+                ,GrantMode = GrantMode.RoleGrant };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Companys>().Any(x => x.Id == defaultSelfCompany))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Companys>(selfcompanys).ExecuteAffrows();
             }
 
-            Companys defaultcompany = new Companys() { Id = defaultCompanyguid, CompanyName = defaultCompanyName };
+            Companys defaultcompany = new Companys() { Id = defaultCompanyguid, CompanyName = defaultCompanyName
+                , GrantMode = GrantMode.RoleGrant
+            };
             if (!DataBaseFactory.Core_Application.FreeSql.Select<Companys>().Any(x => x.Id == defaultCompanyguid))
             {
                 DataBaseFactory.Core_Application.FreeSql.Insert<Companys>(defaultcompany).ExecuteAffrows();
@@ -582,8 +533,8 @@ namespace Core.AppSystemServices
 
 
             //初始化组织机构用户
-            OrganizationUsers organizationSelfUsers = new OrganizationUsers() { CompanysId = companyid, OrganizationsId = defaultOrganization, UsersId = userid };
-            if (!DataBaseFactory.Core_Application.FreeSql.Select<OrganizationUsers>().Any(x => x.OrganizationsId == defaultOrganization && x.UsersId == userid))
+            OrganizationUsers organizationSelfUsers = new OrganizationUsers() { CompanysId = companyid, OrganizationsId = id, UsersId = userid };
+            if (!DataBaseFactory.Core_Application.FreeSql.Select<OrganizationUsers>().Any(x => x.OrganizationsId == id && x.UsersId == userid))
                 DataBaseFactory.Core_Application.FreeSql.Insert<OrganizationUsers>(organizationSelfUsers).ExecuteAffrows();
 
 

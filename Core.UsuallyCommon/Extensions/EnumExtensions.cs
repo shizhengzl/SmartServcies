@@ -45,6 +45,80 @@ namespace Core.UsuallyCommon
 
 
         /// <summary>
+        /// 获取程序集中所有自定义枚举
+        /// </summary>
+        /// <returns></returns>
+        public static List<CodeValue> GetAssembliesEnum()
+        {
+            List<CodeValue> response = new List<CodeValue>();
+            var enums = AssembliesExtensions.GetEnums(String.Empty);
+
+            enums.ForEach(x => {
+                if (x.FullName.Contains("Core.UsuallyCommon") || x.FullName.Contains("Core.AppSystemServices"))
+                {
+                    response.Add(new CodeValue() { Code = x.Name,Name = x.GetClassOrEnumDescription() }); 
+                } 
+            });
+
+            return response;
+        }
+
+
+        /// <summary>
+        /// 获取程序集中所有自定义枚举
+        /// </summary>
+        /// <returns></returns>
+        public static List<CodeValue> GetEnum(this String type)
+        {
+            List<CodeValue> response = new List<CodeValue>();
+            var enums = AssembliesExtensions.GetEnums(String.Empty);
+
+            enums.ForEach(x => {
+                if (x.FullName.Contains("Core.UsuallyCommon") || x.FullName.Contains("Core.AppSystemServices"))
+                {
+                    if (type.ToUpper() == x.Name.ToUpper())
+                    {
+                        response =  x.GetEnum(); 
+                    } 
+                }
+            });
+
+            return response;
+        }
+
+        /// <summary>
+        /// 根据枚举获取查询列集合
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <returns></returns>
+        public static List<CodeValue> GetEnum(this Type type)
+        {
+            List<CodeValue> list = new List<CodeValue>();
+            try
+            {
+                foreach (int i in Enum.GetValues(type))
+                {
+                    var name = Enum.GetName(type, i);
+                    var key = i;
+
+                    FieldInfo field = type.GetField(name);
+
+                    DescriptionAttribute attribute = Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute;
+
+                    var description = attribute.IsNull() ? name : attribute.Description;
+
+                    list.Add(new CodeValue() { Code = i.ToString(),  Name =   description });
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return list;
+        }
+
+
+        /// <summary>
         /// 根据枚举获取查询列集合
         /// </summary>
         /// <param name="enumType"></param>

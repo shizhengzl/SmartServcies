@@ -11,6 +11,11 @@ namespace Core.FreeSqlServices
         private static ConnectionString _Core_Application { get; set; }
 
         private static ConnectionString _Core_Log { get; set; }
+
+
+        private static String DefaultUser = "u_temp";
+        private static String DefaultPassWord = "3GfnOA#hbz%aRWR7njM&";
+        private static String DefaultAddress = "192.168.0.100";
         //public static ConnectionString Core_Base
         //{
         //    get
@@ -40,12 +45,12 @@ namespace Core.FreeSqlServices
                 {
                     _Core_DataBase = new ConnectionString()
                     {
-                        Address = ".",
+                        Address = DefaultAddress,// ".",
                         DataType = FreeSql.DataType.SqlServer,
                         DefaultDataBase = "Core_DataBase",
                         IsWindows = false,
-                        UserIds = "sa",
-                        Password = "sasa"
+                        UserIds = DefaultUser,// "sa",
+                        Password = DefaultPassWord// "sasa"
                     };
                 }
                 return _Core_DataBase;
@@ -61,12 +66,12 @@ namespace Core.FreeSqlServices
                 {
                     _Core_Application = new ConnectionString()
                     {
-                        Address = ".",
+                        Address = DefaultAddress,
                         DataType = FreeSql.DataType.SqlServer,
                         DefaultDataBase = "Core_Application",
                         IsWindows = false,
-                        UserIds = "sa",
-                        Password = "sasa"
+                        UserIds = DefaultUser,
+                        Password = DefaultPassWord
                     };
                 }
                 return _Core_Application;
@@ -81,12 +86,12 @@ namespace Core.FreeSqlServices
                 {
                     _Core_Log = new ConnectionString()
                     {
-                        Address = ".",
+                        Address = DefaultAddress,
                         DataType = FreeSql.DataType.SqlServer,
                         DefaultDataBase = "Core_Log",
                         IsWindows = false,
-                        UserIds = "sa",
-                        Password = "sasa"
+                        UserIds = DefaultUser,
+                        Password = DefaultPassWord
                     };
                 }
                 return _Core_Log;
@@ -107,26 +112,26 @@ namespace Core.FreeSqlServices
             //Core_Base.UserIds = "sa";
             //Core_Base.Password = "sasa";
              
-            Core_DataBase.Address = ".";
+            Core_DataBase.Address = DefaultAddress;
             Core_DataBase.IsWindows = false;
             Core_DataBase.DataType = FreeSql.DataType.SqlServer;
             Core_DataBase.DefaultDataBase = "Core_DataBase";
-            Core_DataBase.UserIds = "sa";
-            Core_DataBase.Password = "sasa";
+            Core_DataBase.UserIds = DefaultUser;
+            Core_DataBase.Password = DefaultPassWord;
 
-            Core_Application.Address = ".";
+            Core_Application.Address = DefaultAddress;
             Core_Application.IsWindows = false;
             Core_Application.DataType = FreeSql.DataType.SqlServer;
             Core_Application.DefaultDataBase = "Core_Application";
-            Core_Application.UserIds = "sa";
-            Core_Application.Password = "sasa";
+            Core_Application.UserIds = DefaultUser;
+            Core_Application.Password = DefaultPassWord;
 
-            Core_Log.Address = ".";
+            Core_Log.Address = DefaultAddress;
             Core_Log.IsWindows = false;
             Core_Log.DataType = FreeSql.DataType.SqlServer;
             Core_Log.DefaultDataBase = "Core_Log";
-            Core_Log.UserIds = "sa";
-            Core_Log.Password = "sasa";
+            Core_Log.UserIds = DefaultUser;
+            Core_Log.Password = DefaultPassWord;
         } 
 
     }

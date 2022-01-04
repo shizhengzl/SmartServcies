@@ -83,7 +83,7 @@ namespace Core.AppWebApi.Controllers
                 signingCredentials: creds);
             response.Success = true;
             response.Data = new JwtSecurityTokenHandler().WriteToken(token);
-            MemoryCacheManager.SetRefushCache<CurrentSesscion>(response.Data, responsesessions.Data, TimeSpan.FromMinutes(30));  
+            MemoryCacheManager.SetRefushCache<CurrentSesscion>(response.Data, responsesessions.Data, TimeSpan.FromDays(30));  
             return response;
         }
 

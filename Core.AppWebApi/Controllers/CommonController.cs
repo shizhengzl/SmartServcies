@@ -129,7 +129,7 @@ namespace Core.AppWebApi.Controllers
                         {
                             showcolumn.TargetSource = "Enum";
                             showcolumn.SourceValue = prportys.Name;
-                            showcolumn.Json = JsonConvert.SerializeObject(prportys.PropertyType.GetListEnumClass(), Formatting.None, serializerSettings);
+                            showcolumn.Json = JsonConvert.SerializeObject(prportys.PropertyType.GetEnum(), Formatting.None, serializerSettings);
                         }
                     }
                     sort++;
@@ -271,14 +271,14 @@ namespace Core.AppWebApi.Controllers
         }
 
         [HttpPost("GetTables")]
-        public ResponseList<EnumClass> GetTables()
+        public ResponseList<CodeValue> GetTables()
         {
-            ResponseList<EnumClass> response = new ResponseList<EnumClass>();
-            List<EnumClass> list = new List<EnumClass>(); 
+            ResponseList<CodeValue> response = new ResponseList<CodeValue>();
+            List<CodeValue> list = new List<CodeValue>(); 
             var table = _dataBaseServices.GetTable(DataBaseFactory.Core_Application.FreeSql, DataBaseFactory.Core_Application.DefaultDataType);
             table.ForEach(x =>
             {
-                list.Add(new EnumClass() { Name = x.TableName, Description = x.TableDescription });
+                list.Add(new CodeValue() { Code = x.TableName, Name = x.TableDescription });
             });
             response.Data = list;
             return response; 
@@ -364,6 +364,56 @@ namespace Core.AppWebApi.Controllers
             return response;
         }
 
+
+
+        [HttpPost("GetALLBackUpConnections")]
+        public ResponseList<TreeClass> GetALLBackUpConnections()
+        {
+            ResponseList<TreeClass> response = new ResponseList<TreeClass>();
+            List<TreeClass> list = new List<TreeClass>();
+            _commonServices.GetConnections(new ConnectionString() { CompanysId = this.session.User.CompanysId }).ForEach(x => {
+
+                var node = new TreeClass() { Id = x.Id.ToString(), Name = x.Address };
+                node.children = new List<TreeClass>();
+
+                var connectionstr = x.GetConnectionString();
+
+                FreeSqlFactory freesql = null;
+                // 添加缓存连接
+                if (MemoryCacheManager.GetCache(connectionstr) != null)
+                    freesql = (FreeSqlFactory)MemoryCacheManager.GetCache(connectionstr);
+                else
+                {
+                    freesql = new FreeSqlFactory(x.GetConnectionString());
+                    MemoryCacheManager.SetCache<FreeSqlFactory>(connectionstr, freesql, null);
+                }
+
+
+                var databases = _dataBaseServices.GetDataBase(freesql.FreeSql, x.DataType);
+                databases.ForEach(p => {
+                    x.DefaultDataBase = p.DataBaseName;
+
+                    var connectionstr = x.GetConnectionString();
+
+                    freesql = new FreeSqlFactory(connectionstr);
+                    var databasenode = new TreeClass() { Id = Guid.NewGuid().ToString(), Name = p.DataBaseName };
+                    databasenode.children = new List<TreeClass>();
+
+                    var tables = _dataBaseServices.GetTable(freesql.FreeSql, x.DataType);
+                    tables.ForEach(o => {
+                        var tablenode = new TreeClass() { Id = Guid.NewGuid().ToString(), HasDescription = o.HasDescription, Name = o.TableName, Description = o.TableDescription, Props = connectionstr };
+                        tablenode.children = new List<TreeClass>();
+                        databasenode.children.Add(tablenode);
+                    });
+                    node.children.Add(databasenode);
+                });
+                list.Add(node);
+            });
+
+            response.Data = list;
+            return response;
+        }
+
         [HttpPost("AddExtendedproperty")]
         public Response<string> AddExtendedproperty([FromBody]  Column column)
         {
@@ -445,6 +495,35 @@ namespace Core.AppWebApi.Controllers
         }
 
 
+
+
+        /// <summary>
+        /// 获取枚举
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("GetEnums")]
+        [Authorize]
+        public ResponseList<CodeValue> GetEnums([FromBody] BaseRequest<string> request)
+        {
+            ResponseList<CodeValue> response = new ResponseList<CodeValue>();
+            response.Data = EnumExtensions.GetAssembliesEnum().ToList();
+            response.TotalCount = request.TotalCount;
+            return response;
+        }
+
+        /// <summary>
+        /// 获取枚举
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("GetEnum")]
+        [Authorize]
+        public ResponseList<CodeValue> GetEnum([FromBody] BaseRequest<string> request)
+        {
+            ResponseList<CodeValue> response = new ResponseList<CodeValue>();
+            response.Data = request.Filter.GetEnum().ToList();
+            response.TotalCount = request.TotalCount;
+            return response;
+        }
     }
 
    

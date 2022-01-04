@@ -100,5 +100,19 @@ namespace Core.DataBaseServices
             return response;
         }
 
+
+        /// <summary>
+        /// 获取连接下所有列
+        /// </summary>
+        /// <returns></returns>
+        public List<Column> GetColumn(IFreeSql freesql, DataType dataType, Boolean Backup, String tableName = "")
+        {
+            var columnsql = sqlconfigservices.GetColumns(dataType);
+            var response = freesql.Ado.ExecuteDataTable(columnsql).ToList<Column>();
+            if (!tableName.IsNullOrEmpty())
+                response = response.Where(x => x.TableName.ToUpper().Equals(tableName.ToUpper())).ToList(); 
+            freesql.Insert<Column>(response).ExecuteAffrows(); 
+            return response;
+        }
     }
 }

@@ -104,25 +104,25 @@ namespace Core.AppSystemServices
         /// 显示添加按钮
         /// </summary>
         [Description("显示添加按钮")]
-        public bool ShowCreate { get; set; }
+        public bool ShowCreate { get; set; } = true;
         /// <summary>
         /// 显示修改按钮
         /// </summary>
         [Description("显示修改按钮")]
-        public bool ShowModify { get; set; }
+        public bool ShowModify { get; set; } = true;
         /// <summary>
         /// 显示删除按钮
         /// </summary>
         [Description("显示删除按钮")]
 
-        public bool ShowRemove { get; set; }
+        public bool ShowRemove { get; set; } = true;
 
         /// <summary>
         /// 显示分页
         /// </summary>
         [Description("显示分页")]
 
-        public bool ShowPage { get; set; }
+        public bool ShowPage { get; set; } = true;
 
         /// <summary>
         /// 每页大小

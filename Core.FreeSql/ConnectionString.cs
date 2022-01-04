@@ -10,6 +10,7 @@ namespace Core.FreeSqlServices
     /// <summary>
     /// 连接字符串管理
     /// </summary>
+    [Description("连接字符串")]
     public class ConnectionString:BaseCompany
     {
         /// <summary>

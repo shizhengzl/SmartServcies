@@ -8,6 +8,7 @@ namespace Core.UsuallyCommon
     /// <summary>
     /// 返回代码描述
     /// </summary>
+    [Description("返回代码描述")]
     public enum CodeDescription
     {
         /// <summary>
