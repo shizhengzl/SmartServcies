@@ -13,28 +13,14 @@ namespace Core.FreeSqlServices
         private static ConnectionString _Core_Log { get; set; }
 
 
-        private static String DefaultUser = "u_temp";
-        private static String DefaultPassWord = "3GfnOA#hbz%aRWR7njM&";
-        private static String DefaultAddress = "192.168.0.100";
-        //public static ConnectionString Core_Base
-        //{
-        //    get
-        //    {
-        //        if (_Core_Base == null)
-        //        {
-        //            _Core_Base = new ConnectionString()
-        //            {
-        //                Address = ".",
-        //                DataType = FreeSql.DataType.SqlServer,
-        //                DefaultDataBase = "Core_Base",
-        //                IsWindows = false,
-        //                UserIds = "sa",
-        //                Password = "sasa"
-        //            };
-        //        }
-        //        return _Core_Base;
-        //    }
-        //}
+        //private static String DefaultUser = "u_temp";
+        //private static String DefaultPassWord = "3GfnOA#hbz%aRWR7njM&";
+        //private static String DefaultAddress = "192.168.0.100";
+
+        private static String DefaultUser = "sa";
+        private static String DefaultPassWord = "sasa";
+        private static String DefaultAddress = ".";
+
 
 
         public static ConnectionString Core_DataBase

@@ -51,5 +51,6 @@ namespace Core.UsuallyCommon
         /// 数据库
         /// </summary>
         public String DataBaseName { get; set; }
+
     }
 }

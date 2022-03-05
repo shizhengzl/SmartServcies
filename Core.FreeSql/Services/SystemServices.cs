@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Linq;
 
 namespace Core.FreeSqlServices
 {
@@ -230,6 +231,25 @@ namespace Core.FreeSqlServices
         public Boolean Remove<T>(T t) where T : class
         {
             return _FreeSql.Delete<T>(t).ExecuteAffrows() > 1;
+        }
+
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="baseRequest"></param>
+        /// <param name="where"></param>
+        /// <param name="orderby"></param>
+        /// <returns></returns>
+        public Boolean Remove<T>(T[] t) where T : class
+        {
+            bool response = true;
+            t.ToList().ForEach(x =>
+            {
+                response = _FreeSql.Delete<T>(x).ExecuteAffrows() > 1;
+            });
+            return response;
         }
         #endregion
 

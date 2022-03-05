@@ -315,13 +315,13 @@ namespace Core.AppWebApi.Controllers
             return response;
         }
 
-
+        [AllowAnonymous]
         [HttpPost("GetALLConnections")]
         public ResponseList<TreeClass> GetALLConnections()
         {
             ResponseList<TreeClass> response = new ResponseList<TreeClass>();
             List<TreeClass> list = new List<TreeClass>();
-            _commonServices.GetConnections(new ConnectionString() {  CompanysId = this.session.User.CompanysId}).ForEach(x => {
+            _commonServices.GetConnections(new ConnectionString() {  CompanysId = this.session == null ? "00000000-0000-0000-0000-000000000001".ToGuid() :  this.session.User.CompanysId}).ForEach(x => {
 
                 var node = new TreeClass() { Id = x.Id.ToString(),Name = x.Address  };
                 node.children = new List<TreeClass>();

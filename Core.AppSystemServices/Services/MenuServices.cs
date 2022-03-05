@@ -17,6 +17,16 @@ namespace Core.AppSystemServices
         
         }
 
+        /// <summary>
+        /// 获取单位菜单
+        /// </summary>
+        /// <param name="CompanyId"></param>
+        /// <returns></returns>
+        public List<Menus> GetCompanyMenus(Guid CompanyId )
+        {
+            return GetEntitys<Menus>().Where(x=>x.CompanysId == CompanyId).ToList();
+        }
+
         public List<Menus> GetSupperMenus()
         {
             return GetEntitys<Menus>().ToList();
@@ -25,5 +35,16 @@ namespace Core.AppSystemServices
         {
             return GetEntitys<Menus>().Where(x=>x.Component == "Layout").ToList();
         }
+
+        /// <summary>
+        /// 获取单位菜单按钮
+        /// </summary>
+        /// <param name="CompanyId"></param>
+        /// <returns></returns>
+        public List<PermissionButton> GetPermissionButtons(Guid CompanyId)
+        {
+            return GetEntitys<PermissionButton>().Where(x => x.CompanysId == CompanyId).ToList();
+        }
+
     }
 }
