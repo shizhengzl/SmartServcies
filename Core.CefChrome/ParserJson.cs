@@ -8,111 +8,145 @@ using System.Threading.Tasks;
 namespace Core.CefChrome
 {
     #region detail
-    
- 
+
+
     public class DataItem
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public string username { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public long  wagers_id { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public DateTime wagers_date { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public long  roundserial { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string round_no { get; set; }
-        /// <summary>
-        /// 百家乐
-        /// </summary>
-        public string gametype { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public long  gamecode { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string bet_detail { get; set; }
-        /// <summary>
-        /// 闲 ( 4 )庄 ( 9 )
-        /// </summary>
-        public string result { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string poker_info { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public decimal betamount { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string commissionable { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
+
+        //	"betTime": "2022-11-11 08:58:33",
+        //	"wagersId": "30149219697",
+        //	"roundSerial": "335396471",
+        //	"roundNumber": "15-46",
+        //	"gameType": "3001",
+        //	"table": "AS9",
+        //	"betAmount": "21.00",
+        //	"commissionable": "21.00",
+        //	"payoff": "-21.00"
+        //}
+
+        public DateTime betTime { get; set; }
+        public String wagersId { get; set; }
+        public long roundSerial { get; set; }
+
+        public String roundNumber { get; set; }
+        public String gameType { get; set; }
+        public String table { get; set; }
+
+
+        public Decimal betAmount { get; set; }
+        public Decimal commissionable { get; set; }
         public Decimal payoff { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string currency { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string exchangerate { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string result_status { get; set; }
-        /// <summary>
-        /// iOS手机
-        /// </summary>
-        public string platform { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string codename { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string wagers_detail_key { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool detail_status { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public long  gametype_id { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string url { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string video_url { get; set; }
     }
 
- 
- 
-    public class Root
+    //public class DataItem
+    //{
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string username { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public long  wagers_id { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public DateTime wagers_date { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public long  roundserial { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string round_no { get; set; }
+    //    /// <summary>
+    //    /// 百家乐
+    //    /// </summary>
+    //    public string gametype { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public long  gamecode { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string bet_detail { get; set; }
+    //    /// <summary>
+    //    /// 闲 ( 4 )庄 ( 9 )
+    //    /// </summary>
+    //    public string result { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string poker_info { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public decimal betamount { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string commissionable { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public Decimal payoff { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string currency { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string exchangerate { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string result_status { get; set; }
+    //    /// <summary>
+    //    /// iOS手机
+    //    /// </summary>
+    //    public string platform { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string codename { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string wagers_detail_key { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public bool detail_status { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public long  gametype_id { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string url { get; set; }
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public string video_url { get; set; }
+    //}
+
+    public class sdata
     { 
+        public List<DataItem> betInfo { get; set; }
+    }
+
+
+    public class Root
+    {
+
+        public sdata data { get;set; }
         /// 
         /// </summary>
-        public List<DataItem> data { get; set; }
+        //public List<DataItem> data { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -132,11 +166,11 @@ namespace Core.CefChrome
         /// <summary>
         /// 
         /// </summary>
-        public long  totalCount { get; set; }
+        public long totalCount { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public long  totalPages { get; set; }
+        public long totalPages { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -168,11 +202,11 @@ namespace Core.CefChrome
         /// <summary>
         /// 
         /// </summary>
-        public long  page { get; set; }
+        public long page { get; set; }
         /// <summary>
         /// 
         /// </summary>
-       
+
         /// <summary>
         /// 
         /// </summary>

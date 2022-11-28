@@ -216,7 +216,7 @@ namespace Core.CefChrome
             this.txtOne.Name = "txtOne";
             this.txtOne.Size = new System.Drawing.Size(116, 21);
             this.txtOne.TabIndex = 33;
-            this.txtOne.Text = "765,670";
+            this.txtOne.Text = "758,668";
             // 
             // txtAdd
             // 
@@ -224,7 +224,7 @@ namespace Core.CefChrome
             this.txtAdd.Name = "txtAdd";
             this.txtAdd.Size = new System.Drawing.Size(116, 21);
             this.txtAdd.TabIndex = 32;
-            this.txtAdd.Text = "1";
+            this.txtAdd.Text = "10";
             // 
             // label7
             // 
@@ -254,7 +254,7 @@ namespace Core.CefChrome
             this.comIMode.Name = "comIMode";
             this.comIMode.Size = new System.Drawing.Size(116, 20);
             this.comIMode.TabIndex = 29;
-            this.comIMode.Text = "Await";
+            this.comIMode.Text = "Add";
             // 
             // txtMin
             // 
@@ -262,7 +262,7 @@ namespace Core.CefChrome
             this.txtMin.Name = "txtMin";
             this.txtMin.Size = new System.Drawing.Size(116, 21);
             this.txtMin.TabIndex = 28;
-            this.txtMin.Text = "10";
+            this.txtMin.Text = "20";
             // 
             // label2
             // 
@@ -302,7 +302,7 @@ namespace Core.CefChrome
             this.commode.Name = "commode";
             this.commode.Size = new System.Drawing.Size(117, 20);
             this.commode.TabIndex = 24;
-            this.commode.Text = "X";
+            this.commode.Text = "Z";
             // 
             // txtJg
             // 
@@ -356,7 +356,7 @@ namespace Core.CefChrome
             this.txtTen.Name = "txtTen";
             this.txtTen.Size = new System.Drawing.Size(116, 21);
             this.txtTen.TabIndex = 13;
-            this.txtTen.Text = "813,670";
+            this.txtTen.Text = "863,667";
             // 
             // label3
             // 
@@ -373,7 +373,7 @@ namespace Core.CefChrome
             this.txtOk.Name = "txtOk";
             this.txtOk.Size = new System.Drawing.Size(116, 21);
             this.txtOk.TabIndex = 10;
-            this.txtOk.Text = "1204,647";
+            this.txtOk.Text = "1207,643";
             // 
             // label4
             // 
@@ -390,7 +390,7 @@ namespace Core.CefChrome
             this.txtHe.Name = "txtHe";
             this.txtHe.Size = new System.Drawing.Size(116, 21);
             this.txtHe.TabIndex = 7;
-            this.txtHe.Text = "947,579";
+            this.txtHe.Text = "953,556";
             // 
             // lblxian
             // 
@@ -407,7 +407,7 @@ namespace Core.CefChrome
             this.txtxian.Name = "txtxian";
             this.txtxian.Size = new System.Drawing.Size(116, 21);
             this.txtxian.TabIndex = 4;
-            this.txtxian.Text = "678,562";
+            this.txtxian.Text = "676,559";
             // 
             // lblzhuang
             // 
@@ -424,7 +424,7 @@ namespace Core.CefChrome
             this.txtzhuang.Name = "txtzhuang";
             this.txtzhuang.Size = new System.Drawing.Size(116, 21);
             this.txtzhuang.TabIndex = 1;
-            this.txtzhuang.Text = "1213,569";
+            this.txtzhuang.Text = "1221,560";
             // 
             // timeserver
             // 

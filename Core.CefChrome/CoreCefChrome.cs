@@ -89,9 +89,9 @@ namespace Core.CefChrome
 
                 if (root != null && root.data != null)
                 {
-                    root.data.ForEach(x =>
+                    root.data.betInfo.ForEach(x =>
                     {
-                        if (!DataBaseFactory.Core_Application.FreeSql.Select<DataItem>().Any(p => p.roundserial == x.roundserial))
+                        if (!DataBaseFactory.Core_Application.FreeSql.Select<DataItem>().Any(p => p.roundSerial == x.roundSerial))
                             DataBaseFactory.Core_Application.FreeSql.Insert<DataItem>(x).ExecuteAffrowsAsync();
                     });
                 }
@@ -175,9 +175,13 @@ namespace Core.CefChrome
             }
             else
             {
-                var jsonurl = @"https://vip337.com:8866/infe/macenter/record/betrecordcontroller/getliverecord.json";
-                CookieContainer cookieContainer = new CookieContainer();
-                CookieCollection cookieCollection = new CookieCollection();
+                cookieCollection = new CookieCollection();
+                var date = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+                var enddate = DateTime.Now.AddDays(2).ToString("yyyy-MM-dd");
+                var jsonurl = "https://www.vip337.com:9900/entrance/betrecord/live/getBetRecord?gameKind=3&searchType=date&page=1&startDate="+date+"&endDate=" + enddate;
+
+               // var jsonurl = @"https://vip337.com:8866/infe/macenter/record/betrecordcontroller/getliverecord.json";
+           
                 cookies.ForEach(cookie => {
                     cookieCollection.Add(new System.Net.Cookie()
                     {
@@ -203,7 +207,7 @@ namespace Core.CefChrome
                     var result = HttpClientHelper.GetResponseString(response);
                     var root = JsonConvert.DeserializeObject<Root>(result);
 
-                    var data = root.data.FirstOrDefault();
+                    var data = root.data.betInfo.FirstOrDefault();
                     if (data != null)
                     {
                         Cdata(data, zMSetting);
@@ -214,23 +218,56 @@ namespace Core.CefChrome
                     }
                 }
             }
-        } 
+        }
+        CookieContainer cookieContainer = new CookieContainer();
+        CookieCollection cookieCollection = new CookieCollection();
 
-       
-        public void Cdata(DataItem dataItem, ZMSetting zMSetting)
+        public bool isover(string danhao)
         {
-            if (dataItem != null)
+            var date = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+            var enddate = DateTime.Now.AddDays(2).ToString("yyyy-MM-dd");
+            var url = 
+                "https://www.vip337.com:9900/infe/macenter/record/cashrecordcontroller/getcashrecord.json?PayWay=ALL&pay_way_result=ALL&Sort=desc&sDate="+date+"&eDate="+enddate+"&qPage=1";
+
+            var response = HttpClientHelper.CreateGetHttpResponse(url, 10000, "", cookieCollection);
+            if (response != null)
             {
-                if (dataItem.detail_status) {
-
-
-                    if (!DataBaseFactory.Core_Application.FreeSql.Select<DataItem>().Any(x => x.roundserial == dataItem.roundserial))
-                        DataBaseFactory.Core_Application.FreeSql.Insert<DataItem>(dataItem).ExecuteAffrowsAsync();
+                var result = HttpClientHelper.GetResponseString(response);
+                var root = JsonConvert.DeserializeObject<searchs>(result);
+                if (root != null)
+                {
+                    var count = root.ARR_WDATA.Where(x => x.ACT_RESULT == "单号:" + danhao).Count();
+                    return count >= 2;
                 }
             }
 
-            if (dataItem.detail_status)
+            return false;
+        }
+
+        public class searchs
+        { 
+            public List<searchitem> ARR_WDATA { get; set; }
+        }
+
+        public class searchitem
+        { 
+            public  string ACT_RESULT { get; set; }//"单号:30149382826"//
+        }
+       
+        public void Cdata(DataItem dataItem, ZMSetting zMSetting)
+        {
+            var has = isover(dataItem.wagersId.ToString());
+            if (dataItem != null)
             {
+                if (has)
+                {
+                    if (!DataBaseFactory.Core_Application.FreeSql.Select<DataItem>().Any(x => x.roundSerial == dataItem.roundSerial))
+                        DataBaseFactory.Core_Application.FreeSql.Insert<DataItem>(dataItem).ExecuteAffrowsAsync();
+                }
+               
+            }
+            if (has) { 
+           
                 Point point = new Point();
                 ShowText($"投注:{zMSetting.inverstMode.ToString()}");
                 // 开始
@@ -255,7 +292,7 @@ namespace Core.CefChrome
                 ShowText($"选择I模式:{zMSetting.Imode.ToString()}");
                 if (zMSetting.Imode == IMode.Await)
                 {
-                    ShowText($"上一把{(dataItem.payoff.ToDecimal() > 0 ? "赢": "输")}了{dataItem.betamount}");
+                    ShowText($"上一把{(dataItem.payoff.ToDecimal() > 0 ? "赢": "输")}了{dataItem.betAmount}");
                     var clicknum = zMSetting.DefaultInverstMoney.ToDecimal();
 
                     ShowText($"选择金额1，坐标{zMSetting.One.point.X},{zMSetting.One.point.Y}");
@@ -284,16 +321,16 @@ namespace Core.CefChrome
                     decimal investmoney = 0;
                     if (dataItem.payoff.ToDecimal() > 0) {
                         ShowText($"上一把赢了{dataItem.payoff.ToDecimal()}");
-                        investmoney = dataItem.payoff.ToDecimal() - zMSetting.Add.ToDecimal();
+                        investmoney = dataItem.betAmount.ToDecimal() - zMSetting.Add.ToDecimal();
                     }
                     if (dataItem.payoff.ToDecimal() == 0)
                     {
-                        ShowText($"上一把和了,{dataItem.betamount.ToDecimal()}");
-                        investmoney = dataItem.betamount.ToDecimal() ;
+                        ShowText($"上一把和了,{dataItem.betAmount.ToDecimal()}");
+                        investmoney = dataItem.betAmount.ToDecimal() ;
                     }
                     if (dataItem.payoff.ToDecimal() < 0)
                     {
-                        ShowText($"上一把输了,{dataItem.betamount.ToDecimal()}");
+                        ShowText($"上一把输了,{dataItem.betAmount.ToDecimal()}");
                         investmoney = 0 - dataItem.payoff.ToDecimal() + zMSetting.Add.ToDecimal();
                     }
 
@@ -301,6 +338,11 @@ namespace Core.CefChrome
                     {
                         ShowText($"投注低于最小,{investmoney},{zMSetting.Min.ToDecimal()}");
                         investmoney = zMSetting.Min.ToDecimal();
+                    }
+
+                    if (investmoney > zMSetting.Add * 20)
+                    {
+                        investmoney = zMSetting.Add * 20;
                     }
 
                     ShowText($"最终投注:{investmoney}");
@@ -400,7 +442,7 @@ namespace Core.CefChrome
 
         private DataItem GetMoni(ZMSetting settings)
         {
-            var dataItem = DataBaseFactory.Core_Application.FreeSql.Select<DataItem>().OrderByDescending(x => x.roundserial).ToOne();
+            var dataItem = DataBaseFactory.Core_Application.FreeSql.Select<DataItem>().OrderByDescending(x => x.roundSerial).ToOne();
             var win = true;
             switch(zMSetting.wRandom)
             {
@@ -421,11 +463,10 @@ namespace Core.CefChrome
             if(dataItem == null)
             {
                 return new DataItem()
-                {
-                    detail_status = true,
+                { 
                     payoff = win ? settings.Min : 0 - settings.Min,
-                    betamount = settings.Min,
-                    roundserial = 1
+                    betAmount = settings.Min,
+                    roundSerial = 1
                 };
 
             }
@@ -440,7 +481,7 @@ namespace Core.CefChrome
                 }
                 if (dataItem.payoff.ToDecimal() == 0)
                 {
-                    investmoney = dataItem.betamount.ToDecimal();
+                    investmoney = dataItem.betAmount.ToDecimal();
                 }
                 if (dataItem.payoff.ToDecimal() < 0)
                 {
@@ -464,8 +505,8 @@ namespace Core.CefChrome
                 }
             }
 
-            dataItem.betamount = investmoney;
-            dataItem.roundserial += 1;
+            dataItem.betAmount = investmoney;
+            dataItem.roundSerial += 1;
             dataItem.payoff =win ? investmoney : 0 - investmoney;
             return dataItem;
         }
