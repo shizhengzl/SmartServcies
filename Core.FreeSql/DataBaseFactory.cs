@@ -9,7 +9,7 @@ namespace Core.FreeSqlServices
         /// <summary>
         /// 核心数据库
         /// </summary>
-        public static FreeSqlFactory _Core_Base { get; set; }
+        //public static FreeSqlFactory _Core_Base { get; set; }
         /// <summary>
         /// 应用数据库
         /// </summary>
@@ -26,16 +26,16 @@ namespace Core.FreeSqlServices
         /// <summary>
         /// 核心数据库
         /// </summary>
-        public static FreeSqlFactory Core_Base {
-            get
-            {
-                if (_Core_Base == null) 
-                {
-                    _Core_Base = new FreeSqlFactory(ConnectionBase.Core_Base.GetConnectionString());
-                }
-                return _Core_Base;
-            }
-        }
+        //public static FreeSqlFactory Core_Base {
+        //    get
+        //    {
+        //        if (_Core_Base == null) 
+        //        {
+        //            _Core_Base = new FreeSqlFactory(ConnectionBase.Core_Base.GetConnectionString());
+        //        }
+        //        return _Core_Base;
+        //    }
+        //}
         /// <summary>
         /// 应用数据库
         /// </summary>

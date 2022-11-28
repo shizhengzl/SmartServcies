@@ -223,7 +223,7 @@ namespace Core.AppSystemServices
                 case GrantMode.OrganizationGrant:
                     // 获取用户角色
                     var userOrganization = GetUserOrganization(user).Select(x => x.OrganizationsId).ToList();
-                    menuids = GetEntitys<OrganizationMenus>().Where(x => userOrganization.Contains(x.OraganizationsId)).ToList().Select(p => p.MenusId).ToList();
+                    menuids = GetEntitys<OrganizationMenus>().Where(x => userOrganization.Contains(x.OrganizationsId)).ToList().Select(p => p.MenusId).ToList();
                     break;
                 case GrantMode.UserGrant:
                     break;
@@ -295,6 +295,30 @@ namespace Core.AppSystemServices
             return GetEntitys<Users>().Where(x => (x.UserName == user.UserName || x.Phone == user.UserName || x.Email == user.UserName)
           && x.PassWord == user.PassWord).ToList().FirstOrDefault();
         }
+
+
+
+        /// <summary>
+        /// 获取用户
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public Users GetUsers(Guid id)
+        {
+            return GetEntitys<Users>().Where(x => x.Id == id).ToList().FirstOrDefault();
+        }
+
+
+        /// <summary>
+        /// 获取用户
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public bool ResetPassword(Users user)
+        {
+            return Modify<Users>(user);
+        }
+
 
         /// <summary>
         /// 验证密码

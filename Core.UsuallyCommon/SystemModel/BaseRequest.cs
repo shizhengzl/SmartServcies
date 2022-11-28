@@ -47,5 +47,10 @@ namespace Core.UsuallyCommon
         /// 类型
         /// </summary>
         public String TableName { get; set; }
+        /// <summary>
+        /// 数据库
+        /// </summary>
+        public String DataBaseName { get; set; }
+
     }
 }

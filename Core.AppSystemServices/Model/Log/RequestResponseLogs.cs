@@ -11,7 +11,7 @@ namespace Core.AppSystemServices
     /// 请求日志表
     /// </summary>
     [Description("请求日志表")]
-    public class RequestResponseLogs : EntityBase
+    public class RequestResponseLogs : BaseCompany
     {
         /// <summary>
         /// 请求地址
@@ -51,15 +51,15 @@ namespace Core.AppSystemServices
         public string ResponseBody { get; set; }
 
         /// <summary>
-        /// 执行开始时间
+        /// 执行时间
         /// </summary>
-        [Description("执行开始时间")]
+        [Description("执行时间")]
         public DateTime ExcuteStartTime { get; set; }
 
         /// <summary>
-        /// 执行完成时间
+        /// 执行时间
         /// </summary> 
-        [Description("执行完成时间")]
+        [Description("完成时间")]
         public DateTime ExcuteEndTime { get; set; }
 
 

@@ -11,7 +11,7 @@ namespace Core.AppSystemServices
     /// 记录日志
     /// </summary>
     [Description("记录日志")]
-    public class InfoLogs : EntityBase
+    public class InfoLogs : BaseCompany
     {
         /// <summary>
         /// 错误消息

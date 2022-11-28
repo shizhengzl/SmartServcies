@@ -16,7 +16,7 @@ namespace Core.AppSystemServices
         /// 部门
         /// </summary>
         [Description("组织机构")]
-        public Guid OraganizationsId { get; set; }
+        public Guid OrganizationsId { get; set; }
 
         /// <summary>
         /// 菜单

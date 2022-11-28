@@ -25,5 +25,22 @@ namespace Core.UsuallyCommon
         /// 枚举描述
         /// </summary>
         public string Description { get; set; }
+         
+    }
+
+    /// </summary>
+    public class CodeValue
+    {
+        /// <summary>
+        /// 数字标识
+        /// </summary>
+        public String Code { get; set; }
+
+
+        /// <summary>
+        /// 枚举名称
+        /// </summary>
+        public string Name { get; set; } 
+
     }
 }

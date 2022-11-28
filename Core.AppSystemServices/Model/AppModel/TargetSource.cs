@@ -6,9 +6,11 @@ using System.Text;
 
 namespace Core.AppSystemServices
 {
- 
+    [Description("目标数据源")]
     public enum TargetSource
-    { 
+    {
+        [Description("枚举")]
+        Enum,
         [Description("表")]
         Table ,
         [Description("SQL")]

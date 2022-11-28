@@ -11,7 +11,7 @@ namespace Core.AppSystemServices
     /// 操作日志表
     /// </summary>
     [Description("操作日志表")]
-    public class OpeartionLogs : EntityBase
+    public class OpeartionLogs : BaseCompany
     {
         /// <summary>
         /// 操作描述
@@ -33,5 +33,13 @@ namespace Core.AppSystemServices
         [Column(StringLength = -1)]
         [Description("现有数据")]
         public String NewJsonData { get; set; }
+
+
+        /// <summary>
+        /// IP地址
+        /// </summary>
+        [Column(StringLength = 50)]
+        [Description("IP地址")]
+        public String IP { get; set; }
     }
 }

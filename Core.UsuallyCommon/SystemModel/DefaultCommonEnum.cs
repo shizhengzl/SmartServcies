@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Core.UsuallyCommon
 {
+    [Description("默认单位枚举")]
     public enum DefaultCommonEnum
     {
         [Description("admin")]

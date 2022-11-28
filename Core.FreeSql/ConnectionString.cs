@@ -10,6 +10,7 @@ namespace Core.FreeSqlServices
     /// <summary>
     /// 连接字符串管理
     /// </summary>
+    [Description("连接字符串")]
     public class ConnectionString:BaseCompany
     {
         /// <summary>
@@ -61,7 +62,7 @@ namespace Core.FreeSqlServices
             }
             if (!IsWindows && DataType == DataType.SqlServer)
             {
-                response = string.Format("server={0};{1}uid={2},pwd={3};", Address,   DefaultDataBase.IsNullOrEmpty() ? string.Empty : database,UserIds,Password);
+                response = string.Format("server={0};{1}uid={2};pwd={3};", Address,   DefaultDataBase.IsNullOrEmpty() ? string.Empty : database,UserIds,Password);
             }
             if (IsWindows && DataType == DataType.MySql)
             {

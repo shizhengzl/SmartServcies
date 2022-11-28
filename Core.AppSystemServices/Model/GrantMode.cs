@@ -11,10 +11,10 @@ namespace Core.AppSystemServices
     [Description("授权模式")]
     public enum GrantMode
     {
-        [Description("单位授权")]
-        CompanyGrant = 0 ,
         [Description("角色授权")]
-        RoleGrant = 1,
+        RoleGrant = 0,
+        [Description("单位授权")]
+        CompanyGrant = 1 ,
         [Description("部门授权")]
         OrganizationGrant = 2,
         [Description("用户授权")]

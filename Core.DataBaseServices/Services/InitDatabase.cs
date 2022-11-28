@@ -10,7 +10,7 @@ namespace Core.DataBaseServices
     {
         public InitDatabase() : base(DataBaseFactory.Core_DataBase.FreeSql)
         {
-            ClearTable();
+            //ClearTable();
             InitConfig();
         }
 
@@ -28,7 +28,7 @@ namespace Core.DataBaseServices
                 {
                     Type = FreeSql.DataType.SqlServer,
                     GetDataBaseSQL = "SELECT name AS DataBaseName FROM sys.sysdatabases ORDER BY name",
-                    GetTableSQL = @"select DB_NAME() As DataBaseName,a.name AS TableName,ISNULL(b.value,'') AS TableDescription from sys.tables a LEFT JOIN  sys.extended_properties  b 
+                    GetTableSQL = @"select DB_NAME() As DataBaseName,a.name AS TableName,ISNULL(b.value,'') AS TableDescription,(CASE WHEN b.value IS NULL THEN '0' ELSE 1 END ) HasDescription from sys.tables a LEFT JOIN  sys.extended_properties  b 
                                 on a.object_id = b.major_id AND  b.minor_id = 0 ORDER BY a.name",
                     GetColumnSQL = @" 
                                SELECT	

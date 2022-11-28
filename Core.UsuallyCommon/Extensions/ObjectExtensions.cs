@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 using System.ComponentModel;
+using System.Collections;
 
 namespace Core.UsuallyCommon
 {
@@ -12,6 +13,96 @@ namespace Core.UsuallyCommon
     /// </summary>
     public static class ObjectExtensions
     {
+        /// <summary>
+        /// 设置动态对象children
+        /// </summary>
+        /// <param name="list"></param>
+        public static List<object> SetChildren(this List<object> list,Type type)
+        { 
+            var father = FindRoot(list);
+            father.ForEach(x => {
+                FindChild(list, x, type);
+            });
+            return father;
+        }
+
+        /// <summary>
+        /// 获取顶级父项
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static void FindChild(List<object> list,object obj, Type type)
+        {
+            var listparent = new List<object>(); 
+            list.ForEach(x => { 
+                if (!x.GetProperty("ParentId").IsNull())
+                {
+                    var sparentid = x.GetPropertyValue("ParentId").ToStringExtension().ToUpper();
+                    var sid = x.GetPropertyValue("Id").ToStringExtension().ToUpper();
+                    var oid = obj.GetPropertyValue("Id").ToStringExtension().ToUpper();
+
+                    if (sparentid == oid)
+                    {
+                        var children = obj.GetPropertyObjectValue("children");
+
+                        Type t = typeof(List<>); 
+                        Type specificListType = t.MakeGenericType(type); 
+                       
+
+
+                        if (children == null || string.IsNullOrEmpty(children.ToStringExtension()))
+                        {
+                            System.Collections.IList add = Activator.CreateInstance(specificListType) as System.Collections.IList;
+                            //List<object> add = new List<object>();
+                            add.Add(x);
+                            obj.SetPropertyValue("children", add);
+                        }
+                        else
+                        {
+                            System.Collections.IList add = (IList) children; 
+                            //var add = (List<object>)(children);
+                            add.Add(x);
+                            obj.SetPropertyValue("children", add);
+                        } 
+                        FindChild(list, x,type);
+                    }
+                }
+            }); 
+        }
+
+        /// <summary>
+        /// 获取顶级父项
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static List<object> FindRoot(List<object> list)
+        {
+            var listparent = new List<object>();
+            var parentid = "ParentId";
+            list.ForEach(x => {
+                var property = x.GetProperty("ParentId");
+                if (!property.IsNull())
+                {
+                    if (x.GetPropertyValue(parentid).ToStringExtension() == Guid.Empty.ToStringExtension()) {
+                        listparent.Add(x);
+                    }
+                }
+            });
+            return listparent;
+        }
+
+        /// <summary>
+        /// 获取对象属性名称
+        /// </summary>
+        /// <param name="objects"></param>
+        /// <returns></returns>
+        public static PropertyInfo GetProperty(this object objects,string propertyName)
+        {
+            PropertyInfo[] propertys = objects.GetType().GetProperties();
+
+            return propertys.FirstOrDefault(p => p.Name.ToUpper() == propertyName.ToUpper());
+        }
+
 
         /// <summary>
         /// 判断动态类型属性值
@@ -95,8 +186,7 @@ namespace Core.UsuallyCommon
 
             return response;
         }
-
-
+         
         /// <summary>
         /// 设置属性值
         /// </summary>
@@ -113,10 +203,14 @@ namespace Core.UsuallyCommon
                     property.SetValue(instance, value, null);
                 else
                 {
-                    if(property.PropertyType.UnderlyingSystemType.Name == "Guid")
+                    if (property.PropertyType.UnderlyingSystemType.Name == "Guid")
                         property.SetValue(instance, Convert.ChangeType(value.ToGuid(), property.PropertyType), null);
-                    else if(property.PropertyType.IsEnum)
-                        property.SetValue(instance,value, null);
+                    else if (property.PropertyType.IsEnum)
+                        property.SetValue(instance, value, null);
+                    //else if (property.PropertyType.Name.Contains("List"))
+                    //{
+                        
+                    //}
                     else
                         property.SetValue(instance, Convert.ChangeType(value, property.PropertyType), null);
                 }
@@ -144,6 +238,18 @@ namespace Core.UsuallyCommon
         {
             return obj.GetType().GetProperty(name).GetValue(obj, null).ToStringExtension();
         }
+
+        /// <summary>
+        /// 获取属性值
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static object GetPropertyObjectValue(this object obj, string name)
+        {
+            return obj.GetType().GetProperty(name).GetValue(obj, null);
+        }
+
 
         /// <summary>
         /// 获取属性特性

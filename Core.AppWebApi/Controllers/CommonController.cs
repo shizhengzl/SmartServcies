@@ -12,7 +12,6 @@ using AutoMapper;
 using System.Linq;
 using System.Collections.Generic;
 using Core.DataBaseServices;
-using Core.AppSystemServices;
 using FreeSql.Internal.Model;
 using Core.FreeSqlServices;
 using Newtonsoft.Json;
@@ -29,50 +28,24 @@ namespace Core.AppWebApi.Controllers
         /// 注入接口
         /// </summary>
         public readonly IMapper mapper;
-        public CommonServices commonServices { get; set; }
+        public CommonServices _commonServices { get; set; }
 
-        DataBaseServices.DataBaseServices dbservices = new Core.DataBaseServices.DataBaseServices();
-        public CommonController(MenuServices _menuServices, IMapper _mapper, CommonServices _commonServices)
+        public LogServices _logServices { get; set; }
+
+        public DataBaseServices.DataBaseServices _dataBaseServices {  get; set; }
+             
+        public CommonController(MenuServices _menuServices, IMapper _mapper, CommonServices commonServices,
+            DataBaseServices.DataBaseServices dataBaseServices,
+            LogServices logServices
+            )
         {
             mapper = _mapper;
-            commonServices = _commonServices;
+            _commonServices = commonServices;
+            _dataBaseServices = dataBaseServices;
+            _logServices = logServices;
         }
 
-        /// <summary>
-        /// 获取列头
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("GetListHeader")]
-        [Authorize]
-        public Response<List<ShowColumns>> GetListHeader([FromBody] BaseRequest<ShowColumns> request)
-        {
-            Response<List<ShowColumns>> response = new Response<List<ShowColumns>>();
-            var hiddencolumns = typeof(BaseCompany).GetPropertyList();
-            var hascolumns = commonServices.CheckShowColumns(request.TableName);
-            if (!hascolumns)
-            {
-                var columns = dbservices.GetColumn(DataBaseFactory.Core_Application.FreeSql, DataBaseFactory.Core_Application.DefaultDataType, request.TableName);
-                List<ShowColumns> showColumns = new List<ShowColumns>();
-                columns.ForEach(x =>
-                {
-                    ShowColumns showcolumn = new ShowColumns()
-                    {
-                        ColumnName = x.ColumnName.ToFirstCharToLower(),
-                        ColumnDescription = x.ColumnDescription,
-                        TableName = x.TableName,
-                        DataBaseName = x.DataBaseName,
-                        ColumnWidth = 150.ToStringExtension(),
-                        IsShow = !hiddencolumns.Any(p => p.ToUpper() == x.ColumnName.ToUpper()),
-                        CompanysId = session.User.CompanysId
-                    };
-                    showColumns.Add(showcolumn);
-                });
-                commonServices.SaveShowColumns(showColumns);
-            }
-            response.Data = commonServices.GetShowColumns(request.TableName);
-            return response;
-        }
-
+        
 
         /// <summary>
         /// 获取列头
@@ -84,30 +57,40 @@ namespace Core.AppWebApi.Controllers
         {
             Response<List<ShowColumns>> response = new Response<List<ShowColumns>>();
             var hiddencolumns = typeof(BaseCompany).GetPropertyList();
-            var hascolumns = commonServices.CheckShowColumns(request.TableName);
+
+            var menuid = string.IsNullOrEmpty(request.Filter) ? Guid.Empty : request.Filter.ToGuid();
+            var hascolumns = _commonServices.CheckShowColumns(request.TableName, menuid);
             var tabletype = request.TableName.GetClassType();
             var serializerSettings = new JsonSerializerSettings
             {
                 // 设置为驼峰命名
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
-
-
             if (!hascolumns)
             {
-                var columns = dbservices.GetColumn(DataBaseFactory.Core_Application.FreeSql, DataBaseFactory.Core_Application.DefaultDataType, request.TableName);
+                List<Column> columns = new List<Column>();
+                switch (request.DataBaseName.ToStringExtension().ToUpper())
+                {
+                    case "LOGS":
+                        columns = _dataBaseServices.GetColumn(DataBaseFactory.Core_Log.FreeSql, DataBaseFactory.Core_Application.DefaultDataType, request.TableName);
+                        break;
+                    default:
+                        columns = _dataBaseServices.GetColumn(DataBaseFactory.Core_Application.FreeSql, DataBaseFactory.Core_Application.DefaultDataType, request.TableName);
+                        break;
+                }
                 List<ShowColumns> showColumns = new List<ShowColumns>();
 
-                var sort = 1;
+                var sort = 1; 
                 columns.ForEach(x =>
                 {
                     ShowColumns showcolumn = new ShowColumns()
                     {
+                        MenusId = menuid,
                         ColumnName = x.ColumnName.ToFirstCharToLower(),
                         ColumnDescription = x.ColumnDescription,
                         TableName = x.TableName,
                         DataBaseName = x.DataBaseName,
-                        ColumnWidth = 120.ToStringExtension(),
+                        ColumnWidth = Math.Ceiling((800 / (columns.Count() - 5)).ToDecimal()).ToStringExtension(),
                         IsShow = !hiddencolumns.Any(p => p.ToUpper() == x.ColumnName.ToUpper()),
                         CompanysId = session.User.CompanysId,
                         CsharpType = x.SQLType.SqlTypeToCSharpType(),
@@ -146,19 +129,16 @@ namespace Core.AppWebApi.Controllers
                         {
                             showcolumn.TargetSource = "Enum";
                             showcolumn.SourceValue = prportys.Name;
-                            showcolumn.Json = JsonConvert.SerializeObject(prportys.PropertyType.GetListEnumClass(), Formatting.None, serializerSettings);
+                            showcolumn.Json = JsonConvert.SerializeObject(prportys.PropertyType.GetEnum(), Formatting.None, serializerSettings);
                         }
                     }
                     sort++;
                     showColumns.Add(showcolumn);
                 });
-                commonServices.SaveShowColumns(showColumns);
+                _commonServices.SaveShowColumns(showColumns);
             }
-            response.Data = commonServices.GetShowColumns(request.TableName);
-            //List<KeyValuePair<string, object>> dirs = new List<KeyValuePair<string, object>>();
-
-
-           
+            response.Data = _commonServices.GetShowColumns(request.TableName, menuid);
+   
             // 处理验证规则
             JObject jobject = new JObject(); 
             response.Data.ForEach(x =>
@@ -167,14 +147,16 @@ namespace Core.AppWebApi.Controllers
                 // 处理数据源
                 if (!string.IsNullOrEmpty(x.TargetSource))
                 {
-
+                    var name = x.SourceValue.Trim();
                     switch (x.TargetSource)
                     {
                         case "Table":
+                            var tabledata = _commonServices.GetAllEntitys(name,session.User.CompanysId);
+                            x.Json = JsonConvert.SerializeObject(tabledata, Formatting.None, serializerSettings);
                             break;
                         case "BaseData":
-                            var name = x.SourceValue.Trim();
-                            var listdata = commonServices.GetBaseDataDeatil(name, session.User.CompanysId);
+                          
+                            var listdata = _commonServices.GetBaseDataDeatil(name, session.User.CompanysId);
                             //dirs.Add(new KeyValuePair<string, object>(name, listdata));
                             x.Json =  JsonConvert.SerializeObject(listdata, Formatting.None, serializerSettings);
                             break;
@@ -202,10 +184,6 @@ namespace Core.AppWebApi.Controllers
                     jobject.Add(x.ColumnName, jarray);
             });
 
-            //if (dirs.Count > 0)
-            //{
-            //    response.Other = dirs;
-            //}
             response.Rules = jobject.ToString();
 
             return response;
@@ -220,16 +198,52 @@ namespace Core.AppWebApi.Controllers
         public ResponseList<object> GetList([FromBody] BaseRequest<string> request)
         {
             ResponseList<object> response = new ResponseList<object>();
-            response.Data = commonServices.GetList(request);
+            
+            switch (request.DataBaseName.ToStringExtension().ToUpper())
+            {
+                case "LOGS":
+                    response.Data = _logServices.GetList(request);
+                    break;
+                default:
+                    response.Data = _commonServices.GetList(request);
+                    break;
+            }
+          
+           
             response.TotalCount = request.TotalCount;
             return response;
         }
+
+        /// <summary>
+        /// 获取列头
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("GetTreeList")]
+        [Authorize]
+        public ResponseList<object> GetTreeList([FromBody] BaseRequest<string> request)
+        {
+            ResponseList<object> response = new ResponseList<object>();
+
+            switch (request.DataBaseName.ToStringExtension().ToUpper())
+            {
+                case "LOGS":
+                    response.Data = _logServices.GetList(request);
+                    break;
+                default:
+                    response.Data = _commonServices.GetTreeList(request);
+                    break;
+            } 
+
+            response.TotalCount = request.TotalCount;
+            return response;
+        }
+
 
         [HttpPost("Remove")]
         public Response<dynamic> Remove([FromBody] ModifyRequest request)
         {
             Response<dynamic> response = new Response<dynamic>();
-            response.Data = commonServices.RemoveEntity(request);
+            response.Data = _commonServices.RemoveEntity(request);
             return response;
         }
 
@@ -252,23 +266,265 @@ namespace Core.AppWebApi.Controllers
                 model.ModifyTime = DateTime.UtcNow;
             }
             request.Model = JsonConvert.SerializeObject(model);
-            response.Data = commonServices.SaveEntitys(request);
+            response.Data = _commonServices.SaveEntitys(request);
             return response;
         }
 
         [HttpPost("GetTables")]
-        public ResponseList<EnumClass> GetTables()
+        public ResponseList<CodeValue> GetTables()
         {
-            ResponseList<EnumClass> response = new ResponseList<EnumClass>();
-            List<EnumClass> list = new List<EnumClass>();
-            Core.DataBaseServices.DataBaseServices dataBaseServices = new DataBaseServices.DataBaseServices();
-            var table = dataBaseServices.GetTable(DataBaseFactory.Core_Application.FreeSql, DataBaseFactory.Core_Application.DefaultDataType);
+            ResponseList<CodeValue> response = new ResponseList<CodeValue>();
+            List<CodeValue> list = new List<CodeValue>(); 
+            var table = _dataBaseServices.GetTable(DataBaseFactory.Core_Application.FreeSql, DataBaseFactory.Core_Application.DefaultDataType);
             table.ForEach(x =>
             {
-                list.Add(new EnumClass() { Name = x.TableName, Description = x.TableDescription });
+                list.Add(new CodeValue() { Code = x.TableName, Name = x.TableDescription });
             });
             response.Data = list;
             return response; 
         }
+
+
+        /// <summary>
+        /// 获取指定连接columns
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <returns></returns>
+        [HttpPost("GetColumns")]
+        public ResponseList<Column> GetColumns([FromBody] Table tab)
+        {
+            ResponseList<Column> response = new ResponseList<Column>();
+            List<Column> list = new List<Column>();
+            var freesql = new FreeSqlFactory(tab.TableDescription);
+            response.Data = _dataBaseServices.GetColumn(freesql.FreeSql, freesql.FreeSql.Ado.DataType,tab.TableName); 
+            return response;
+        }
+
+
+        /// <summary>
+        /// 获取当前连接columns
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <returns></returns>
+        [HttpPost("GetCurrentColumns")]
+        public ResponseList<Column> GetCurrentColumns([FromBody] Table tab)
+        {
+            ResponseList<Column> response = new ResponseList<Column>();
+            List<Column> list = new List<Column>(); 
+            response.Data = _dataBaseServices.GetColumn(_commonServices._FreeSql, _commonServices._FreeSql.Ado.DataType, tab.TableName);
+            return response;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("GetALLConnections")]
+        public ResponseList<TreeClass> GetALLConnections()
+        {
+            ResponseList<TreeClass> response = new ResponseList<TreeClass>();
+            List<TreeClass> list = new List<TreeClass>();
+            _commonServices.GetConnections(new ConnectionString() {  CompanysId = this.session == null ? "00000000-0000-0000-0000-000000000001".ToGuid() :  this.session.User.CompanysId}).ForEach(x => {
+
+                var node = new TreeClass() { Id = x.Id.ToString(),Name = x.Address  };
+                node.children = new List<TreeClass>();
+
+                var connectionstr = x.GetConnectionString();
+                 
+                FreeSqlFactory freesql = null;  
+                // 添加缓存连接
+                if (MemoryCacheManager.GetCache(connectionstr) != null)
+                    freesql = (FreeSqlFactory)MemoryCacheManager.GetCache(connectionstr);
+                else
+                {
+                    freesql = new FreeSqlFactory(x.GetConnectionString());
+                    MemoryCacheManager.SetCache<FreeSqlFactory>(connectionstr, freesql, null);
+                }
+                   
+
+                var databases = _dataBaseServices.GetDataBase(freesql.FreeSql, x.DataType);
+                databases.ForEach(p => {
+                    x.DefaultDataBase = p.DataBaseName;
+
+                    var connectionstr = x.GetConnectionString();
+
+                    freesql = new FreeSqlFactory(connectionstr);
+                    var databasenode = new TreeClass() { Id =Guid.NewGuid().ToString(), Name = p.DataBaseName };
+                    databasenode.children = new List<TreeClass>();
+
+                    var tables = _dataBaseServices.GetTable(freesql.FreeSql, x.DataType);
+                    tables.ForEach(o=>{
+                        var tablenode = new TreeClass() { Id = Guid.NewGuid().ToString(),HasDescription = o.HasDescription, Name = o.TableName,Description = o.TableDescription,Props = connectionstr };
+                        tablenode.children = new List<TreeClass>(); 
+                        databasenode.children.Add(tablenode);
+                    }); 
+                    node.children.Add(databasenode);
+                }); 
+                list.Add(node);
+            }); 
+         
+            response.Data = list;
+            return response;
+        }
+
+
+
+        [HttpPost("GetALLBackUpConnections")]
+        public ResponseList<TreeClass> GetALLBackUpConnections()
+        {
+            ResponseList<TreeClass> response = new ResponseList<TreeClass>();
+            List<TreeClass> list = new List<TreeClass>();
+            _commonServices.GetConnections(new ConnectionString() { CompanysId = this.session.User.CompanysId }).ForEach(x => {
+
+                var node = new TreeClass() { Id = x.Id.ToString(), Name = x.Address };
+                node.children = new List<TreeClass>();
+
+                var connectionstr = x.GetConnectionString();
+
+                FreeSqlFactory freesql = null;
+                // 添加缓存连接
+                if (MemoryCacheManager.GetCache(connectionstr) != null)
+                    freesql = (FreeSqlFactory)MemoryCacheManager.GetCache(connectionstr);
+                else
+                {
+                    freesql = new FreeSqlFactory(x.GetConnectionString());
+                    MemoryCacheManager.SetCache<FreeSqlFactory>(connectionstr, freesql, null);
+                }
+
+
+                var databases = _dataBaseServices.GetDataBase(freesql.FreeSql, x.DataType);
+                databases.ForEach(p => {
+                    x.DefaultDataBase = p.DataBaseName;
+
+                    var connectionstr = x.GetConnectionString();
+
+                    freesql = new FreeSqlFactory(connectionstr);
+                    var databasenode = new TreeClass() { Id = Guid.NewGuid().ToString(), Name = p.DataBaseName };
+                    databasenode.children = new List<TreeClass>();
+
+                    var tables = _dataBaseServices.GetTable(freesql.FreeSql, x.DataType);
+                    tables.ForEach(o => {
+                        var tablenode = new TreeClass() { Id = Guid.NewGuid().ToString(), HasDescription = o.HasDescription, Name = o.TableName, Description = o.TableDescription, Props = connectionstr };
+                        tablenode.children = new List<TreeClass>();
+                        databasenode.children.Add(tablenode);
+                    });
+                    node.children.Add(databasenode);
+                });
+                list.Add(node);
+            });
+
+            response.Data = list;
+            return response;
+        }
+
+        [HttpPost("AddExtendedproperty")]
+        public Response<string> AddExtendedproperty([FromBody]  Column column)
+        {
+            Response<string> response = new Response<string>();
+
+            var connectionstr = column.DefaultValue;
+            FreeSqlFactory freesql = null;
+            // 添加缓存连接
+            if (MemoryCacheManager.GetCache(connectionstr) != null)
+                freesql = (FreeSqlFactory)MemoryCacheManager.GetCache(connectionstr);
+            else
+            {
+                freesql = new FreeSqlFactory(connectionstr);
+                MemoryCacheManager.SetCache<FreeSqlFactory>(connectionstr, freesql, null);
+            }
+             
+            _dataBaseServices.AddExtendedproperty(freesql.FreeSql, freesql.FreeSql.Ado.DataType, column.TableName,column.ColumnName,column.ColumnDescription);
+            return response;
+        }
+
+
+        [HttpPost("ModifyExtendedproperty")]
+        public Response<string> ModifyExtendedproperty([FromBody] Column column)
+        {
+            Response<string> response = new Response<string>();
+
+            var connectionstr = column.DefaultValue;
+            FreeSqlFactory freesql = null;
+            // 添加缓存连接
+            if (MemoryCacheManager.GetCache(connectionstr) != null)
+                freesql = (FreeSqlFactory)MemoryCacheManager.GetCache(connectionstr);
+            else
+            {
+                freesql = new FreeSqlFactory(connectionstr);
+                MemoryCacheManager.SetCache<FreeSqlFactory>(connectionstr, freesql, null);
+            }
+            _dataBaseServices.ModifyExtendedproperty(freesql.FreeSql, freesql.FreeSql.Ado.DataType, column.TableName, column.ColumnName, column.ColumnDescription);
+            return response;
+        }
+
+
+        [HttpPost("AddTableExtendedproperty")]
+        public Response<string> AddExteAddTableExtendedpropertyndedproperty([FromBody] Column column)
+        {
+            Response<string> response = new Response<string>();
+
+            var connectionstr = column.DefaultValue;
+            FreeSqlFactory freesql = null;
+            // 添加缓存连接
+            if (MemoryCacheManager.GetCache(connectionstr) != null)
+                freesql = (FreeSqlFactory)MemoryCacheManager.GetCache(connectionstr);
+            else
+            {
+                freesql = new FreeSqlFactory(connectionstr);
+                MemoryCacheManager.SetCache<FreeSqlFactory>(connectionstr, freesql, null);
+            }
+            _dataBaseServices.AddTableExtendedproperty(freesql.FreeSql, freesql.FreeSql.Ado.DataType, column.TableName,  column.TableDescription);
+            return response;
+        }
+
+
+        [HttpPost("ModifyTableExtendedproperty")]
+        public Response<string> ModifyTableExtendedproperty([FromBody] Column column)
+        {
+            Response<string> response = new Response<string>();
+
+            var connectionstr = column.DefaultValue;
+            FreeSqlFactory freesql = null;
+            // 添加缓存连接
+            if (MemoryCacheManager.GetCache(connectionstr) != null)
+                freesql = (FreeSqlFactory)MemoryCacheManager.GetCache(connectionstr);
+            else
+            {
+                freesql = new FreeSqlFactory(connectionstr);
+                MemoryCacheManager.SetCache<FreeSqlFactory>(connectionstr, freesql, null);
+            }
+            _dataBaseServices.ModifyTableExtendedproperty(freesql.FreeSql, freesql.FreeSql.Ado.DataType, column.TableName, column.TableDescription);
+            return response;
+        }
+
+
+
+
+        /// <summary>
+        /// 获取枚举
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("GetEnums")]
+        [Authorize]
+        public ResponseList<CodeValue> GetEnums([FromBody] BaseRequest<string> request)
+        {
+            ResponseList<CodeValue> response = new ResponseList<CodeValue>();
+            response.Data = EnumExtensions.GetAssembliesEnum().ToList();
+            response.TotalCount = request.TotalCount;
+            return response;
+        }
+
+        /// <summary>
+        /// 获取枚举
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("GetEnum")]
+        [Authorize]
+        public ResponseList<CodeValue> GetEnum([FromBody] BaseRequest<string> request)
+        {
+            ResponseList<CodeValue> response = new ResponseList<CodeValue>();
+            response.Data = request.Filter.GetEnum().ToList();
+            response.TotalCount = request.TotalCount;
+            return response;
+        }
     }
+
+   
 }

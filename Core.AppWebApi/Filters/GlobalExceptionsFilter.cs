@@ -1,4 +1,5 @@
 ﻿using Core.AppSystemServices;
+using Core.CacheServices;
 using Core.UsuallyCommon;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -38,7 +39,11 @@ namespace Core.AppWebApi.Filters
                 Message = ex.Message,
                 Code = CodeDescription.Faile
             });
-            context.ExceptionHandled = true;
+            context.ExceptionHandled = true; 
+
+            var token = context.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", ""); 
+            CurrentSesscion sesscion = MemoryCacheManager.GetCache<CurrentSesscion>(token); 
+            _logServices.AddExexptionLogs(ex, context.HttpContext.Request.Path,"",sesscion);
         }
     }
 }

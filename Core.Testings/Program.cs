@@ -24,9 +24,18 @@ namespace Core.Testings
         public static FreeSqlFactory factory = new FreeSqlFactory();
         static void Main()
         {
+            EnumExtensions.GetAssembliesEnum().ForEach(x => {
+                Console.WriteLine($"{x.Code}:{x.Name}");
+                x.Code.GetEnum().ForEach(p => {
+                    Console.WriteLine($"{p.Code}:{p.Name}");
+                });
+            });
+            Console.ReadLine();
+            return;
+
             var rt = typeof(SexEnum).GetClassOrEnumDescription();
 
-            Console.ReadLine();
+           
             return;
 
             //var ds = OfficeServices.ExeclServices.GetDataTable(@"C:\Users\shizheng\Desktop\报表\房建进度款标准报表\3.3.xls");

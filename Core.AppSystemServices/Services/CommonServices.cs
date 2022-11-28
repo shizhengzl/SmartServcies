@@ -13,9 +13,10 @@ namespace Core.AppSystemServices
     [AppServiceAttribute]
     public class CommonServices: SystemServices
     {
-        public CommonServices() : base(DataBaseFactory.Core_Application.FreeSql)
-        {
-
+        LogServices _logServices { get; set; }
+        public CommonServices(LogServices logServices) : base(DataBaseFactory.Core_Application.FreeSql)
+        { 
+                _logServices = logServices; 
         }
 
         /// <summary>
@@ -39,10 +40,11 @@ namespace Core.AppSystemServices
         /// </summary>
         /// <param name="TableName"></param>
         /// <returns></returns>
-        public bool CheckShowColumns(string TableName)
+        public bool CheckShowColumns(string TableName,Guid menuId)
         {
-            return GetEntitys<ShowColumns>().Any(x => x.TableName == TableName);
+             return GetEntitys<ShowColumns>().Any(x => x.TableName == TableName && x.MenusId == menuId); 
         }
+
 
         /// <summary>
         /// 保存显示列
@@ -61,9 +63,20 @@ namespace Core.AppSystemServices
         /// </summary>
         /// <param name="TableName"></param>
         /// <returns></returns>
-        public List<ShowColumns> GetShowColumns(string TableName)
+        public List<ShowColumns> GetShowColumns(string TableName, Guid menuId)
         {
-            return GetEntitys<ShowColumns>().Where(x => x.TableName == TableName && x.IsShow).OrderBy(x=>x.Sort).ToList();
+            return GetEntitys<ShowColumns>().Where(x => x.TableName == TableName && x.IsShow && x.MenusId == menuId).OrderBy(x=>x.Sort).ToList();
+        }
+
+
+        /// <summary>
+        /// 获取列表
+        /// </summary> 
+        /// <param name="request"></param> 
+        /// <returns></returns>
+        public List<object> GetTreeList(BaseRequest<string> request)
+        {
+            return GetTreeEntitys(request);
         }
 
         /// <summary>
@@ -76,6 +89,16 @@ namespace Core.AppSystemServices
             return GetEntitys(request); 
         }
 
+        /// <summary>
+        /// 获取列表
+        /// </summary> 
+        /// <param name="request"></param> 
+        /// <returns></returns>
+        public List<object> GetLogList(BaseRequest<string> request)
+        {
+            return _logServices.GetEntitys(request);
+        } 
+
 
         /// <summary>
         /// 获取列表
@@ -86,5 +109,21 @@ namespace Core.AppSystemServices
         {
             return SaveEntitys(request);
         }
+
+        /// <summary>
+        /// 获取数据库连接
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        public List<ConnectionString> GetConnections(ConnectionString search)
+        {
+            var response = GetEntitys<ConnectionString>();
+            if (!search.IsNull() && !search.CompanysId.IsNullOrEmpty())
+                response = GetEntitys<ConnectionString>().Where(x => x.CompanysId == search.CompanysId);
+            return response.ToList();
+        }
+
+         
+
     }
 }

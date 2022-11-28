@@ -21,5 +21,7 @@ namespace Core.AppSystemServices
         /// 缓存
         /// </summary>
         public bool noCache { get; set; }
+
+        public object menusettins { get; set; }
     }
 }

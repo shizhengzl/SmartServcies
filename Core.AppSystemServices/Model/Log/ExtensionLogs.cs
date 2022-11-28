@@ -9,7 +9,7 @@ namespace Core.AppSystemServices
     /// 异常日志
     /// </summary>
     [Description("异常日志")]
-    public class ExceptionLogs : EntityBase
+    public class ExceptionLogs : BaseCompany
     {
         /// <summary>
         /// 堆栈信息
