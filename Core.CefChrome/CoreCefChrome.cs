@@ -31,7 +31,7 @@ namespace Core.CefChrome
         {
             //this.WindowState = FormWindowState.;    //最大化窗体
             this.Location = new System.Drawing.Point(0, 0);
-           
+            initlevel();
             InitializeComponent(); 
             InitChrome();
         } 
@@ -222,13 +222,13 @@ namespace Core.CefChrome
         CookieContainer cookieContainer = new CookieContainer();
         CookieCollection cookieCollection = new CookieCollection();
 
-        public bool isover(string danhao)
+        public bool isover(string danhao,out decimal money)
         {
             var date = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
-            var enddate = DateTime.Now.AddDays(2).ToString("yyyy-MM-dd");
+            var enddate = DateTime.Now.AddDays(2).ToString("yyyy-MM-dd"); 
             var url = 
                 "https://www.vip337.com:9900/infe/macenter/record/cashrecordcontroller/getcashrecord.json?PayWay=ALL&pay_way_result=ALL&Sort=desc&sDate="+date+"&eDate="+enddate+"&qPage=1";
-
+            money = 0;
             var response = HttpClientHelper.CreateGetHttpResponse(url, 10000, "", cookieCollection);
             if (response != null)
             {
@@ -237,10 +237,12 @@ namespace Core.CefChrome
                 if (root != null)
                 {
                     var count = root.ARR_WDATA.Where(x => x.ACT_RESULT == "单号:" + danhao).Count();
+
+                    money = root.ARR_WDATA.Where(x => x.ACT_RESULT == "单号:" + danhao).OrderByDescending(p=>p.KEY_DATE).FirstOrDefault().NOW_GOLD;
+
                     return count >= 2;
                 }
-            }
-
+            } 
             return false;
         }
 
@@ -252,11 +254,24 @@ namespace Core.CefChrome
         public class searchitem
         { 
             public  string ACT_RESULT { get; set; }//"单号:30149382826"//
+
+
+            public decimal NOW_GOLD { get; set; }// 育儿
+
+
+            public DateTime KEY_DATE { get; set; }
         }
-       
+
+
+        public int wincount = 0;
+        public int lostcount = 0;
+        public int hecount = 0;
+        public decimal nowmoney = 0;
+        public int currentbashu = 0;
+
         public void Cdata(DataItem dataItem, ZMSetting zMSetting)
-        {
-            var has = isover(dataItem.wagersId.ToString());
+        { 
+            var has = isover(dataItem.wagersId.ToString(), out nowmoney);
             if (dataItem != null)
             {
                 if (has)
@@ -322,16 +337,19 @@ namespace Core.CefChrome
                     if (dataItem.payoff.ToDecimal() > 0) {
                         ShowText($"上一把赢了{dataItem.payoff.ToDecimal()}");
                         investmoney = dataItem.betAmount.ToDecimal() - zMSetting.Add.ToDecimal();
+                        wincount++; 
                     }
                     if (dataItem.payoff.ToDecimal() == 0)
                     {
                         ShowText($"上一把和了,{dataItem.betAmount.ToDecimal()}");
                         investmoney = dataItem.betAmount.ToDecimal() ;
+                        hecount++;
                     }
                     if (dataItem.payoff.ToDecimal() < 0)
                     {
                         ShowText($"上一把输了,{dataItem.betAmount.ToDecimal()}");
                         investmoney = 0 - dataItem.payoff.ToDecimal() + zMSetting.Add.ToDecimal();
+                        lostcount++;
                     }
 
                     if (investmoney < zMSetting.Min.ToDecimal())
@@ -340,13 +358,25 @@ namespace Core.CefChrome
                         investmoney = zMSetting.Min.ToDecimal();
                     }
 
-                    if (investmoney > zMSetting.Add * 20)
+
+                    var traget = result.OrderBy(x => x.money).ToList().Where(p => p.money > nowmoney).FirstOrDefault();
+                    if (currentbashu == 0)
                     {
-                        investmoney = zMSetting.Add * 20;
+                        currentbashu = traget.count - 1;
+                    }
+                    else
+                    {
+                        if (traget.count >= currentbashu)
+                        {
+                            currentbashu = traget.count;
+                            investmoney = zMSetting.Min;
+
+                            ShowText($"达到目标把数{currentbashu},重置");
+                        }
                     }
 
-                    ShowText($"最终投注:{investmoney}");
-
+                     
+                    ShowText($"最终投注:{investmoney}，总计赢{wincount},输:{lostcount},和:{hecount} 下个金额：{traget.money},还差:{traget.money - nowmoney}"); 
                     ShowText($"选择投注点击次数{investmoney}");
                     for (int i = 0; i < investmoney; i++)
                     {
@@ -354,7 +384,7 @@ namespace Core.CefChrome
                         if (!Moni)
                             MouseHelper.DoClick(point.X, point.Y);
                     }
-                    ShowText($"点击ok,坐标:{zMSetting.OK.point.X},{zMSetting.OK.point.Y}");
+                    //ShowText($"点击ok,坐标:{zMSetting.OK.point.X},{zMSetting.OK.point.Y}");
                     // ok
                     if (!Moni)
                         MouseHelper.DoClick(zMSetting.OK.point.X, zMSetting.OK.point.Y);
@@ -510,5 +540,34 @@ namespace Core.CefChrome
             dataItem.payoff =win ? investmoney : 0 - investmoney;
             return dataItem;
         }
+
+        public void initlevel()
+        {
+            result = new List<listresult>();
+            int defaultmoney = 0;
+            int allmoney = 0;
+            for (int i = 1; i < 200; i++)
+            {
+                listresult listresult = new listresult();
+                defaultmoney += 10;
+                allmoney += defaultmoney;
+                listresult.count = i;
+                listresult.money = allmoney;
+                listresult.invest = defaultmoney; 
+                result.Add(listresult);
+            }
+        }
+
+        List<listresult> result = new List<listresult>(); 
+
+
+    }
+
+    public class listresult
+    {
+        public int count { get; set; }
+
+        public int invest { get; set; }
+        public decimal money { get; set; }
     }
 }
