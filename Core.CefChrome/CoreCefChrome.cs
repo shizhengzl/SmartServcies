@@ -31,9 +31,10 @@ namespace Core.CefChrome
         {
             //this.WindowState = FormWindowState.;    //最大化窗体
             this.Location = new System.Drawing.Point(0, 0);
-            initlevel();
+        
             InitializeComponent(); 
             InitChrome();
+
         } 
         public void InitChrome()
         {
@@ -270,7 +271,8 @@ namespace Core.CefChrome
         public int currentbashu = 0;
 
         public void Cdata(DataItem dataItem, ZMSetting zMSetting)
-        { 
+        {
+            initlevel();
             var has = isover(dataItem.wagersId.ToString(), out nowmoney);
             if (dataItem != null)
             {
@@ -337,6 +339,7 @@ namespace Core.CefChrome
                     if (dataItem.payoff.ToDecimal() > 0) {
                         ShowText($"上一把赢了{dataItem.payoff.ToDecimal()}");
                         investmoney = dataItem.betAmount.ToDecimal() - zMSetting.Add.ToDecimal();
+
                         wincount++; 
                     }
                     if (dataItem.payoff.ToDecimal() == 0)
@@ -359,24 +362,26 @@ namespace Core.CefChrome
                     }
 
 
-                    var traget = result.OrderBy(x => x.money).ToList().Where(p => p.money > nowmoney).FirstOrDefault();
+                    var targer = result.OrderBy(x => x.money).ToList().Where(p => nowmoney > p.money).LastOrDefault();
                     if (currentbashu == 0)
-                    {
-                        currentbashu = traget.count - 1;
-                    }
+                        currentbashu =  targer.count;
                     else
                     {
-                        if (traget.count >= currentbashu)
+                        if(currentbashu < targer.count)
                         {
-                            currentbashu = traget.count;
+                            currentbashu = targer.count;
                             investmoney = zMSetting.Min;
-
                             ShowText($"达到目标把数{currentbashu},重置");
                         }
+                            
                     }
 
-                     
-                    ShowText($"最终投注:{investmoney}，总计赢{wincount},输:{lostcount},和:{hecount} 下个金额：{traget.money},还差:{traget.money - nowmoney}"); 
+                    var next = result.OrderBy(x => x.money).ToList().Where(p => p.count== currentbashu+1).FirstOrDefault();
+                
+
+
+                    ShowText($"最终投注:{investmoney}，总计赢{wincount},输:{lostcount},和:{hecount}");
+                    ShowText($"把数：{currentbashu}，金额把数：{next.count} 下个金额：{next.money},还差:{next.money - nowmoney}");
                     ShowText($"选择投注点击次数{investmoney}");
                     for (int i = 0; i < investmoney; i++)
                     {
@@ -436,7 +441,7 @@ namespace Core.CefChrome
         }
         private void timeserver_Tick(object sender, EventArgs e)
         {
-            InitData();
+            InitData(); 
         }
 
         private void BtnGetCookie_Click(object sender, EventArgs e)
@@ -544,12 +549,15 @@ namespace Core.CefChrome
         public void initlevel()
         {
             result = new List<listresult>();
-            int defaultmoney = 0;
-            int allmoney = 0;
+            decimal defaultmoney = 0;
+            decimal allmoney = 0;
             for (int i = 1; i < 200; i++)
             {
                 listresult listresult = new listresult();
-                defaultmoney += 10;
+                defaultmoney += zMSetting.Add.ToInt32();
+
+                defaultmoney = defaultmoney+ (int)(defaultmoney / (zMSetting.Add.ToInt32()* 20));
+
                 allmoney += defaultmoney;
                 listresult.count = i;
                 listresult.money = allmoney;
@@ -567,7 +575,7 @@ namespace Core.CefChrome
     {
         public int count { get; set; }
 
-        public int invest { get; set; }
+        public decimal invest { get; set; }
         public decimal money { get; set; }
     }
 }

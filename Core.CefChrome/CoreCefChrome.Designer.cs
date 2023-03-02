@@ -224,7 +224,7 @@ namespace Core.CefChrome
             this.txtAdd.Name = "txtAdd";
             this.txtAdd.Size = new System.Drawing.Size(116, 21);
             this.txtAdd.TabIndex = 32;
-            this.txtAdd.Text = "10";
+            this.txtAdd.Text = "2";
             // 
             // label7
             // 
@@ -262,7 +262,7 @@ namespace Core.CefChrome
             this.txtMin.Name = "txtMin";
             this.txtMin.Size = new System.Drawing.Size(116, 21);
             this.txtMin.TabIndex = 28;
-            this.txtMin.Text = "20";
+            this.txtMin.Text = "10";
             // 
             // label2
             // 
@@ -302,7 +302,7 @@ namespace Core.CefChrome
             this.commode.Name = "commode";
             this.commode.Size = new System.Drawing.Size(117, 20);
             this.commode.TabIndex = 24;
-            this.commode.Text = "Z";
+            this.commode.Text = "Rondom";
             // 
             // txtJg
             // 
