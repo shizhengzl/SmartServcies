@@ -25,7 +25,7 @@ namespace Core.CefChrome
     { 
         public ChromiumWebBrowser chromiumWebBrowser;
         List<CefSharp.Cookie> cookies = new List<CefSharp.Cookie>();
- 
+        TWin win = new TWin();
         public ZMSetting zMSetting { get; set; }
         public CoreCefChrome()
         {
@@ -34,6 +34,8 @@ namespace Core.CefChrome
         
             InitializeComponent(); 
             InitChrome();
+
+         
 
         } 
         public void InitChrome()
@@ -336,10 +338,15 @@ namespace Core.CefChrome
                         MouseHelper.DoClick(zMSetting.One.point.X, zMSetting.One.point.Y);
 
                     decimal investmoney = 0;
+                    if (win.Count > 21)
+                        win.Count = 0;
+                    if (win.Count < 0)
+                        win.Count = 0;
                     if (dataItem.payoff.ToDecimal() > 0) {
                         ShowText($"上一把赢了{dataItem.payoff.ToDecimal()}");
-                        investmoney = dataItem.betAmount.ToDecimal() - zMSetting.Add.ToDecimal();
-
+                        win.Count--;
+                        investmoney = win.IWin[win.Count];//dataItem.betAmount.ToDecimal() - zMSetting.Add.ToDecimal();
+                       
                         wincount++; 
                     }
                     if (dataItem.payoff.ToDecimal() == 0)
@@ -351,7 +358,8 @@ namespace Core.CefChrome
                     if (dataItem.payoff.ToDecimal() < 0)
                     {
                         ShowText($"上一把输了,{dataItem.betAmount.ToDecimal()}");
-                        investmoney = 0 - dataItem.payoff.ToDecimal() + zMSetting.Add.ToDecimal();
+                        win.Count++;
+                        investmoney = win.IWin[win.Count];// 0 - dataItem.payoff.ToDecimal() + zMSetting.Add.ToDecimal();
                         lostcount++;
                     }
 
@@ -396,6 +404,43 @@ namespace Core.CefChrome
                 }
             }
         }
+
+
+        public class TWin
+        {
+            public Int32 Count { get; set; } = 0;
+
+            public List<Int32> IWin = new List<int>();
+
+            public TWin()
+            {
+                IWin.Add(10);
+                IWin.Add(11);
+                IWin.Add(12);
+                IWin.Add(13);
+                IWin.Add(14);
+                IWin.Add(15);
+                IWin.Add(16);
+                IWin.Add(17);
+                IWin.Add(18);
+                IWin.Add(19);
+
+                IWin.Add(20);
+                IWin.Add(21);
+                IWin.Add(22);
+                IWin.Add(23);
+                IWin.Add(24);
+                IWin.Add(25);
+                IWin.Add(26);
+                IWin.Add(27);
+                IWin.Add(28);
+                IWin.Add(29);
+
+                IWin.Add(400);
+                IWin.Add(800);
+            }
+        }
+
 
         #region 其他代码
 
